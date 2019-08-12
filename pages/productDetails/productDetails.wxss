@@ -1,0 +1,335 @@
+.container{
+    position: relative;
+    width: 100%;
+    height:1200rpx;
+    overflow-x: hidden;
+}
+.swiper{
+  position: absolute;
+  width: 100%;
+  height:484rpx;
+  top: 0rpx;
+  left: 0rpx;
+  /* border: 1rpx solid red; */
+  }
+.slide-image{
+  width: 100%;
+}
+.productName{
+    position: absolute;
+    top: 525rpx;
+    left: 24rpx;
+    color: #323232;
+    font-size: 36rpx;
+    font-weight: bold;
+}
+.monthSale{
+    position: absolute;
+    top: 525rpx;
+    right: 24rpx;
+    color: #939090;
+    font-size: 24rpx;
+}
+.platformPrice{
+    position: absolute;
+    top: 598rpx;
+    left: 24rpx;
+    color: #f94d1e;
+    font-size: 32rpx;
+}
+.storePrice{
+    position: absolute;
+    top: 664rpx;
+    left: 24rpx;
+    color: #939090;
+    font-size: 30rpx;
+}
+.remainder{
+    position: absolute;
+    top: 646rpx;
+    right: 186rpx;
+    color: #939090;
+    font-size: 24rpx;
+}
+.range{
+    position: absolute;
+    top: 657rpx;
+    right:25rpx;
+    color: #939090;
+    font-size: 24rpx;
+    width: 148rpx;
+    height: 13rpx;
+    background:rgba(249,77,30,1);
+    border:1rpx solid rgba(249,77,30,1);
+    border-radius:7rpx;
+}
+.line{
+    position: absolute;
+    top: 746rpx;
+    left: 24rpx;
+    width:702rpx;
+    height:1rpx;
+    background:rgba(27,27,27,1);
+    opacity:0.1;
+}
+.wrapa{
+    width: 100%;
+    height: 400rpx;
+    position: absolute;
+    top: 750rpx;
+    /* border: 1rpx solid red; */
+}
+.ainco,.ainco1,.ainco2{
+    position: absolute;
+    top: 20rpx;
+    left: 24rpx;
+    color: #f94d1e;
+    font-weight: bold;
+    font-size: 40rpx;
+}
+.ainco1{
+    top:24rpx;
+}
+.ainco2{
+    top: 2256rpx;
+}
+.proDetails,.evaluateText,.ownBusiness{
+    position: absolute;
+    top: 30rpx;
+    left: 43rpx;
+    color: #111111;
+    font-size: 30rpx;
+}
+.evaluateText{
+    top: 35rpx;
+}
+.ownBusiness{
+    top: 2269rpx;
+}
+.detailsName{
+    position: absolute;
+    top: 80rpx;
+    left: 24rpx;
+    color: #323232;
+    font-size: 30rpx;
+}
+.remark{
+    position: absolute;
+    top: 120rpx;
+    left: 24rpx;
+    color: #939090;
+    font-size: 30rpx;
+}
+.productContent{
+    position: absolute;
+    top: 154rpx;
+    left: 24rpx;
+}
+.remarkWrap{
+    position: absolute;
+    top: 194rpx;
+    left: 24rpx;
+    width: 500rpx;
+    height: 208rpx;
+    /* border: 1rpx solid red; */
+    overflow-y: scroll;
+}
+.productNameNum{
+    margin-top: 10rpx;
+    font-size: 30rpx;
+    color: #323232;
+    display: block;
+}
+.parting{
+    position: absolute;
+    left: 0;
+    top: 395rpx;
+    width:750rpx;
+    height:10rpx;
+    background:rgba(238,238,238,1);
+}
+.evaluateWrap{
+    position: absolute;
+    width: 100%;
+    height: 1000rpx;
+    top: 1154rpx;
+    overflow-y: hidden;
+    /* border: 1rpx solid blue; */
+}
+  /* 评价详情 */
+.allEvaluate{
+  position:relative;
+  width: 730rpx;
+  height: 330rpx;
+  margin-left: 25rpx;
+  /* border: 1rpx solid blue; */
+}
+.allEvaluateImg{
+  height:435rpx;
+  /* border: 1rpx solid orangel; */
+}
+/* 头像 */
+.avatar{
+  position: absolute;
+  top: 110rpx;
+  width: 80rpx;
+  height: 80rpx;
+  /* border: 1rpx solid salmon; */
+  border-radius: 50%;
+}
+/* 昵称 */
+.nickName,.evaDate{
+  position: absolute;
+  top: 90rpx;
+  left: 125rpx;
+  font-size: 26rpx;
+  color: #939090;
+}
+/* 日期 */
+.evaDate{ 
+  left: 564rpx;
+  font-size: 24rpx;
+}
+/* 星星 */
+.evaStar{
+  order: 1px solid blue;
+  width: 115rpx;
+  height: 23rpx;
+  position: absolute;
+  top: 145rpx;
+  left: 125rpx;
+  display: block;
+  background-color: red；
+}
+/* 非常满意 */
+.evaDescription{
+  position: absolute;
+  left: 246rpx;
+  top: 145rpx;
+  font-size: 24rpx;
+  color: #F94D1E;
+}
+/* 详细评价 */
+.evaDetails{
+  position: absolute;
+  left: 125rpx;
+  top: 200rpx;
+  font-size: 30rpx;
+  color: #323232;
+}
+/* 评价图标 */
+.evaInco,.evaIncoHaveImg{
+  position: absolute;
+  width: 26rpx;
+  height: 26rpx;
+  left: 125rpx;
+  top:270rpx;
+  /* border: 1rpx solid salmon; */
+}
+.evaIncoHaveImg{
+  top: 500rpx;
+}
+/* 更多评价  */
+.evaMore,.evaMoreHaveImg{
+  position: absolute;
+  left: 170rpx;
+  font-size: 24rpx;
+  color: #BFBFBF;
+  top:270rpx;
+}
+.evaMoreHaveImg{
+  top:500rpx;
+}
+/* 分割线 */
+.evaLine,.evaLineImg{
+  position: absolute;
+  left: 127rpx;
+  top:360rpx;
+  width: 621rpx;
+  border: 1rpx solid #EEEEEE;
+}
+.evaLineImg{
+  top:570rpx;
+}
+.evaImgWrap{
+   margin-left: 95rpx;
+}
+.evaImg{
+  float: left;
+  /* position: absolute; */
+  width: 190rpx;
+  height: 190rpx;
+  margin-left: 15rpx;
+  margin-top: 290rpx;
+  /* border: 1rpx solid yellow; */
+}
+.watchMore,.watchMoreTo{
+    position: absolute;
+    top: 2140rpx;
+    right:60rpx;
+    color: #f94d1e;
+    font-size: 24rpx;
+}
+.watchMoreTo{
+    top: 2130rpx;
+    right: 24rpx;
+    font-size: 40rpx;
+}
+.partingLine{
+    position: absolute;
+    top: 2212rpx;
+    width:750rpx;
+    height:10rpx;
+    background:rgba(238,238,238,1);
+}
+.storeNameBottom{
+    position: absolute;
+    top: 2333rpx;
+    left: 24rpx;
+    color: #111111;
+    font-size: 33rpx;
+}
+.toOrder{
+    position: absolute;
+    top: 2360rpx;
+    right: 24rpx;
+    width:130rpx;
+    height:63rpx;
+    background:linear-gradient(0deg,rgba(249,77,30,1) 0%,rgba(251,149,62,1) 100%);
+    border-radius:10rpx;
+    text-align: center;
+    line-height: 63rpx;
+    color: #FFFEFE;
+    font-size: 30rpx;
+}
+.star{
+    position: absolute;
+    left: 24rpx;
+    top: 2396rpx;
+    width: 120rpx;
+    height: 23rpx;
+    border: 1rpx solid red;
+}
+.score{
+    position: absolute;
+    top: 2390rpx;
+    left: 163rpx;
+    color: #F94D1E;
+    font-size: 24rpx;
+}
+.adressDesc,.type,.perCapita{
+    position: absolute;
+    top: 2390rpx;
+    left: 245rpx;
+    color: #939090;
+    font-size: 24rpx;
+}
+.type{
+    left: 342rpx;
+}
+.perCapita{
+    left: 459rpx;
+}
+/* .active{
+    display: block;
+} */

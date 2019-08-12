@@ -1,0 +1,66 @@
+/* 最外层大容器 */
+.container{
+    width: 750rpx;
+    height: 100vh;
+    position: relative;
+}
+/* 点单框 */
+.order,.payment{
+  position: absolute;
+  top:346rpx;
+  left: 98rpx;
+  width: 240rpx;
+  height: 240rpx;
+  background-color: #F94D1E;
+}
+/* 付款框 */
+.payment{
+  background-color: #FB953E;
+  left: 416rpx;
+}
+/* 点单图标 */
+.orderInco,.paymentInco{
+  width: 148rpx;
+  height: 165rpx;
+  position: absolute;
+  left: 48rpx;
+  top: 38rpx;
+}
+.paymentInco{
+  width: 136rpx;
+  height: 126rpx;
+  top: 57rpx;
+}
+/* 付款图标 */
+/* 点单文字 */
+.oerderText,.paymentText{
+  position:absolute;
+  top:  638rpx;
+  left: 196rpx;
+  color: #F94D1E;
+  font-size: 40rpx;
+}
+/* 付款文字 */
+.paymentText{
+  left: 496rpx;
+  color: #FB953E;
+}
+.button-hover,
+ button::after{
+  border: 0;
+}
+ button{
+  background: transparent;
+ }
+.usermask{
+  position: fixed;
+  z-index: 99;
+  background: transparent;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.phonemask{
+  z-index: 9999
+}

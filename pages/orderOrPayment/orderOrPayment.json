@@ -1,0 +1,8 @@
+{
+"usingComponents": {},
+"backgroundTextStyle": "dark",
+"navigationBarBackgroundColor": "#F94D1E",
+"navigationBarTitleText": "火烈鸟甜品",
+"navigationBarTextStyle": "white",
+"enablePullDownRefresh": true
+}

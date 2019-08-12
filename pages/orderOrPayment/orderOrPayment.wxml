@@ -1,0 +1,19 @@
+
+
+<view class="container" style="background-image:url(../../images/orderOrPayment/bg.png)">
+    <!-- <button class="usermask phonemask" wx:if='{{isPhone}}' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> -->
+    <button class="usermask" wx:if='{{isUser}}' open-type="getUserInfo" bindgetuserinfo="getUserInfo"></button>
+    <navigator url="../storeDetails/storeDetails">
+       <button class="order">
+            <image class="orderInco" src="../../images/orderOrPayment/order.png"></image>
+        </button>
+    </navigator>
+     <text class="oerderText">点单</text>
+    <view bindtap="gotoPay"> 
+        <button class="payment">
+        <image class="orderInco" src="../../images/orderOrPayment/pay.png"></image>
+        </button>
+        <text class="paymentText">付款</text>
+    </view>
+  
+</view>

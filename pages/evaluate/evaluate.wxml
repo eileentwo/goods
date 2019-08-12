@@ -1,0 +1,45 @@
+<form bindsubmit="formSubmit">
+    <view container>
+        <image class="storeInco" src="{{store_logo}}"></image>
+        <text class="storeName">{{store_name}}</text>
+        <!-- 星级评价 -->
+        <block wx:for="{{stars}}">
+            <image class="star-image" style="left: {{item*80}}rpx" src="{{key > item ?(key-item == 0.5?                             halfSrc:selectedSrc) : normalSrc}}">
+                <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
+                <view class="item" style="left:30rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
+            </image>
+            <text class="score">{{key}}分</text>
+        </block>
+        <view>
+        <!-- tags标签 -->
+            <view class='tagArea'>
+                <block wx:for="{{selectall}}" wx:key="{{this}}">
+                    <text class="{{item.isSelect?'active':'select'}}" bindtap='select' data-index="{{index}}">{{item.title}}</text>
+                </block>
+            </view>
+            <!-- <button bindtap="submit">dianji</button> -->
+
+            <textarea class="moreEvaluate" placeholder="请输入内容..." maxlength="99" placeholder-style="color:#b3b3b3;font-size:28rpx;" bindinput="handleContentInput" value="{{content}}"></textarea>
+            <view class=" tongji">
+                {{contentCount}}/99</view>
+            <view class="upImgWrap">
+                <view class="uploadImg" bindtap="chooseImage" wx:if="{{images.length < 9}}">
+                    <image class="upImg" src="../../images/eva/camera.png"></image>
+                    <text class="upText">上传图片</text>
+                </view>
+                <view class="imgContent">
+                    <view wx:for="{{images}}" wx:key="*this">
+                        <scroll-view scroll-x>
+                            <image class="uploadImg1" src="{{item}}" data-id="{{index}}" mode="aspectFill" bindtap="previewIamge"></image>
+                            <image class="deImg1" src="../../images/eva/error.png" mode="aspectFill" data-id="{{index}}" bindtap="deleteImage"></image>
+                        </scroll-view>
+                    </view>
+                </view>
+            </view>
+            <checkbox-group bindchange="anonymous">
+            <checkbox class="anonymousText"  value="1" >是否匿名</checkbox>
+            </checkbox-group>
+            <button class="release" type="primary" form-type="submit">发布</button>
+        </view>
+    </view>
+</form>

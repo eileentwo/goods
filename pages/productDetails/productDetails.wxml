@@ -1,0 +1,37 @@
+<view class="container">
+    <!-- 轮播图 -->
+    <view>
+        <swiper autoplay="{{true}}" interval="{{5000}}" duration="{{1000}}" class="swiper">
+            <block wx:for="{{imgUrls}}">
+                <swiper-item>
+                    <image src="{{item}}" class="slide-image" />
+                </swiper-item>
+            </block>
+        </swiper>
+    </view>
+    <block wx:for="{{goodsDetails}}" wx:for-item="{{goodsDetails}}">
+        <view>
+            <text class="productName">{{goodsDetails.goods_name}}</text>
+            <text class="monthSale">月售{{goodsDetails.month_count}}</text>
+            <text class="platformPrice">平台价:￥{{goodsDetails.discount_price}}</text>
+            <text class="storePrice">门店价:¥{{goodsDetails.goods_price}}</text>
+            <text class="remainder">剩余{{goodsDetails.stock_count}}份</text>
+            <text class="range"></text>
+            <text class="line"></text>
+        </view>
+
+        <view class="wrapa">
+            <text class="ainco">|</text>
+            <text class="proDetails">商品详情</text>
+            <text class="detailsName">{{goodsDetails.goods_desc}}</text>
+            <text class="remark">备注</text> 
+            <text class="productContent">套餐内容</text><br/>
+            <view class="remarkWrap">
+                <text class="productNameNum">田园沙拉冰淇淋（2份）</text>
+                <text class="productNameNum">盐酥鸡（1份）</text>
+                <text class="productNameNum">饮料(2杯)</text>
+            </view> 
+            <text class="parting"></text>
+        </view>
+    </block>
+</view>

@@ -1,0 +1,13 @@
+/**app.wxss**/
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+} 
+
+.flexbox{
+  display: flex;
+  flex-direction: row;
+}
