@@ -1,0 +1,150 @@
+.content{
+  font-size: 24rpx;
+  background-color: #F3F3F3;
+  position: relative;
+  z-index: -2;
+}
+.header{
+  height: 160rpx;
+}
+.bgimg{
+  padding: 70rpx 0 360rpx;
+  text-align: center;
+  font-size: 38rpx;
+  color: #FFFFFF;
+  background: #f00;
+  border-radius:0 0 4% 4%;
+  width: 100%;
+  position: absolute;
+  z-index: -1;
+}
+.selctbtn{
+  height: 128rpx;
+  background: #fff;
+}
+
+.swiperbox{
+  width: 94%;
+  height: 310rpx; 
+  margin: 0 auto 40rpx;
+  position: relative;
+
+}
+.slide-image{
+  width: 100%;
+  height: 360rpx;
+}
+.dots{
+  width: 100%;
+  position: absolute;
+  bottom: 10rpx;
+  height: 4rpx;
+  display: flex;
+  justify-content: center; 
+
+}
+.dot{
+  display: inline-block;
+  width: 16rpx;
+  height: 4rpx;
+  margin-right: 8rpx;
+  background-color: rgba(255, 255, 255, .6);
+}
+.dotactive{
+  width: 24rpx;
+  background-color: rgba(255, 255, 255, 1);
+}
+/* nav */
+.nav{
+  padding: 0 20rpx;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 40rpx;
+}
+.nav_item{
+  width: 20%;
+  text-align: center;
+}
+.nav image{
+  width: 105rpx;
+  height: 105rpx;
+  border-radius: 10rpx;
+}
+.nav1 image{
+  width: 40rpx;
+  height: 40rpx;
+}
+.radiusbox{
+  width: 662rpx;
+  padding: 0 20rpx;
+  margin: 0 auto 34rpx;
+  background-color: #fff;
+  border-radius: 15rpx;
+}
+.adds{
+  height: 66rpx;
+  font-size: 20rpx;
+  line-height: 66rpx;
+}
+.adds image{
+  width: 110rpx;
+  height: 60rpx;
+}
+.adds .new {
+  margin: 20rpx 40rpx 20rpx 20rpx;
+  width: 52rpx;
+  height: 24rpx;
+  line-height: 24rpx;
+  text-align: center;
+  font-size: 18rpx;
+  border-radius: 11rpx;
+  background-color: #FFE8EA;
+  color: #FF1E32;
+}
+.goods_item{
+  height: 360rpx;
+}
+.goods_item_head{
+  justify-content: space-between;
+  line-height: 66rpx;
+  border-bottom: 2rpx solid #F3F3F3;
+  margin-bottom: 20rpx;
+}
+.goods_item_head text{
+  font-size: 32rpx;
+  font-weight: bold;
+}
+.goods_item_head navigator{
+  font-size: 24rpx;
+  color: #B8B8B8;
+}
+.goods_img{
+  width:210rpx;
+  height:178rpx;
+  border-radius:10rpx;
+  margin-bottom: 22rpx;
+}
+.goods_item_detail{
+  width: 33.3%;
+  /* text-align: center; */
+}
+.goods_title{
+  color: #111;
+  font-size: 24rpx;
+  text-align: left;
+
+}
+.stars{
+  width: 20rpx;
+  height: 18rpx;
+}
+.goods_item_detail text{
+  color: #AEADAA;
+  font-size: 18rpx;
+}
+
+.goods_item_detail .pink{
+  color: #FF1D3A;
+  font-size: 20rpx;
+  margin: 0 20rpx 20rpx 6rpx;
+}

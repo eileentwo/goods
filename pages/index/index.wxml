@@ -1,0 +1,58 @@
+<view class="content">
+  <view class="header">
+    <view class="bgimg">一鹿省</view>
+  </view>
+  <view class="selctbtn"></view>
+  <view class="swiperbox">
+    <swiper id='loop'	 circular class="swiper" current="{{swiperCurrent}}"  bindchange="swiperChange">
+      <block wx:for="{{imgUrls}}"  wx:key="item">
+          <swiper-item>
+              <image lazy-load='true' src="{{item}}" mode="aspectFit" class="slide-image" />
+          </swiper-item>
+      </block>
+      <!--重置小圆点的样式  -->
+      <view class="dots">  
+          <block wx:for="{{imgUrls}}">  
+              <view class="dot {{index == currentSwiper ? ' dotactive' : ''}}"></view>  
+          </block>  
+      </view> 
+    </swiper>
+  
+  </view>
+  <view class="nav flexbox">
+   <view class="nav_item" wx:for='{{nav1}}'>
+    <image src="../../images/cake.png"></image>
+    <view>美食</view>
+   </view>
+  </view>
+  <view class="nav nav1 flexbox">
+   <view class="nav_item" wx:for='{{nav1}}'>
+    <image src="../../images/cake.png"  mode="aspectFit"></image>
+    <view>美食</view>
+   </view>
+  </view>
+  <view class="adds flexbox radiusbox">
+    <image src="../../images/cake.png"  mode="aspectFit"></image>
+    <view class="new">NEW</view>
+    <view>用户180****5483食汇堂精选套餐一份 节省50元</view>
+  </view>
+  <view class="goods_item radiusbox">
+    <view class="goods_item_head flexbox">
+      <text>省到爆</text>
+      <navigator>更多 ></navigator>
+    </view>
+     <view class="goods_item_body flexbox">
+      <view class="goods_item_detail" wx:for="{{goodsItem1}}">
+        <image class="goods_img" src="../../images/cake.png"  mode="aspectFit"></image>
+        <view class="goods_title">李记自助餐厅</view>
+        <view class="flexbox">
+          <image class="stars"></image>
+          <text class="pink">5.0</text>
+          <text>月售5362</text>
+        </view>
+      </view>
+
+    </view>
+  </view>
+ 
+</view>
