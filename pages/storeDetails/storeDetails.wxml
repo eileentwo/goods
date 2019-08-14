@@ -69,7 +69,7 @@
         </view>
         <!-- 优惠商品面板 -->
         <swiper class="tab1 {{currentTab ==0?'tab1a':'tab1b'}}"  id="tab1" current="{{currentTab}}" bindchange="changeTab">
-          <swiper-item>
+          <swiper-item style='overflow-y: scroll; -webkit-overflow-scrolling: touch;'>
             <view class="goods">
              <!-- 左 -->
                 <view class='tab-left'  style="height:{{height}}px" >
@@ -97,7 +97,7 @@
                       <text class="mustSee">{{tintroduce}}</text>
                     </view>
                   </view>
-                  <scroll-view class="absolute" scroll-with-animation="true" scroll-y="true" style="height:{{height}}px"  bindscroll="right" scroll-into-view="{{toView}}" >
+                  <scroll-view class="absolute"  style='overflow-y: scroll; -webkit-overflow-scrolling: touch;' scroll-with-animation="true"  scroll-y="true" style="height:{{height}}px"  bindscroll="right" scroll-into-view="{{toView}}" >
                       <view wx:for="{{goodsItem}}" wx:for-item='item' wx:for-index = 'index' wx:key="id"  id="{{item.id}}">
                         <view class="right-item" data-parentid="{{item.id}}" >
 

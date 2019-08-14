@@ -382,8 +382,8 @@ navigator {
 }
 
 .fixed-title{
-  position: absolute;
-  top: 0;
+  position: relative;
+  /* top: 0; */
   width: 568rpx;
   height: 60rpx;
   line-height: 60rpx;
@@ -600,18 +600,23 @@ navigator {
     background-color: rgba(0, 0, 0, .5)
 }
 .position{
-  position: absolute;
-  top: 0;
+    width: 568rpx;
+    background: #fff;
+    position: absolute;
+    top: 0;
 }
 .tab-right{ 
     height:900rpx;
     width: 568rpx;
     padding-left: 20rpx;
     position: relative;
+    
 } 
 .absolute{
   height:900rpx;
   width: 568rpx;
+  position: relative;
+  top: -76rpx;
 }
 /* 拨打商家电话 */
 
