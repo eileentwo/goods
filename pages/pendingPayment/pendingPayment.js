@@ -1,7 +1,7 @@
 var app = getApp();
 var md5 = require('../../utils/md5.js');
 var util = require('../../utils/util.js');
-var timestamp = Date.parse(new Date());
+var timestamp = 0;
 
 let userInfokey = [];
 Page({
@@ -34,12 +34,14 @@ Page({
       let userInfokey = wx.getStorageSync('userInfokey');
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
       let token = app.globalData.token || userInfokey.token
+      timestamp=Date.parse(new Date());
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
       
       wx.request({
         url: 'https://exbuy.double.com.cn/api/store_detail/insert_order_new',
         data: {
+          request_object: app.globalData.request_object,
           user_id: app.globalData.user_id || userInfokey.user_id,
           store_id,
           activity_goods: activity_goods,
@@ -67,8 +69,8 @@ Page({
               service_money: res.data.data.service_money,
               no_discount_price: res.data.data.no_discount_price,
               orderList: res.data.data.list_goods,
-              table_number: res.data.data.table_number,
-              order_number: res.data.data.order_number
+              table_number: res.data.data.table_number || '',
+              order_number: res.data.data.order_number 
             })
           } else {
             console.log("我的订单详情请求失败", res.data)
@@ -87,12 +89,14 @@ Page({
   cancleOrder: function () {
     let userInfokey = wx.getStorageSync('userInfokey');
     let token = app.globalData.token || userInfokey.token
+    timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString() + token;
     var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
     var hexMD5 = md5.hexMD5(val);
         wx.request({
           url: 'https://exbuy.double.com.cn/api/store_detail/insert_order_new',
           data: {
+            request_object: app.globalData.request_object,
             user_id: app.globalData.user_id || userInfokey.user_id,
             store_id,
             activity_goods: activity_goods,
@@ -143,7 +147,9 @@ Page({
     wetchatPay:function(){
       let userInfokey = wx.getStorageSync('userInfokey');
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
-      let token = app.globalData.token || userInfokey.token
+      let token = app.globalData.token || userInfokey.token;
+
+      timestamp = Date.parse(new Date());
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
       var that = this;
@@ -151,8 +157,9 @@ Page({
       wx.request({
         url: 'https://exbuy.double.com.cn/api/nearby/order_payment_new',
         data: {
+          request_object: app.globalData.request_object,
           store_id,
-          user_id: app.globalData.user_id,
+          user_id: app.globalData.user_id || userInfokey.user_id,
           token: token,
           timestamp: timestamp,
           process: hexMD5,

@@ -35,6 +35,7 @@
 }
 /* ￥ */
 .moneySign{
+  display: block;
   padding-top: 80rpx;
   height: 60rpx;
   line-height: 60rpx;
@@ -117,6 +118,12 @@
   position: absolute;
   left: 40rpx;
   bottom: 20rpx;
+}
+.mask{
+  position: absolute;
+  width: 623rpx;
+  height: 81rpx;
+  z-index: 99;
 }
 .place-holder{
   font-size: 26rpx;

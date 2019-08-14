@@ -1,7 +1,6 @@
 var app = getApp();
 var util = require('../../utils/util.js');
 var md5 = require('../../utils/md5.js');
-var timestamp = Date.parse(new Date());
 
 var data_list = new Array();
 var category_list = new Array();
@@ -15,7 +14,7 @@ var goodsItem = [];
 // 右侧每一类的 bar 的高度（固定）
 const RIGHT_BAR_HEIGHT = 30;
 // 右侧每个子类的高度（固定）
-const RIGHT_ITEM_HEIGHT = 100;
+const RIGHT_ITEM_HEIGHT =124;
 // 左侧每个类的高度（固定）
 const LEFT_ITEM_HEIGHT = 42     
  
@@ -78,6 +77,7 @@ Page({
     noGood:false,
     order_cost:0,//订单总价
     tempTop:0,
+    isMask:false,
 
 
     //swiper滑动的数组
@@ -123,6 +123,7 @@ Page({
       totalSwiper: array.length,
       tips: array1,
       store_score: store_info.store_score,
+      isMask:false,
     })
 
 
@@ -130,16 +131,16 @@ Page({
     let choosedList = wx.getStorageSync('choosedList') || [];
     let order_info = wx.getStorageSync('order_info') || {};
     goodsItem = wx.getStorageSync('goodsItem') || app.globalData.goodsItem;
-    console.log(choosedList, 199, goodsItem, order_info, choosedList.length > 0)
-
-    if (choosedList.length>0){
+    console.log(order_info,1333)
+    if (choosedList.length > 0 || wx.getStorageInfoSync('goodsItem').length>0){
       for (let i = 0; i < choosedList.length;i++){
         for(let j=0;j<goodsItem.length;j++){
-          let list_goods = goodsItem[j].list_goods
+          let list_goods = goodsItem[j].list_goods;
+          goodsItem[j].select_nums=0
           for (let k = 0; k < list_goods.length;k++){
             if (choosedList[i].goodsid == list_goods[k].goods_id){
               list_goods[k].num = choosedList[i].goods_selenum;
-              goodsItem[j].select_nums += list_goods[k].num
+              goodsItem[j].select_nums+= choosedList[i].goods_selenum;
             }
           }
         }
@@ -185,6 +186,8 @@ Page({
     })
     that.setData({
       currentLeftSelect: goodsItem[0].id,
+      tcategory: goodsItem[0].category,
+      tintroduce: goodsItem[0].introduce,
       eachRightItemToTop: this.getEachRightItemToTop()
     })
   },
@@ -207,9 +210,8 @@ Page({
       swiperCurrent: e.detail.current
     })
   },
-  toPay: util.throttle(function (e) {
+  toPay:function (e) {
     let that = this;
-    console.log(this.data.choosedList, this.data.total_num )
     // 判断是否有选中商品
     if (this.data.total_num > 0) {
       var choosedList = wx.getStorageSync('choosedList') || that.data.choosedList;
@@ -230,22 +232,24 @@ Page({
       wx.setStorageSync('ol', choosedList);
        
        // ------------------------------
-        var activity_goods = JSON.stringify(activity_goods);
+        // var activity_goods = JSON.stringify(activity_goods);
         var discount_goods = JSON.stringify(discount_goods);
-        app.globalData.activity_goods = activity_goods;
+        // app.globalData.activity_goods = activity_goods;
         app.globalData.discount_goods = discount_goods;
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
-        let token = app.globalData.token || userInfokey.token;
+      var timestamp = Date.parse(new Date());
+      let token = app.globalData.token || userInfokey.token;
         var val = 'fanbuyhainan' + timestamp.toString() + token;
         var hexMD5 = md5.hexMD5(val);
-      console.log(212, discount_goods, store_id, token)
+      console.log(212, timestamp)
 
         // 生成订单号
         wx: wx.request({
           url: 'https://exbuy.double.com.cn/api/store_detail/insert_order_new',
           data: {
+            request_object: app.globalData.request_object,
             user_id: app.globalData.user_id || userInfokey.user_id ,
-            store_id: store_id,
+            store_id,
             discount_goods: discount_goods,
             timestamp: timestamp,
             process: hexMD5, 
@@ -257,42 +261,50 @@ Page({
           },
           success: function (res) {
             console.log(token,243,userInfokey,'生成订单号', res)
-          if (res.data.status == 1) {
-            that.setData({
-              actual_money: res.data.data.actual_money
-            })
-            // 订单号
-            userInfokey.order_id = res.data.data.order_id
-            // 订单金额
-            userInfokey.account_money = res.data.data.account_money
-            // 翻倍金额
-            // ////console.log("翻倍金额", res.data.data.discount_price)
-            userInfokey.discount_price = res.data.data.discount_price
-            // 服务费用
-            // ////console.log("服务费用", res.data.data.service_money)
-            userInfokey.service_money = res.data.data.service_money
-            // 本单节省
-            // ////console.log("本单节省", res.data.data.save_money)
-            userInfokey.save_money = res.data.data.save_money
-            // 未翻金额
-            // ////console.log("未翻金额", res.data.data.no_discount_price)
-            userInfokey.no_discount_price = res.data.data.no_discount_price
-            userInfokey.actual_money = res.data.data.actual_money
-            wx.setStorageSync('userInfokey', userInfokey)
-            wx.navigateTo({
-              url: '../submitOrders/submitOrders'
-            });
-            } else {
-              wx.showToast({
-                title: '账单生成失败',
-                icon: 'none',
-                duration: 2000,
+            if (res.data.status == 1) {
+              that.setData({
+                actual_money: res.data.data.actual_money, isMask:true
               })
+              // 订单号
+              userInfokey.order_id = res.data.data.order_id
+              // 订单金额
+              userInfokey.account_money = res.data.data.account_money
+              // 翻倍金额
+              // ////console.log("翻倍金额", res.data.data.discount_price)
+              userInfokey.discount_price = res.data.data.discount_price
+              // 服务费用
+              // ////console.log("服务费用", res.data.data.service_money)
+              userInfokey.service_money = res.data.data.service_money
+              // 本单节省
+              // ////console.log("本单节省", res.data.data.save_money)
+              userInfokey.save_money = res.data.data.save_money
+              // 未翻金额
+              // ////console.log("未翻金额", res.data.data.no_discount_price)
+              userInfokey.no_discount_price = res.data.data.no_discount_price
+              userInfokey.actual_money = res.data.data.actual_money
+              wx.setStorageSync('userInfokey', userInfokey)
+              wx.navigateTo({
+                url: '../submitOrders/submitOrders'
+              });
+            } else {
+              if (res.data.message){
+
+                wx.showToast({
+                  title: res.data.message,
+                  icon: 'none',
+                  duration: 2000,
+                })
+              }
             }
           },
           fail: function () {
             // fail
-            ////console.log("服务器响应失败");
+            console.log("服务器响应失败");
+            wx.showToast({
+              title: '服务器响应失败',
+              icon: 'none',
+              duration: 2000,
+            })
           },
           complete: function () {
             // complete
@@ -306,7 +318,7 @@ Page({
         duration: 1000
       })
     }
-  },1000),
+  },
 
   // 打开定位地图
 
@@ -550,7 +562,7 @@ Page({
     let goodindex =dataset.goodindex;
     let goodsItem = this.data.goodsItem;
     let curGood = goodsItem[index];
-    console.log(goodsItem, 563, index, dataset)
+    // console.log(goodsItem, 563, index, dataset)
     let curGoodInfo = curGood.list_goods[goodindex];
     let isInArray = this.isInArray(choosedList, dataset.goodsid);
   
@@ -704,7 +716,7 @@ Page({
     let evaluate = wx.getStorageSync('evaluate') || that.data.evaluate;
     let evaluate_list = evaluate.list_evaluate;
     let templist=[];
-    console.log(evaluate)
+    
     for (let i = 0; i < evaluate_list.length;i++){
 
       if (evaluate_list[i].pics !='' && current == 0) {
@@ -742,7 +754,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    this.setData({
+      isMask: false,
+    })
   },
 
   /**
@@ -829,15 +843,15 @@ Page({
 
     this.getEvaluate();
   },
-  navigator(){
+  navigator() {
     wx.navigateTo({
-      url: '../businessQualification/businessQualification?store_id='+app.globalData.store_id,
+      url: '../businessQualification/businessQualification?store_id=' + app.globalData.store_id || wx.getStorageSync('store_info').store_id,
     })
   },
 
   report() {
     wx.navigateTo({
-      url: '../reportBusiness/reportBusiness?store_id=' + app.globalData.store_id,
+      url: '../reportBusiness/reportBusiness?store_id=' + app.globalData.store_id || wx.getStorageSync('store_info').store_id,
     })
       
   },
@@ -852,7 +866,8 @@ Page({
     obj[goodsItem[0].id] = totop
     // 循环来计算每个子类到顶部的高度
     for (let i = 1; i < (goodsItem.length + 1); i++) {
-      totop += (RIGHT_BAR_HEIGHT + goodsItem[i - 1].category.length * RIGHT_ITEM_HEIGHT)
+      console.log(goodsItem[i - 1])
+      totop += (RIGHT_BAR_HEIGHT + goodsItem[i - 1].list_goods.length * RIGHT_ITEM_HEIGHT)
       // 这个的目的是 例如有两类，最后需要 0-1 1-2 2-3 的数据，所以需要一个不存在的 'last' 项，此项即为第一类加上第二类的高度。
       obj[goodsItem[i] ? goodsItem[i].id : 'last'] = totop
     }
@@ -864,18 +879,24 @@ Page({
       let left = this.data.eachRightItemToTop[this.data.goodsItem[i].id]
       let right = this.data.eachRightItemToTop[this.data.goodsItem[i + 1] ? this.data.goodsItem[i + 1].id : 'last']
       if (e.detail.scrollTop < right && e.detail.scrollTop >= left) {
+        // console.log(this.data.goodsItem[i].category)
         this.setData({
           currentLeftSelect: this.data.goodsItem[i].id,
-          leftToTop: LEFT_ITEM_HEIGHT * i
+          leftToTop: LEFT_ITEM_HEIGHT * i,
+          tcategory: this.data.goodsItem[i].category,
+          tintroduce: this.data.goodsItem[i].introduce
         })
       }
     }
   },
   // 左侧类的点击事件，点击时，右侧会滚动到对应分类
   left: function (e) {
-    this.setData({
-      toView: e.target.id || e.target.dataset.id,
-      currentLeftSelect: e.target.id || e.target.dataset.id
+    console.log(e)
+    this.setData({ 
+      toView: e.currentTarget.id || e.currentTarget.dataset.id,
+      currentLeftSelect: e.currentTarget.id || e.currentTarget.dataset.id,
+      tcategory: e.currentTarget.tcategory || e.currentTarget.dataset.tcategory,
+      tintroduce: e.currentTarget.tintroduce || e.currentTarget.dataset.tcategory
     })
   },
 

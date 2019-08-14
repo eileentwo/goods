@@ -17,8 +17,9 @@ Page({
       var that = this;
       wx: wx.request({
           url: 'https://exbuy.double.com.cn/api/store_detail/get_business_info',
-          data: {
-              store_id: 6415,
+        data: {
+          request_object: app.globalData.request_object,
+          store_id :app.globalData.store_id || wx.getStorageSync('store_info').store_id
           },
           header: {},
           method: 'POST',

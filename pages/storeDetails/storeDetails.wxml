@@ -72,10 +72,10 @@
           <swiper-item>
             <view class="goods">
              <!-- 左 -->
-                <scroll-view class='tab-left' scroll-with-animation="true" scroll-y="true" style="height:{{height}}px" scroll-top="{{leftToTop}}">
+                <view class='tab-left'  style="height:{{height}}px" >
                     <view style="padding-bottom: 50rpx;" >
-                      <view scroll_left_text wx:for="{{goodsItem}}" wx:for-index='index'wx:key="id" bindtap="left" data-id="{{item.id}}" >
-                        <view  id="item.id" class="tabArr {{item.id==currentLeftSelect? 'active' : ''}}" data-category="{{index}}"  bindtap="switchCategory">
+                      <view  wx:for="{{goodsItem}}" wx:for-index='index'wx:key="id" bindtap="left" data-id="{{item.id}}" data-tcategory="{{item.category}}"   data-tintroduce="{{item.introduce}}">
+                        <view  class="tabArr {{item.id==currentLeftSelect? 'active' : ''}}" data-category="{{index}}"  >
                             <view>
                               <image src='{{index==0?"../../images/storeDetails/active.png":""}}' wx:if="{{index==0}}" class="activeInco"></image>
                               <image src='{{index==1?"../../images/storeDetails/offer.png":""}}' wx:elif="{{index==1}}"  class="activeInco"></image>
@@ -86,15 +86,22 @@
                
                       </view>
                     </view>
-                </scroll-view>
+                </view>
 
                 <!-- 右 -->
+                <view class="discountedGoodsTitle fixed-title">
+                  <view>
+                    <image src="../../images/storeDetails/jian.png" lazy-load='true' class="preInco"></image>
+                    <text class="preferential">{{tcategory}}</text>
+                    <text class="mustSee">{{tintroduce}}</text>
+                  </view>
+                </view>
                 <scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{height}}px"  bindscroll="right" scroll-into-view="{{toView}}"  class='tab-right'>
-                    <view wx:for="{{goodsItem}}" wx:for-item='item' wx:for-index = 'index' wx:key="id">
-                       <view class="right-item" data-parentid="{{index}}">
+                    <view wx:for="{{goodsItem}}" wx:for-item='item' wx:for-index = 'index' wx:key="id"  id="{{item.id}}">
+                       <view class="right-item" data-parentid="{{item.id}}" >
 
                         <view class="discountedGoodsTitle">
-                          <view  class="{{item.id==currentLeftSelect?'fixed-title':''}} ">
+                          <view>
                             <image src="../../images/storeDetails/jian.png" lazy-load='true' class="preInco"></image>
                             <text class="preferential">{{item.category}}</text>
                             <text class="mustSee">{{item.introduce}}</text>
@@ -205,7 +212,7 @@
       </view> 
     </view> 
     <!-- 购物车弹窗 -->
-    <view class="cartBox_mask"  bindtap="powerDrawer1" data-statu="car"  wx:if="{{cartBoxStatus}}"></view> 
+    <view class="cartBox_mask"  bindtap="powerDrawer" data-statu="car"  wx:if="{{cartBoxStatus}}"></view> 
     <view class="cartBox" id='cartBox' animation="{{animationData}}" wx:if="{{cartBoxStatus}}" >
       <view class="cartInner" >
         <view class="cartTitle">
@@ -235,7 +242,10 @@
               <image class="anInco" src="../../images/storeDetails/shopcar.png" bindtap="openCart" data-num="{{total_num}}"></image>
               <view class="shoppingNum" hidden="{{total_num==0}}">{{total_num}}</view>
               <view class="money">￥{{order_cost}}</view>
-              <view class="settlement" bindtap="toPay">去结算</view>
+              <view class="settlement">
+                <view class="settlementmask" wx:if="{{isMask}}"></view>
+                <view   bindtap="toPay">去结算</view>
+              </view>
             <!-- </block>
             <block wx:else="{{business}}">
               <view class="rest">店铺休息中</view>

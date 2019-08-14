@@ -2,7 +2,7 @@ var app = getApp();
 var md5 = require('../../utils/md5.js');
 var md51 = require('../../utils/md51.js');
 var util = require('../../utils/util.js');
-var timestamp = Date.parse(new Date());
+var timestamp =0;
 
 var textcontent = '';
 var table_number = ''; 
@@ -22,6 +22,7 @@ Page({
         actual_money:'',
         userInput:'',
         isShowmore:false,
+      isMask:false,
     },
     clearInput: function () {
         this.setData({
@@ -92,6 +93,7 @@ Page({
             store_name: app.globalData.store_name,
             store_logo: app.globalData.store_logo,
             store_address: app.globalData.store_address,
+          isMask:false,
         })
         var no_discount_price = userInfokey.no_discount_price;
         var ol = wx.getStorageSync('ol');
@@ -121,14 +123,14 @@ Page({
     },
     // 桌号
     table_number:function(e){
-        let table_number = e.detail.value;
-        this.data.table_number = table_number;
+      this.data.table_number = e.detail.value;
+      console.log(this.data.table_number, e.detail.value)
     },
-  wechatPay: util.throttle (function () {
-      // console.log(app.globalData,126,'submitorders', userInfokey)
+  wechatPay: function () {
       var that = this;
     let userInfokey = wx.getStorageSync('userInfokey');
     var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
+       timestamp = Date.parse(new Date());
       let token = app.globalData.token || userInfokey.token
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
@@ -136,6 +138,7 @@ Page({
       wx.request({
         url: 'https://exbuy.double.com.cn/api/mini_program/get_prepay_id',
         data: {
+          request_object: app.globalData.request_object,
           store_id,
           user_id: app.globalData.user_id || userInfokey.user_id,
           openid: app.globalData.openid || userInfokey.openid,
@@ -144,9 +147,8 @@ Page({
           process: hexMD5,
           order_id: userInfokey.order_id,
           paid_type: 2,
-          remark: "这是测试数据",
-          marks: that.data.userInput,
-          table_number: that.data.table_number
+          remark: that.data.userInput || '',//备注
+          table_number: that.data.table_number || ''
         },
         method: 'POST',
         header: {
@@ -158,6 +160,17 @@ Page({
           if (res.data.status == 1) {
             let order_info = [];
             let choosedList = [];
+            let goodsItem = wx.getStorageSync('goodsItem');
+
+            for (var i in goodsItem) {
+              goodsItem[i].select_nums = 0;
+              for (var j in goodsItem[i].list_goods) {
+                goodsItem[i].list_goods[j].num = 0;
+              }
+
+            }
+            wx.setStorageSync('goodsItem', goodsItem);
+
             wx.setStorageSync('choosedList', choosedList);
             wx.setStorageSync('order_info', order_info);
             let strmd5 = 'appId=' + res.data.data.appid + '&nonceStr=' + res.data.data.noncestr + '&package=prepay_id=' + res.data.data.prepayid + '&signType=MD5&timeStamp=' + res.data.data.timestamp + '&key=rImE3xCA7U22TWYxFvA2eYq4Umy1NVgP';
@@ -175,6 +188,9 @@ Page({
                 paySign: mypaySign,
                 success(res) {
                   wx.clearStorageSync('ol')
+                  that.setData({
+                    isMask:true
+                  })
                   wx.showModal({
                     title: '支付成功',
                     content: '您将在“微信支付”官方号中收到支付凭证',
@@ -191,22 +207,37 @@ Page({
               })
               // 将缓存的ol清空
             } else {
-              console.log("咋啦", res.data)
+              wx.showToast({
+                title: res.data.message,
+                icon: 'none',
+                duration: 2000,
+              })
+              // console.log("咋啦", res.data)
             }
           } else {
-            console.log("咋啦", res.data)
+            wx.showToast({
+              title: res.data.message,
+              icon: 'none',
+              duration: 2000,
+            })
+            // console.log("咋啦", res.data)
           }
         },
         fail: function () {
           // fail
           console.log("支付订单请求失败");
 
+          wx.showToast({
+            title: "支付订单请求失败",
+            icon: 'none',
+            duration: 2000,
+          })
         },
         complete: function () {
           // complete
         }
       })
-    },1000),
+    },
 
   showMore(){
     console.log(this.data.orderList)

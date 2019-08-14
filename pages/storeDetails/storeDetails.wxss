@@ -594,11 +594,18 @@ navigator {
     font-size: 36rpx;
     text-align: center;
 }
-
+.settlementmask{
+    position: absolute;
+    width: 272rpx;
+    height: 118rpx;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, .5)
+}
 .tab-right{ 
     height:900rpx;
     width: 568rpx;
     padding-left: 20rpx;
+    position: relative;
 } 
 
 /* 拨打商家电话 */

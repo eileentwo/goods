@@ -2,7 +2,7 @@
 var app = getApp();
 var md5 = require('../../utils/md5.js');
 var util = require('../../utils/util.js');
-var timestamp = Date.parse(new Date());
+var timestamp =0;
 
 Page({
 
@@ -19,13 +19,7 @@ Page({
    */
   onLoad: function (options) {
     let userInfokey = wx.getStorageSync('userInfokey');
-    console.log(16, userInfokey)
-    if (userInfokey.hasOwnProperty('token')){
-      this.setData({
-        isPhone:false,
-        isUser: false
-      })
-    }
+    console.log(userInfokey, 22)
   },
   /*getPhoneNumber:function(e) {
     var that = this;
@@ -43,7 +37,8 @@ Page({
       let iv=e.detail.iv
       wx.request({
         url: 'https://exbuy.double.com.cn/api/mini_program/get_phone_number',
-        data: { 
+        data: {
+          request_object: app.globalData.request_object,
               process:md5,
               timestamp,
               session_key: app.globalData.session_key,
@@ -76,9 +71,10 @@ Page({
     var userInfokey = wx.getStorageSync('userInfokey');
     userInfokey.user_id = 0;
     userInfokey.token = 0;
-
+    timestamp=Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var hexMd5 = md5.hexMD5(val);
+    console.log(!userInfokey.hasOwnProperty('userInfo'))
     if (!userInfokey.hasOwnProperty('userInfo')){
 
       wx.getSetting({
@@ -97,6 +93,7 @@ Page({
                   wx.request({
                     url: 'https://exbuy.double.com.cn/api/mini_program/login',
                     data: {
+                      request_object: app.globalData.request_object,
                     nickname: userinfo.nickName,
                     sex: userinfo.gender,
                     headimgurl: userinfo.avatarUrl,
@@ -209,6 +206,14 @@ Page({
    */
   onShow: function () {
 
+    let userInfokey = wx.getStorageSync('userInfokey');
+    console.log(userInfokey,207)
+    if (userInfokey.hasOwnProperty('token') || userInfokey.user_id) {
+      this.setData({
+        isPhone: false,
+        isUser: false
+      })
+    }
   },
 
   /**

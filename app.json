@@ -1,8 +1,10 @@
 {
     "pages": [
-      "pages/orderOrPayment/orderOrPayment",
-      "pages/payment/payment",
+      "pages/index/index",
       "pages/storeDetails/storeDetails",
+      "pages/orderOrPayment/orderOrPayment",
+      "pages/productDetails/productDetails",
+      "pages/payment/payment",
       "pages/login/login",
       "pages/submitOrders/submitOrders",
       "pages/registered/registered",
@@ -11,10 +13,8 @@
       "pages/evaluate/evaluate",
       "pages/relatedEvaluation/relatedEvaluation",
       "pages/pendingPayment/pendingPayment",
-      "pages/productDetails/productDetails",
       "pages/localtion/localtion",
       "pages/businessQualification/businessQualification",
-      "pages/index/index",
       "pages/logs/logs"
     ],
     "window": {

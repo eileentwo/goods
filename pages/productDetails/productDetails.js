@@ -22,7 +22,8 @@ Page({
         goods_id= options.goods_id;
         wx.request({
             url: 'https://exbuy.double.com.cn/api/store_detail/get_goods_info',
-            data: {
+          data: {
+            request_object: app.globalData.request_object,
                 goods_id: goods_id
             },
             method: 'POST', 
@@ -36,6 +37,7 @@ Page({
                     pictures[item]=app.formatImg(pictures[item])
                 }
                 res.data.data.goods_pics=pictures
+              console.log(res.data.data)
                 that.setData({
                     goodsDetails: res.data.data,
                     imgUrls: res.data.data.goods_pics
@@ -53,7 +55,8 @@ Page({
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
         wx.request({
             url: 'https://exbuy.double.com.cn/api/store_detail/list_user_evaluate',
-            data: {
+          data: {
+            request_object: app.globalData.request_object,
                 store_id
             },
             method: 'POST',
@@ -62,37 +65,9 @@ Page({
             }, // 设置请求的 header
             success: function (res) {
                 console.log(res.data)
-                // 获取到的评论类型
-                // console.log("type",res.data.data.list_type)
-                // // 获取到的评论标签
-                // console.log(res.data.data.list_tag)
-                // // 获取到的评论详情
-                // console.log("a",res.data.data.list_evaluate)
-                // var list = res.data.data.list_evaluate;
-                // for (var i = 0; i < list.length; i++) {
-                //     console.log("i",list[i])
-                //     var pics = app.formatImg(list[i]["head_pic"]);
-                //     if (list[i]["head_pic"]==pics){
-                //         return list[i]["head_pic"];
-                //     }
-                //     if (list[i]["head_pic"] != pics){
-                //         return pics;
-                //     }
-                    
-                // }
-                var array = new Array;
-                var array1 = new Array;
-                var list = res.data.data.list_evaluate;
-                for (var i = 0; i < list.length; i++) {
-                    array1.push(app.formatImg(list[i]["head_pic"]));
-                    array.push(list[i])     
-                }
-                that.setData({
-                    list_type: res.data.data.list_type,
-                    list_tag: res.data.data.list_tag,
-                    list_evaluate: array,
-                    
-                })
+              if (res.data.status=='1'){
+                
+              }
 
             },
             fail: function () {

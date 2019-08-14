@@ -1,7 +1,7 @@
 var app = getApp();
 var util = require('../../utils/util.js');
 var md5 = require('../../utils/md5.js');
-var timestamp = Date.parse(new Date());
+var timestamp = 0;
 
 var currentid = 0;
 var textcontent = '';
@@ -142,11 +142,13 @@ Page({
       let userInfokey = wx.getStorageSync('userInfokey');
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
       let token = app.globalData.token || userInfokey.token
+      timestamp = Date.parse(new Date())
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
         wx.request({
             url: 'https://exbuy.double.com.cn/api/store_detail/insert_report',
-            data: {
+          data: {
+            request_object: app.globalData.request_object,
               user_id: app.globalData.user_id || userInfokey.user_id,
                 store_id,
                 token,

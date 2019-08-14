@@ -39,7 +39,8 @@ Page({
                 icon: 'none',
                 wx: wx.request({
                     url: 'https://exbuy.double.com.cn/api/users/send_code',
-                    data: {
+                  data: {
+                    request_object: app.globalData.request_object,
                         mobile: phone,
                         type: 1,
                         timestamp: timestamp,

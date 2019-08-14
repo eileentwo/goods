@@ -72,7 +72,10 @@
             </view>
         </view>
         <!-- <navigator url="../payment/payment"> -->
-            <view class="settlement" bindtap="wechatPay">微信支付</view>
+        <view class="settlement">
+            <view class="mask" wx:if="{{isMask}}"></view>
+            <view  bindtap="wechatPay">微信支付</view>
+        </view>
         <!-- </navigator> -->
     </view>
 </view> 

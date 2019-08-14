@@ -25,7 +25,8 @@ Page({
         }else{
             wx: wx.request({
                 url: 'https://exbuy.double.com.cn/api/users/login',
-                data: {
+              data: {
+                request_object: app.globalData.request_object,
                     mobile: e.detail.value.mobile,
                     password: psd,
                     timestamp: timestamp,

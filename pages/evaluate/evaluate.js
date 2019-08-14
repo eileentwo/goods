@@ -236,7 +236,8 @@ Page({
       var hexMD5 = md5.hexMD5(val);
         wx.request({
             url: 'https://exbuy.double.com.cn/api/store_order/insert_user_evaluate',
-            data: {
+          data: {
+            request_object: app.globalData.request_object,
               user_id: app.globalData.user_id || userInfokey.user_id,
                 order_id: app.globalData.order_id,
                 score: key,
