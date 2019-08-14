@@ -382,14 +382,12 @@ navigator {
 }
 
 .fixed-title{
-  position: fixed;
-  left: 178rpx;
-  right: 0;
+  position: absolute;
   top: 0;
   width: 568rpx;
   height: 60rpx;
   line-height: 60rpx;
-  background-color: #fff;
+  background: #fff;
   z-index: 999999;
 }
 /* 商品图片 */
@@ -601,13 +599,20 @@ navigator {
     z-index: 9999;
     background-color: rgba(0, 0, 0, .5)
 }
+.position{
+  position: absolute;
+  top: 0;
+}
 .tab-right{ 
     height:900rpx;
     width: 568rpx;
     padding-left: 20rpx;
     position: relative;
 } 
-
+.absolute{
+  height:900rpx;
+  width: 568rpx;
+}
 /* 拨打商家电话 */
 
 /*mask*/

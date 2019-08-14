@@ -89,52 +89,54 @@
                 </view>
 
                 <!-- 右 -->
-                <view class="discountedGoodsTitle fixed-title">
-                  <view>
-                    <image src="../../images/storeDetails/jian.png" lazy-load='true' class="preInco"></image>
-                    <text class="preferential">{{tcategory}}</text>
-                    <text class="mustSee">{{tintroduce}}</text>
-                  </view>
-                </view>
-                <scroll-view scroll-with-animation="true" scroll-y="true" style="height:{{height}}px"  bindscroll="right" scroll-into-view="{{toView}}"  class='tab-right'>
-                    <view wx:for="{{goodsItem}}" wx:for-item='item' wx:for-index = 'index' wx:key="id"  id="{{item.id}}">
-                       <view class="right-item" data-parentid="{{item.id}}" >
-
-                        <view class="discountedGoodsTitle">
-                          <view>
-                            <image src="../../images/storeDetails/jian.png" lazy-load='true' class="preInco"></image>
-                            <text class="preferential">{{item.category}}</text>
-                            <text class="mustSee">{{item.introduce}}</text>
-                          </view>
-                        </view>
-                        <view class="specificProduct"  wx:for="{{item.list_goods}}" wx:for-item='gooditem' wx:for-index="goodindex" wx:key="goodindex" >
-                        <!--  -->
-                          <navigator url="../productDetails/productDetails?goods_id={{gooditem.goods_id}}">
-                            <image class="productImage" src="{{gooditem.goods_pic}}"></image>
-                          </navigator>
-                          <text class="productDescription">{{gooditem.goods_name}}</text>
-                          <text class="saleMonth">月售{{gooditem.month_count}} </text>
-                          <view class="name">{{gooditem.goods_desc}}</view>
-                          <text class="diningNum">{{gooditem.diningNum}}</text>
-                          <view class="platformPrice">
-                            <image src="../../images/storeDetails/evar.png"></image>
-                            <text >平台价</text>
-                            <text>¥{{gooditem.discount_price}}</text>
-                          </view>
-                          <text class="storePrice">门店价: ¥{{gooditem.goods_price}}</text>
-                          <view  class="gray" >
-                            <text class="range " style="width:{{gooditem.per*150}}rpx"></text>
-                          </view>
-                          <text class="remainder">剩余{{gooditem.stock_count}}份</text>
-                          <image data-index="{{index}}" data-goodindex="{{goodindex}}" data-goods_desc="{{item.goods_desc}}"  data-is_fanbuy="{{item.is_fanbuy}}" data-goods_count="{{gooditem.goods_count}}"  data-goodsId="{{gooditem.goods_id}}" data-goods_selenum="{{gooditem.num?gooditem.num:0}}"  data-goods_price="{{gooditem.goods_price}}" data-discount_price="{{gooditem.discount_price}}"  data-goods_name="{{gooditem.goods_name}}" data-goods_pic="{{gooditem.goods_pic}}"  data-goods_type="{{item.goods_type}}" data-stock_count="{{gooditem.stock_count}}"  bindtap="reduceFromCart" hidden="{{!noGood}}" class="circleLess" src="../../images/storeDetails/less.png"></image>
-                          <text class="amount" hidden="{{!noGood}}">{{gooditem.num?gooditem.num:0}}</text>
-                          <image data-index="{{index}}"  data-goods_count="{{gooditem.goods_count}}"  data-is_fanbuy="{{item.is_fanbuy}}" data-goodindex="{{goodindex}}" data-goodsId="{{gooditem.goods_id}}" data-goods_pic="{{gooditem.goods_pic}}"  data-goods_desc="{{item.goods_desc}}" data-goods_price="{{gooditem.goods_price}}" data-discount_price="{{gooditem.discount_price}}"  data-goods_name="{{gooditem.goods_name}}" data-goods_selenum="{{gooditem.num?gooditem.num:0}}"  data-stock_count="{{gooditem.stock_count}}" data-goods_type="{{item.goods_type}}"  bindtap="addToCart" class="circleAdd"  hidden="{{!noGood}}"src="../../images/storeDetails/add.png"></image>
-                          <text class="circleAdd noGood " hidden="{{noGood}}" >已售罄</text>
-                        </view>
-                      </view>
-                       
+                <view  class='tab-right'>
+                  <view class="discountedGoodsTitle fixed-title">
+                    <view class="position">
+                      <image src="../../images/storeDetails/jian.png" lazy-load='true' class="preInco"></image>
+                      <text class="preferential">{{tcategory}}</text>
+                      <text class="mustSee">{{tintroduce}}</text>
                     </view>
-                </scroll-view>
+                  </view>
+                  <scroll-view class="absolute" scroll-with-animation="true" scroll-y="true" style="height:{{height}}px"  bindscroll="right" scroll-into-view="{{toView}}" >
+                      <view wx:for="{{goodsItem}}" wx:for-item='item' wx:for-index = 'index' wx:key="id"  id="{{item.id}}">
+                        <view class="right-item" data-parentid="{{item.id}}" >
+
+                          <view class="discountedGoodsTitle" hidden="{{index==currentLeftSelect}}">
+                            <view>
+                              <image src="../../images/storeDetails/jian.png" lazy-load='true' class="preInco"></image>
+                              <text class="preferential">{{item.category}}</text>
+                              <text class="mustSee">{{item.introduce}}</text>
+                            </view>
+                          </view>
+                          <view class="specificProduct"  wx:for="{{item.list_goods}}" wx:for-item='gooditem' wx:for-index="goodindex" wx:key="goodindex" >
+                          <!--  -->
+                            <navigator url="../productDetails/productDetails?goods_id={{gooditem.goods_id}}">
+                              <image class="productImage" src="{{gooditem.goods_pic}}"></image>
+                            </navigator>
+                            <text class="productDescription">{{gooditem.goods_name}}</text>
+                            <text class="saleMonth">月售{{gooditem.month_count}} </text>
+                            <view class="name">{{gooditem.goods_desc}}</view>
+                            <text class="diningNum">{{gooditem.diningNum}}</text>
+                            <view class="platformPrice">
+                              <image src="../../images/storeDetails/evar.png"></image>
+                              <text >平台价</text>
+                              <text>¥{{gooditem.discount_price}}</text>
+                            </view>
+                            <text class="storePrice">门店价: ¥{{gooditem.goods_price}}</text>
+                            <view  class="gray" >
+                              <text class="range " style="width:{{gooditem.per*150}}rpx"></text>
+                            </view>
+                            <text class="remainder">剩余{{gooditem.stock_count}}份</text>
+                            <image data-index="{{index}}" data-goodindex="{{goodindex}}" data-goods_desc="{{item.goods_desc}}"  data-is_fanbuy="{{item.is_fanbuy}}" data-goods_count="{{gooditem.goods_count}}"  data-goodsId="{{gooditem.goods_id}}" data-goods_selenum="{{gooditem.num?gooditem.num:0}}"  data-goods_price="{{gooditem.goods_price}}" data-discount_price="{{gooditem.discount_price}}"  data-goods_name="{{gooditem.goods_name}}" data-goods_pic="{{gooditem.goods_pic}}"  data-goods_type="{{item.goods_type}}" data-stock_count="{{gooditem.stock_count}}"  bindtap="reduceFromCart" hidden="{{!noGood}}" class="circleLess" src="../../images/storeDetails/less.png"></image>
+                            <text class="amount" hidden="{{!noGood}}">{{gooditem.num?gooditem.num:0}}</text>
+                            <image data-index="{{index}}"  data-goods_count="{{gooditem.goods_count}}"  data-is_fanbuy="{{item.is_fanbuy}}" data-goodindex="{{goodindex}}" data-goodsId="{{gooditem.goods_id}}" data-goods_pic="{{gooditem.goods_pic}}"  data-goods_desc="{{item.goods_desc}}" data-goods_price="{{gooditem.goods_price}}" data-discount_price="{{gooditem.discount_price}}"  data-goods_name="{{gooditem.goods_name}}" data-goods_selenum="{{gooditem.num?gooditem.num:0}}"  data-stock_count="{{gooditem.stock_count}}" data-goods_type="{{item.goods_type}}"  bindtap="addToCart" class="circleAdd"  hidden="{{!noGood}}"src="../../images/storeDetails/add.png"></image>
+                            <text class="circleAdd noGood " hidden="{{noGood}}" >已售罄</text>
+                          </view>
+                        </view>
+                        
+                      </view>
+                  </scroll-view>
+                </view>
             </view>
           </swiper-item>
           <swiper-item class="tabs-content-item">
