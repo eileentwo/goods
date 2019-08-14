@@ -1,38 +1,93 @@
-.content{
+page{
   font-size: 24rpx;
   background-color: #F3F3F3;
   position: relative;
   z-index: -2;
 }
 .header{
-  height: 160rpx;
-}
-.bgimg{
-  padding: 70rpx 0 360rpx;
+  width: 100%;
+  padding-top: 50rpx;
+  height: 90rpx;
   text-align: center;
   font-size: 38rpx;
   color: #FFFFFF;
-  background: #f00;
-  border-radius:0 0 4% 4%;
+}
+
+.bgimg{
   width: 100%;
   position: absolute;
   z-index: -1;
 }
-.selctbtn{
-  height: 128rpx;
-  background: #fff;
+.selection{
+  height: 110rpx;
+  color: #fff;
+  font-size: 18rpx;
+  padding: 0 20rpx;
+}
+.selectbtn{
+  width: 418rpx;
+  height: 64rpx;
+  overflow: hidden;
+  background-color: #fff;
+  border-radius: 32rpx;
+  font-size: 28rpx;
 }
 
+.selection .logo{
+  width:70rpx;
+  height: 70rpx;
+  margin-right: 10rpx;
+  border-radius: 50%;
+}
+.location{
+  width: 100rpx;
+
+}
+.curcity{
+  font-size: 28rpx;
+  line-height: 1;
+  margin-bottom: 10rpx;
+}
+.location image{
+  width: 20rpx;
+  height: 10rpx;
+  vertical-align: text-top;
+  margin-top: 10rpx;
+}
+.selectbtn image{
+  width: 36rpx;
+  height: 36rpx;
+  margin: 16rpx 16rpx 16rpx 24rpx;
+}
+.selectbtn input{
+  height: 60rpx;
+}
+.moreSelect image{
+  width: 40rpx;
+  height: 40rpx;
+  margin-bottom:4rpx;
+}
+.moreSelect {
+  width: 40rpx;
+  text-align: center;
+}
+.placeholder{
+  color: #939090;
+}
 .swiperbox{
   width: 94%;
   height: 310rpx; 
   margin: 0 auto 40rpx;
   position: relative;
-
+  background-color: #fff;
+  border-radius: 10rpx;
+}
+.swiper{
+  height: 310rpx;
 }
 .slide-image{
   width: 100%;
-  height: 360rpx;
+  height: 310rpx;
 }
 .dots{
   width: 100%;
@@ -66,17 +121,17 @@
   text-align: center;
 }
 .nav image{
-  width: 105rpx;
-  height: 105rpx;
+  width: 120rpx;
+  height: 120rpx;
   border-radius: 10rpx;
 }
 .nav1 image{
-  width: 40rpx;
-  height: 40rpx;
+  width: 60rpx;
+  height: 60rpx;
 }
 .radiusbox{
   width: 662rpx;
-  padding: 0 20rpx;
+  padding: 0 20rpx 20rpx ;
   margin: 0 auto 34rpx;
   background-color: #fff;
   border-radius: 15rpx;
@@ -85,6 +140,7 @@
   height: 66rpx;
   font-size: 20rpx;
   line-height: 66rpx;
+  padding-bottom: 0;
 }
 .adds image{
   width: 110rpx;
@@ -124,19 +180,22 @@
   border-radius:10rpx;
   margin-bottom: 22rpx;
 }
-.goods_item_detail{
-  width: 33.3%;
-  /* text-align: center; */
+.goods_item_body,.address,.money,.selection {
+  justify-content: space-between;
 }
+
 .goods_title{
   color: #111;
   font-size: 24rpx;
   text-align: left;
-
+  margin-bottom: 6rpx;
+  text-indent: 10rpx;
 }
 .stars{
   width: 20rpx;
-  height: 18rpx;
+  height: 20rpx;
+  margin-top: 4rpx;
+  margin-left: 10rpx;
 }
 .goods_item_detail text{
   color: #AEADAA;
@@ -147,4 +206,64 @@
   color: #FF1D3A;
   font-size: 20rpx;
   margin: 0 20rpx 20rpx 6rpx;
+}
+
+.store_item {
+  padding-top: 20rpx;
+}
+.store_item image{
+  width: 224rpx;
+  height: 208rpx;
+}
+.store_info{
+  width: 468rpx;
+  padding-left: 20rpx;
+  font-size: 24rpx;
+  color: #737373;
+  line-height: 1.6;
+}
+.textover{
+  display:block;
+  width: 280rpx;
+  height: 30rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.store_title {
+  font-size:18rpx;
+  margin-bottom:10rpx;
+}
+.store_title text{
+  font-size: 30rpx;
+  color: #111111;
+  font-weight: bold;
+  margin-right: 16rpx;
+}
+.pinkB{
+  color:#FF1D3A;
+  font-size: 30rpx;
+  font-weight: bold;
+  margin-right: 4rpx;
+}
+.pink{
+  color:#FF1D3A;
+  font-weight: bold;
+}
+.smallsize{
+  font-size: 16rpx;
+  margin-right: 36rpx;
+}
+.formal{
+  text-decoration: line-through;
+}
+.marks text{
+  font-size: 20rpx;
+  padding: 0 6rpx;
+  border: 2rpx solid #FF2245;
+  border-radius: 6rpx;
+  margin-right: 6rpx;
+  color:#FF2245;
 }
