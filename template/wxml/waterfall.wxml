@@ -1,0 +1,33 @@
+<template name ='waterfall'>
+    <navigator class="store_item radiusbox flexbox">
+      <image src="../../images/cake.png"  mode="aspectFit"></image>
+      <view class="store_info">
+         <view class="store_title">
+            <text>长沙南站希尔顿欢朋酒店</text>高档型
+        </view>
+        <view class="store_score">
+          <text class="pinkB">4.8</text><text class="smallsize">分</text>55条点评
+        </view>
+        <view class="marks">
+          <text>点评</text>
+          <text>点评</text>
+          <text>点点评评</text>
+        </view>
+        <view class="address flexbox">
+          <text>长沙・中国</text>
+          <text class="textover">高铁南站/国际会展中心/国际会展中心</text>
+        </view>
+        <view class="money  flexbox">
+          <text>距您4.8公里</text>
+          <view>
+            <text class="formal">￥567</text>
+            <text class="pink">￥</text>
+            <text class="pinkB">467</text>起
+          </view>
+        </view>
+      </view>
+    </navigator>
+    <view>
+      <view class="loading"></view>
+    </view>
+</template>

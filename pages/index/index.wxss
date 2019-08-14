@@ -4,13 +4,20 @@ page{
   position: relative;
   z-index: -2;
 }
-.header{
+.header {
+  height: 160rpx;
+}
+.header view{
   width: 100%;
-  padding-top: 50rpx;
+  padding-top: 70rpx;
   height: 90rpx;
   text-align: center;
   font-size: 38rpx;
+  background-color: #FF2041;
   color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
 }
 
 .bgimg{
@@ -208,62 +215,4 @@ page{
   margin: 0 20rpx 20rpx 6rpx;
 }
 
-.store_item {
-  padding-top: 20rpx;
-}
-.store_item image{
-  width: 224rpx;
-  height: 208rpx;
-}
-.store_info{
-  width: 468rpx;
-  padding-left: 20rpx;
-  font-size: 24rpx;
-  color: #737373;
-  line-height: 1.6;
-}
-.textover{
-  display:block;
-  width: 280rpx;
-  height: 30rpx;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -ms-text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.store_title {
-  font-size:18rpx;
-  margin-bottom:10rpx;
-}
-.store_title text{
-  font-size: 30rpx;
-  color: #111111;
-  font-weight: bold;
-  margin-right: 16rpx;
-}
-.pinkB{
-  color:#FF1D3A;
-  font-size: 30rpx;
-  font-weight: bold;
-  margin-right: 4rpx;
-}
-.pink{
-  color:#FF1D3A;
-  font-weight: bold;
-}
-.smallsize{
-  font-size: 16rpx;
-  margin-right: 36rpx;
-}
-.formal{
-  text-decoration: line-through;
-}
-.marks text{
-  font-size: 20rpx;
-  padding: 0 6rpx;
-  border: 2rpx solid #FF2245;
-  border-radius: 6rpx;
-  margin-right: 6rpx;
-  color:#FF2245;
-}
+ @import "/template/wxss/waterfall.wxss"; 

@@ -15,9 +15,9 @@
         <input placeholder="一鹿省全新升级" placeholder-class="placeholder"></input>
       </view>
     </view>
-    <view class="moreSelect">
+    <navigator class="moreSelect">
       <image src="../../images/more10.png" mode="aspectFit"></image>更多
-    </view>
+    </navigator>
   </view>
   <view class="swiperbox">
     <swiper id='loop'	 circular class="swiper" current="{{swiperCurrent}}"  bindchange="swiperChange">
@@ -36,16 +36,16 @@
   
   </view>
   <view class="nav flexbox">
-   <view class="nav_item" wx:for='{{nav1}}'>
+   <navigator class="nav_item" wx:for='{{nav1}}'>
     <image src="../../images/{{item.src}}.png"></image>
     <view>{{item.title}}</view>
-   </view>
+   </navigator>
   </view>
   <view class="nav nav1 flexbox">
-   <view class="nav_item" wx:for='{{nav2}}'>
+   <navigator class="nav_item" wx:for='{{nav2}}'>
     <image src="../../images/{{item.src}}.png"  mode="aspectFit"></image>
     <view>{{item.title}}</view>
-   </view>
+   </navigator>
   </view>
   <view class="adds flexbox radiusbox">
     <image src="../../images/toutiao.png"  mode="aspectFit"></image>
@@ -71,8 +71,9 @@
     </view>
   </view>
   <view class="store_items">
-  
-    <view class="store_item radiusbox flexbox">
+    <import src="/template/wxml/waterfall.wxml" />
+    <template is="waterfall" data=""></template>
+    <!-- <navigator class="store_item radiusbox flexbox">
       <image src="../../images/cake.png"  mode="aspectFit"></image>
       <view class="store_info">
          <view class="store_title">
@@ -99,7 +100,7 @@
           </view>
         </view>
       </view>
-    </view>
-  
+    </navigator> -->
+    
   </view>
 </view>
