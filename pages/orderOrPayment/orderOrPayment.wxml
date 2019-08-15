@@ -1,5 +1,7 @@
 
 
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
 <view class="container" style="background-image:url(../../images/orderOrPayment/bg.png)">
     <!-- <button class="usermask phonemask" wx:if='{{isPhone}}' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> -->
     <button class="usermask" wx:if='{{isUser}}' open-type="getUserInfo" bindgetuserinfo="getUserInfo"></button>

@@ -1,3 +1,5 @@
+
+ @import "/template/wxss/waterfall.wxss"; 
 .content{
     position: relative;
     width: 100%;
@@ -43,7 +45,7 @@
     position: absolute;
     top: 598rpx;
     left: 24rpx;
-    color: #f94d1e;
+    color: #FF1D3A;
     font-size: 32rpx;
 }
 .storePrice{
@@ -95,7 +97,7 @@
     font-size: 30rpx;
 }
 .proDetails{
-  border-left: 2px solid #f94d1e;
+  border-left: 2px solid #FF1D3A;
   padding-left: 20rpx
 }
 .evaluateText{
@@ -186,7 +188,7 @@
   left: 246rpx;
   top: 145rpx;
   font-size: 24rpx;
-  color: #F94D1E;
+  color: #FF1D3A;
 }
 /* 详细评价 */
 .evaDetails{
@@ -246,7 +248,7 @@
     position: absolute;
     top: 2140rpx;
     right:60rpx;
-    color: #f94d1e;
+    color: #FF1D3A;
     font-size: 24rpx;
 }
 .watchMoreTo{
@@ -293,7 +295,7 @@
     position: absolute;
     top: 2390rpx;
     left: 163rpx;
-    color: #F94D1E;
+    color: #FF1D3A;
     font-size: 24rpx;
 }
 .adressDesc,.type,.perCapita{
@@ -334,7 +336,7 @@
 }
 .commentstars{
   position: relative;
-  color: #F94D1E;
+  color: #FF1D3A;
   font-size: 24rpx;
 }
 .commentstars image{

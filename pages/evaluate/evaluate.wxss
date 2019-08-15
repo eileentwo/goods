@@ -1,3 +1,5 @@
+
+ @import "/template/wxss/waterfall.wxss"; 
 .container{
     width: 100%;
     /* height: 100vh; */
@@ -45,7 +47,7 @@
     top:261rpx;
     left:338rpx;
     font-size: 30rpx;
-    color: #F94D1E;
+    color: #FF1D3A;
 }
 
 .moreEvaluate{
@@ -146,7 +148,7 @@
     top:1051rpx;
     left: 23rpx;
     border-radius: 10rpx;
-    background-color: #F94D1E!important;
+    background-color: #FF1D3A!important;
     color: #ffffff;
     font-size: 30rpx;
     text-align: center;
@@ -177,7 +179,7 @@
 .active{
   display: inline-block;
   /* background: #f44232; */
-  color: #F94D1E;
+  color: #FF1D3A;
   box-shadow: 0 5rpx 15rpx #f44232;
   font-size: 24rpx;
   padding: 5rpx 5rpx;
@@ -187,5 +189,5 @@
     height: 42rpx;
     text-align: center;
     line-height: 42rpx;
-    border: 1rpx solid #F94D1E;
+    border: 1rpx solid #FF1D3A;
 }

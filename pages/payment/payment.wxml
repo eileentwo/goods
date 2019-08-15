@@ -1,4 +1,6 @@
 <view class="container">
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
     <view class="wrap">
         <view class="payMerchant">付款给 {{store_name}}</view>
         <image class="merchantInco" src="{{img}}"></image>

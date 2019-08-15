@@ -4,7 +4,8 @@ Page({
     /**
      * 页面的初始数据
      */
-    data: {
+  data: {
+    titlename: '店铺定位',
     
     },
     localtion:function(e){
@@ -79,10 +80,21 @@ Page({
 
     },
 
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage: function () {
-
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function (res) {
+    let store_info = wx.getStorageSync('store_info');
+    console.log(store_info)
+    if (res.from === 'button') {
     }
+    return {
+      title: '转发',
+      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id,
+      success: function (res) {
+
+      }
+    }
+
+  },
 })

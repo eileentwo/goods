@@ -1,6 +1,13 @@
+
+<template name ='head'>
+  <navigator  open-type='navigateBack' target delta='1' class="backhome"><image  src="../../images/left.png"></image></navigator>
+  <view class="header">
+    <view>{{titlename}}</view>
+  </view>
+</template>
 <template name ='waterfall'>
-    <navigator class="store_item radiusbox flexbox">
-      <image src="../../images/cake.png"  mode="aspectFit"></image>
+    <navigator class="store_item radiusbox flexbox" wx:for='{{store_info}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ' wx:key="item">  
+      <image src="../../images/cake.png" lazy-load="true" mode="aspectFit"></image>
       <view class="store_info">
          <view class="store_title">
             <text>长沙南站希尔顿欢朋酒店</text>高档型

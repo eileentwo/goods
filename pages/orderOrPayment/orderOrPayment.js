@@ -10,6 +10,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    titlename: '',
     isUser:true,
     isPhone:true,
   },
@@ -18,8 +19,97 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let userInfokey = wx.getStorageSync('userInfokey');
-    console.log(userInfokey, 22)
+    let store_info = wx.getStorageSync('store_info') || [];
+    let that=this;
+    store_info.store_id = options.store_id;
+    wx.setStorageSync('store_info', store_info)
+    console.log(store_info, 22, !store_info.store_address)
+
+    if (!store_info.store_address) {
+      // 店铺详情
+      wx.request({
+        url: 'https://exbuy.double.com.cn/api/store_detail/get_store_info_new',
+        data: {
+          store_id: options.store_id,
+          request_object: app.globalData.request_object,
+        },
+        method: 'POST',
+        header: {
+          'Content-Type': "application/x-www-form-urlencoded"
+        },
+        success: function (res) {
+          if (res.data.status == 1) {
+            console.log(res.data.data.store_info,50)
+            wx.setStorageSync('store_info', res.data.data.store_info)
+          } else {
+            wx.showToast({
+              title: '加载失败',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        },
+        fail: function () {
+          console.log("店铺详情请求失败");
+          wx.showToast({
+            title: '服务器响应失败',
+            icon: 'none',
+            duration: 3000,
+          })
+        },
+        complete: function () {
+          // complete
+        }
+      })
+
+      //商品列表
+      wx: wx.request({
+        url: 'https://exbuy.double.com.cn/api/store_detail/list_store_goods',
+        data: {
+          request_object: app.globalData.request_object,
+          store_id :options.store_id,
+          page: 1,
+          limit: 100
+        },
+        method: 'POST',
+        dataType: 'json',
+        responseType: 'text',
+        success: function (res) {
+          console.log('商品列表', res)
+          if (res.data.status == 1) {
+            let goodsItem = res.data.data;
+            for (let i = 0; i < goodsItem.length; i++) {
+              goodsItem[i].id = 'id' + i;
+              goodsItem[i].select_nums = 0;
+              let goods = goodsItem[i].list_goods;
+              for (let j = 0; j < goods.length; j++) {
+                goods[j].num = 0;
+              }
+            }
+            
+            wx.setStorageSync('goodsItem', goodsItem)
+
+          } else {
+            wx.showToast({
+              title: '营业日期加载失败',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        },
+        fail: function (res) {
+          wx.showToast({
+            title: '服务器响应失败',
+            icon: 'none',
+            duration: 3000,
+          })
+        },
+        complete: function (res) { },
+      })
+    }
+    this.setData({
+      titlename: options.store_name
+    })
   },
   /*getPhoneNumber:function(e) {
     var that = this;
@@ -76,79 +166,61 @@ Page({
     var hexMd5 = md5.hexMD5(val);
     console.log(!userInfokey.hasOwnProperty('userInfo'))
     if (!userInfokey.hasOwnProperty('userInfo')){
-
-      wx.getSetting({
+      wx.getUserInfo({
         success(res) {
-          // console.log("res", res)
-          if (res.authSetting['scope.userInfo']) {
-            console.log("已授权=====")
-            // 已经授权，可以直接调用 getUserInfo 获取头像昵称
-            wx.getUserInfo({
-              success(res) {
-                console.log("获取用户信息成功", res)
-                if ('getUserInfo:ok' == res.errMsg) {
-                  let userinfo = res.userInfo;
-                  userInfokey.userInfo = userinfo
-                  
-                  wx.request({
-                    url: 'https://exbuy.double.com.cn/api/mini_program/login',
-                    data: {
-                      request_object: app.globalData.request_object,
-                    nickname: userinfo.nickName,
-                    sex: userinfo.gender,
-                    headimgurl: userinfo.avatarUrl,
-                    country: userinfo.country,
-                    city: userinfo.city,
-                    province: userinfo.province,
-                    unionid: '',
-                    nickname: userinfo.nickName,
-                      openid: userInfokey.openid,
-                      timestamp,
-                      process: hexMd5,
+          console.log("获取用户信息成功", res)
+          if ('getUserInfo:ok' == res.errMsg) {
+            let userinfo = res.userInfo;
+            userInfokey.userInfo = userinfo
 
-                    },
-                    method: 'POST',
-                    success: function (res) {
-                      console.log(res,86)
-                      if(res.data.status==1){
-                        
-                        userInfokey.user_id = res.data.data.user_id;
-                        userInfokey.token = res.data.data.token;
-                        app.globalData.token = res.data.data.token;
-                        app.globalData.user_id = res.data.data.user_id;
-                        wx.setStorageSync('userInfokey', userInfokey)
-                        that.setData({
-                          isUser: false
-                        })
-                        wx.showToast({
-                          title: '登录成功',
-                        })
-                      } 
+            wx.request({
+              url: 'https://exbuy.double.com.cn/api/mini_program/login',
+              data: {
+                request_object: app.globalData.request_object,
+                nickname: userinfo.nickName,
+                sex: userinfo.gender,
+                headimgurl: userinfo.avatarUrl,
+                country: userinfo.country,
+                city: userinfo.city,
+                province: userinfo.province,
+                unionid: '',
+                nickname: userinfo.nickName,
+                openid: userInfokey.openid,
+                timestamp,
+                process: hexMd5,
 
-                    }
-                  })
-                }else{
+              },
+              method: 'POST',
+              success: function (res) {
+                console.log(res, 86)
+                if (res.data.status == 1) {
+
+                  userInfokey.user_id = res.data.data.user_id;
+                  userInfokey.token = res.data.data.token;
+                  wx.setStorageSync('userInfokey', userInfokey)
                   that.setData({
-                    isUser: true
+                    isUser: false
+                  })
+                  wx.showToast({
+                    title: '登录成功',
                   })
                 }
-              },
-              fail(res) {
-                console.log("获取用户信息失败", res)
+
               }
             })
           } else {
-            wx.showModal({
-              title: '请授权',
-              content: '为了让您更好的体验点单服务，请授权！！！',
+            that.setData({
+              isUser: true
             })
-            console.log("未授权=====")
-            // wx.navigateTo({
-            //   url: '../login/login',
-            // })
           }
+        },
+        fail(res) {
+          console.log("获取用户信息失败", res)
+          wx.showModal({
+            title: '请授权',
+            content: '为了让您更好的体验点单服务，请授权！！！',
+          })
         }
-      
       })
     } else {
       that.setData({
@@ -187,19 +259,13 @@ Page({
 
   },
   gotoPay() {
-    let userInfokey = wx.getStorageSync('userInfokey');
-    console.log(userInfokey.order_id)
-    // if (userInfokey.order_id ){
-      wx.navigateTo({
-        url: '../payment/payment',
+      wx.showModal({
+        title: '温馨提示',
+        content: '直接付款功能暂未开放，敬请期待！',
       })
-    // }else{
-    //   wx.showModal({
-    //     content: '你无未付款订单，快去点餐吧！',
-
-    //   })
-    // }
-
+      // wx.navigateTo({
+      //   url: '../payment/payment',
+      // })
   },
   /**
    * 生命周期函数--监听页面显示
@@ -244,10 +310,22 @@ Page({
 
   },
 
+
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function (res) {
+    let store_info = wx.getStorageSync('store_info');
+    console.log(store_info)
+    if (res.from === 'button') {
+    }
+    return {
+      title: '转发',
+      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id,
+      success: function (res) {
 
-  }
+      }
+    }
+
+  },
 })

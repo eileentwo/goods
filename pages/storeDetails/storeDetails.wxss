@@ -1,3 +1,5 @@
+
+ @import "/template/wxss/waterfall.wxss"; 
 /* 整个页面容器 */
 
 .container {
@@ -89,7 +91,7 @@ navigator {
     left: 151rpx;
     top: 96rpx;
     font-size: 24rpx;
-    color: #f94d1e;
+    color: #FF1D3A;
 }
 
 /* 人均 */
@@ -174,9 +176,9 @@ navigator {
 
 .detailedLocation {
     margin: 30rpx 0 0 69rpx; 
-    width: 580rpx;
+    width: 578rpx;
     height: 90rpx;
-    padding: 5rpx 0;
+    padding: 5rpx 10rpx 5rpx 0;
     font-size: 23rpx;
     color: #323232;
     line-height: 2;
@@ -234,8 +236,8 @@ navigator {
     color: #737370;
 }
 .storeDetails .active{
-  color: #F94D1E;
-  border-bottom: 2px solid #F94D1E;
+  color: #FF1D3A;
+  border-bottom: 2px solid #FF1D3A;
 }
 
 .navInfo2 {
@@ -449,7 +451,7 @@ navigator {
 
 .platformPrice {
     font-size: 24rpx;
-    color: #F94D1E;
+    color: #FF1D3A;
     position: absolute;
     top: 74rpx;
     left: 200rpx;
@@ -491,7 +493,7 @@ navigator {
 .range {
     width: 150rpx;
     height: 12rpx;
-    background-color: #f94d1e;
+    background-color: #FF1D3A;
     position: absolute;
     border-radius: 6rpx;
 }
@@ -584,7 +586,7 @@ navigator {
     position: absolute;
     bottom: 0;
     right: 0rpx;
-    background-color: #f94d1e;
+    background-color: #FF1D3A;
     width: 272rpx;
     height: 118rpx;
     color: #fff;
@@ -616,7 +618,7 @@ navigator {
   height:900rpx;
   width: 568rpx;
   position: relative;
-  top: -76rpx;
+  /* top: -76rpx; */
 }
 /* 拨打商家电话 */
 
@@ -730,7 +732,7 @@ navigator {
 .marks view{
   padding: 20rpx ;
   border-radius: 10rpx;
-  background-color: #F94D1E;
+  background-color: #FF1D3A;
   color: #939090;
   font-size: 26rpx;
 }
@@ -766,7 +768,7 @@ navigator {
 }
 .commentstars{
   position: relative;
-  color: #F94D1E;
+  color: #FF1D3A;
   font-size: 24rpx;
 }
 .commentstars image{

@@ -1,4 +1,8 @@
+
+
+ @import "/template/wxss/waterfall.wxss"; 
 /* 整体大容器 */
+
 .container{
   width: 750rpx;
   height: 1207rpx;
@@ -200,7 +204,7 @@
   
   top: 25rpx;
   left: 127rpx;
-  color: #F94D1E;
+  color: #FF1D3A;
   font-size: 32rpx;
 }
 /* 已优惠 */
@@ -232,7 +236,7 @@
   position: absolute;
   bottom: 0;
   right: 0rpx;
-  background-color: #F94D1E;
+  background-color: #FF1D3A;
   width: 208rpx;
   height: 110rpx;
   color: #FFFFFF;
@@ -287,7 +291,7 @@
 }
 .money{
     padding-left:380rpx;
-    color: #f94d1e;
+    color: #FF1D3A;
 }
 .proDetails{
     
@@ -300,7 +304,7 @@
     
     top:25rpx;
     left: 24rpx;
-    color: #f94d1e;
+    color: #FF1D3A;
     font-weight: bold;
     font-size: 40rpx;
 }

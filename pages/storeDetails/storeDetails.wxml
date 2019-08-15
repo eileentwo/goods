@@ -1,4 +1,6 @@
 <wxs module="numFr" src="../../filter/numFr.wxs"></wxs>
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
 <view class="container">
      <!-- 轮播图 -->
     <view class="swipercontainer">
@@ -90,13 +92,13 @@
 
                 <!-- 右 -->
                 <view  class='tab-right'>
-                  <view class="discountedGoodsTitle fixed-title">
+                  <!-- <view class="discountedGoodsTitle fixed-title">
                     <view class="position">
                       <image src="../../images/storeDetails/jian.png" lazy-load='true' class="preInco"></image>
                       <text class="preferential">{{tcategory}}</text>
                       <text class="mustSee">{{tintroduce}}</text>
                     </view>
-                  </view>
+                  </view> -->
                   <scroll-view class="absolute"  style='overflow-y: scroll; -webkit-overflow-scrolling: touch;' scroll-with-animation="true"  scroll-y="true" style="height:{{height}}px"  bindscroll="right" scroll-into-view="{{toView}}" >
                       <view wx:for="{{goodsItem}}" wx:for-item='item' wx:for-index = 'index' wx:key="id"  id="{{item.id}}">
                         <view class="right-item" data-parentid="{{item.id}}" >

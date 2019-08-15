@@ -1,25 +1,14 @@
+
+ @import "/template/wxss/waterfall.wxss"; 
 page{
   font-size: 24rpx;
   background-color: #F3F3F3;
   position: relative;
   z-index: -2;
 }
-.header {
-  height: 160rpx;
+.backhome{
+  display: none;
 }
-.header view{
-  width: 100%;
-  padding-top: 70rpx;
-  height: 90rpx;
-  text-align: center;
-  font-size: 38rpx;
-  background-color: #FF2041;
-  color: #FFFFFF;
-  position: fixed;
-  top: 0;
-  z-index: 9999;
-}
-
 .bgimg{
   width: 100%;
   position: absolute;
@@ -95,6 +84,7 @@ page{
 .slide-image{
   width: 100%;
   height: 310rpx;
+  border-radius: 10rpx;
 }
 .dots{
   width: 100%;
@@ -108,41 +98,41 @@ page{
 .dot{
   display: inline-block;
   width: 16rpx;
-  height: 4rpx;
+  height: 6rpx;
+  border-radius: 3rpx;
   margin-right: 8rpx;
   background-color: rgba(255, 255, 255, .6);
 }
 .dotactive{
-  width: 24rpx;
+  width: 22rpx;
   background-color: rgba(255, 255, 255, 1);
 }
 /* nav */
 .nav{
+  width: 710rpx;
   padding: 0 20rpx;
   flex-direction: row;
   justify-content: space-between;
-  margin-bottom: 40rpx;
+  flex-wrap: wrap;
+  box-sizing: content-box;
+  overflow: hidden;
+  margin-right:-20rpx;
 }
 .nav_item{
-  width: 20%;
+  width: 128rpx;
+  margin-bottom: 40rpx;
   text-align: center;
 }
 .nav image{
-  width: 120rpx;
-  height: 120rpx;
+  width: 128rpx;
+  height: 128rpx;
   border-radius: 10rpx;
 }
 .nav1 image{
   width: 60rpx;
   height: 60rpx;
 }
-.radiusbox{
-  width: 662rpx;
-  padding: 0 20rpx 20rpx ;
-  margin: 0 auto 34rpx;
-  background-color: #fff;
-  border-radius: 15rpx;
-}
+
 .adds{
   height: 66rpx;
   font-size: 20rpx;
@@ -154,7 +144,7 @@ page{
   height: 60rpx;
 }
 .adds .new {
-  margin: 20rpx 40rpx 20rpx 20rpx;
+  margin: 20rpx;
   width: 52rpx;
   height: 24rpx;
   line-height: 24rpx;
@@ -163,6 +153,15 @@ page{
   border-radius: 11rpx;
   background-color: #FFE8EA;
   color: #FF1E32;
+}
+.add {
+  width: 510rpx;
+  height: 60rpx;
+  line-height: 60rpx;
+  overflow: hidden;
+}
+.add swiper{
+  height: 60rpx;
 }
 .goods_item{
   height: 360rpx;
@@ -184,25 +183,44 @@ page{
 .goods_img{
   width:210rpx;
   height:178rpx;
-  border-radius:10rpx;
   margin-bottom: 22rpx;
 }
-.goods_item_body,.address,.money,.selection {
+.goods_img image{
+  width:210rpx;
+  height:178rpx;
+  border-radius:10rpx;
+}
+.address,.money,.selection {
   justify-content: space-between;
 }
 
+.goods_item_body{
+  width:690rpx;
+  flex-direction: row;
+}
+.goods_item_scroll{
+  margin-right: -20rpx;white-space: nowrap;
+}
 .goods_title{
+  width: 90%;
+  height: 30rpx;
   color: #111;
   font-size: 24rpx;
   text-align: left;
   margin-bottom: 6rpx;
   text-indent: 10rpx;
+   
 }
 .stars{
   width: 20rpx;
   height: 20rpx;
   margin-top: 4rpx;
   margin-left: 10rpx;
+}
+.goods_item_detail{
+  display: inline-block;
+  width: 210rpx;
+  margin-right: 20rpx;
 }
 .goods_item_detail text{
   color: #AEADAA;
@@ -214,5 +232,3 @@ page{
   font-size: 20rpx;
   margin: 0 20rpx 20rpx 6rpx;
 }
-
- @import "/template/wxss/waterfall.wxss"; 

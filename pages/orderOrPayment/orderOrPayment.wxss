@@ -1,3 +1,5 @@
+
+ @import "/template/wxss/waterfall.wxss"; 
 /* 最外层大容器 */
 .container{
     width: 750rpx;
@@ -11,7 +13,7 @@
   left: 98rpx;
   width: 240rpx;
   height: 240rpx;
-  background-color: #F94D1E;
+  background-color: #FF1D3A;
 }
 /* 付款框 */
 .payment{
@@ -37,7 +39,7 @@
   position:absolute;
   top:  638rpx;
   left: 196rpx;
-  color: #F94D1E;
+  color: #FF1D3A;
   font-size: 40rpx;
 }
 /* 付款文字 */

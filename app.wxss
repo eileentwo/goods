@@ -7,8 +7,29 @@
   box-sizing: border-box;
   overflow-y: scroll;
 } 
-
+/*flexbox盒模型  */
 .flexbox{
   display: flex;
   flex-direction: row;
+}
+/* 圆角背景盒子 */
+.radiusbox {
+  width: 662rpx;
+  padding: 0 20rpx 20rpx;
+  margin: 0 auto 34rpx;
+  background-color: #fff;
+  border-radius: 15rpx;
+
+}
+/* 下边框为0 */
+.nobottomB{
+  border-bottom:0;
+}
+
+.ellipsis{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -ms-text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  white-space: nowrap;
 }

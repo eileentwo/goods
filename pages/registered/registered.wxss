@@ -1,3 +1,5 @@
+
+ @import "/template/wxss/waterfall.wxss"; 
 .container{
   width: 750rpx;
   height: 1334rpx;
@@ -24,7 +26,7 @@
 /* 用户协议 */
 .userAgreement{
   left: 145px;
-  color: #F94D1E;
+  color: #FF1D3A;
   cursor: pointer;
 }
 /* 手机号,验证码,推荐人图标 */
@@ -88,8 +90,8 @@ input::placeholder{
 }
 /* 重新获取 */
 .reacquire{
-/* border:1rpx solid #F94D1E;  */
-background-color: #F94D1E;
+/* border:1rpx solid #FF1D3A;  */
+background-color: #FF1D3A;
 color: #FFFFFF;
 }
 /* 分割线 */
@@ -116,7 +118,7 @@ color: #FFFFFF;
   top: 553rpx;
   left: 571rpx;
   font-size: 26rpx;
-  color: #F94D1E;
+  color: #FF1D3A;
 }
 /* 进入按钮 */
 .enter{
@@ -126,7 +128,7 @@ color: #FFFFFF;
   width: 702rpx;
   height: 86rpx;
   line-height: 86rpx;
-  background-color: #F94D1E!important;
+  background-color: #FF1D3A!important;
   border-radius: 10rpx;
   color: #FFFFFF;
 }

@@ -1,4 +1,35 @@
 
+/* 自定义头部 */
+
+
+.header {
+  height: 160rpx;
+}
+.header view{
+  width: 100%;
+  padding-top: 70rpx;
+  height: 90rpx;
+  text-align: center;
+  font-size: 38rpx;
+  background-color: #FF2041;
+  color: #FFFFFF;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+
+ .backhome{
+   position: fixed;
+   top:70rpx;
+   left: 20rpx;
+   z-index: 999999999999;
+ }
+ .backhome image{
+   width: 48rpx;
+   height: 44rpx;
+ }
+/* 下拉店铺 */
+
 .store_item {
   padding-top: 20rpx;
 }

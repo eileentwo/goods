@@ -1,4 +1,6 @@
 <!-- 营业资质界面 -->
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
 <view class="container">
     <view class="publicity">
         <text class="publictyTitle">食品安全监督公示</text>

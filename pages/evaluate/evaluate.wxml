@@ -1,3 +1,6 @@
+
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
 <form bindsubmit="formSubmit">
     <view container>
         <image class="storeInco" src="{{store_logo}}"></image>

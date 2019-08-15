@@ -1,4 +1,6 @@
 <view class="content">
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
     <!-- 轮播图 -->
     <view class="swiperWrap">
         <swiper autoplay="{{true}}" interval="{{5000}}" duration="{{1000}}" class="swiper" >

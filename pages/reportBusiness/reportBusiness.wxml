@@ -1,5 +1,7 @@
 <!-- 举报商家 -->
 <form bindsubmit="formSubmit">
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
     <view class="container">
         <view class="reportWrap">
             <image class="storeImg" src="{{store_logo}}"></image>

@@ -1,0 +1,9 @@
+/* pages/classification/classification.wxss */
+
+ @import "/template/wxss/waterfall.wxss"; 
+ .header{
+   margin-bottom: 20rpx;
+ }
+ .store_item {
+   border-bottom: 1px solid #ebf0ea;
+ }

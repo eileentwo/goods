@@ -1,106 +1,89 @@
+<import src="/template/wxml/waterfall.wxml" />
 <view class="content">
     <image class="bgimg" mode="aspectFit" src="../../images/redimg.png"></image>
-  <view class="header">
-    <view>一鹿省</view>
-  </view>
+   <template is="head" data="{{titlename}}"></template>
   <view class="selection flexbox">
     <view class="flexbox">
-       <image class="logo" mode="aspectFit" src="../../images/logo.png"></image>
+       <image class="logo"  lazy-load="true" mode="aspectFit" src="../../images/logo.png"></image>
       <view class="location">
-        <view class="curcity">长沙 <image mode="aspectFit" src="../../images/bottom.png"></image></view>
-        <view>下雨</view>
+        <view class="curcity"> {{curCity}}
+          <!-- <image mode="aspectFit" src="../../images/bottom.png"></image> -->
+        </view>
+        <view>{{weather.wea}} {{weather.tem}}</view>
       </view>
       <view class="selectbtn flexbox">
         <label><image src="../../images/select.png" mode="aspectFit"></image></label>
-        <input placeholder="一鹿省全新升级" placeholder-class="placeholder"></input>
+        <input placeholder="一鹿省全新升级  " placeholder-class="placeholder"></input>
       </view>
     </view>
-    <navigator class="moreSelect">
+    <navigator class="moreSelect" url="../../pages/classification/classification?category_id=0&category_name=全部&longitude={{longitude}}&latitude={{latitude}}">
       <image src="../../images/more10.png" mode="aspectFit"></image>更多
     </navigator>
   </view>
   <view class="swiperbox">
     <swiper id='loop'	 circular class="swiper" current="{{swiperCurrent}}"  bindchange="swiperChange">
-      <block wx:for="{{imgUrls}}"  wx:key="item">
+      <block wx:for="{{list_ad}}"  wx:key="item">
           <swiper-item>
-              <image lazy-load='true' src="{{item}}" mode="aspectFit" class="slide-image" />
+              <image lazy-load='true' src="{{url}}{{item.ad_pic}}" mode="aspectFill" class="slide-image" />
           </swiper-item>
       </block>
-      <!--重置小圆点的样式  -->
-      <view class="dots">  
-          <block wx:for="{{imgUrls}}">  
-              <view class="dot {{index == currentSwiper ? ' dotactive' : ''}}"></view>  
-          </block>  
-      </view> 
     </swiper>
   
+      <!--重置小圆点的样式  -->
+      <view class="dots">  
+          <block wx:for="{{list_ad}}" wx:key="item">  
+              <view class="dot {{index == swiperCurrent ? ' dotactive' : ''}}"></view>  
+          </block>  
+      </view> 
   </view>
   <view class="nav flexbox">
-   <navigator class="nav_item" wx:for='{{nav1}}'>
-    <image src="../../images/{{item.src}}.png"></image>
-    <view>{{item.title}}</view>
+   <navigator class="nav_item" wx:for='{{list_category}}'  url="../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}" hover-class="navigator-hover" wx:key='index'>
+    <image src="{{url}}{{item.category_pic}}"></image>
+    <view>{{item.category_name}}</view>
    </navigator>
   </view>
-  <view class="nav nav1 flexbox">
-   <navigator class="nav_item" wx:for='{{nav2}}'>
+  <!-- 二级分类导航 -->
+  <!-- <view class="nav nav1 flexbox"> 
+   <navigator class="nav_item" wx:for='{{nav2}}' url='../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.title}}' wx:key='index'>
     <image src="../../images/{{item.src}}.png"  mode="aspectFit"></image>
-    <view>{{item.title}}</view>
+    <view>{{item.category_name}}</view>
    </navigator>
-  </view>
+  </view> -->
   <view class="adds flexbox radiusbox">
     <image src="../../images/toutiao.png"  mode="aspectFit"></image>
     <view class="new">NEW</view>
-    <view>用户180****5483食汇堂精选套餐一份 节省50元</view>
+    <view class="add">
+      <swiper  autoplay="true" vertical='true' circular='true' interval='1500'>
+        <swiper-item wx:for='{{list_headlines}}'>{{item.content}}</swiper-item>
+      </swiper>
+    </view>
   </view>
   <view class="goods_item radiusbox">
     <view class="goods_item_head flexbox">
       <text>省到爆</text>
       <navigator>更多 ></navigator>
     </view>
-     <view class="goods_item_body flexbox">
-      <view class="goods_item_detail" wx:for="{{goodsItem1}}">
-        <image class="goods_img" src="../../images/cake.png"  mode="scaleToFill"></image>
-        <view class="goods_title">李记自助餐厅</view>
-        <view class="flexbox">
-          <image class="stars"src="../../images/redstar.png"  mode="aspectFit"></image>
-          <text class="pink">5.0</text>
-          <text>月售5362</text>
-        </view>
-      </view>
+    <view class="goods_item_body">
+      
+      <scroll-view scroll-x='true' class="goods_item_scroll flexbox" style="">
+        <navigator class="goods_item_detail" wx:for="{{list_goods_choice}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
+          <view class="goods_img">
+            <image  lazy-load="true"  src="{{url}}{{item.store_logo}}"  mode="scaleToFill"></image>
+          </view>
+          <view class="goods_title ellipsis">{{item.store_name}}</view>
+          <view class="flexbox">
+            <image class="stars"src="../../images/redstar.png"  mode="aspectFit"></image>
+            <text class="pink">{{item.store_score}}</text>
+            <text>月售{{item.month_count}}</text>
+          </view>
+        </navigator>
 
+      </scroll-view>
     </view>
   </view>
-  <view class="store_items">
-    <import src="/template/wxml/waterfall.wxml" />
-    <template is="waterfall" data=""></template>
-    <!-- <navigator class="store_item radiusbox flexbox">
-      <image src="../../images/cake.png"  mode="aspectFit"></image>
-      <view class="store_info">
-         <view class="store_title">
-            <text>长沙南站希尔顿欢朋酒店</text>高档型
-        </view>
-        <view class="store_score">
-          <text class="pinkB">4.8</text><text class="smallsize">分</text>55条点评
-        </view>
-        <view class="marks">
-          <text>点评</text>
-          <text>点评</text>
-          <text>点点评评</text>
-        </view>
-        <view class="address flexbox">
-          <text>长沙・中国</text>
-          <text class="textover">高铁南站/国际会展中心/国际会展中心</text>
-        </view>
-        <view class="money  flexbox">
-          <text>距您4.8公里</text>
-          <view>
-            <text class="formal">￥567</text>
-            <text class="pink">￥</text>
-            <text class="pinkB">467</text>起
-          </view>
-        </view>
-      </view>
-    </navigator> -->
+  <!-- <view class="store_items">
+    <template is="waterfall" data="{{stores}}"></template>
     
-  </view>
+    
+  </view> -->
 </view>

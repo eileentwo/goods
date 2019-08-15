@@ -8,7 +8,8 @@ var textcontent = '';
 var table_number = ''; 
 
 Page({ 
-    data: {
+  data: {
+    titlename: '提交订单',
         showModalStatus: false,
         orderList: [],
         orderCost: 0,
@@ -78,21 +79,21 @@ Page({
             });
         }
     },
+ 
   onShow: function () {
-    
-    console.log(78, 'submit', wx.getStorageSync('userInfokey') )
+    let store_info = wx.getStorageSync('store_info');
     let userInfokey= wx.getStorageSync('userInfokey')
       let that = this;
         that.setData({
-            account_money: userInfokey.account_money,
-            discount_price: userInfokey.discount_price,
-            service_money: userInfokey.service_money,
-            save_money: userInfokey.save_money,
-            no_discount_price: userInfokey.no_discount_price,
-            actual_money: userInfokey.actual_money,
-            store_name: app.globalData.store_name,
-            store_logo: app.globalData.store_logo,
-            store_address: app.globalData.store_address,
+          account_money: userInfokey.account_money,
+          discount_price: userInfokey.discount_price,
+          service_money: userInfokey.service_money,
+          save_money: userInfokey.save_money,
+          no_discount_price: userInfokey.no_discount_price,
+          actual_money: userInfokey.actual_money,
+          store_name: store_info.store_name,
+          store_logo: store_info.store_logo,
+          store_address: store_info.store_address,
           isMask:false,
         })
         var no_discount_price = userInfokey.no_discount_price;
@@ -104,10 +105,9 @@ Page({
             for (let k in ol) {
               ol[k].cost = ol[k].goods_selenum * ol[k].discount_price;
           }
-            var oc = app.globalData.orderCost;
+          
           that.setData({
             orderList: ol,
-                orderCost: oc
             })
         }
     },
@@ -128,10 +128,10 @@ Page({
     },
   wechatPay: function () {
       var that = this;
-    let userInfokey = wx.getStorageSync('userInfokey');
-    var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
+      let userInfokey = wx.getStorageSync('userInfokey');
+      var store_id =wx.getStorageSync('store_info').store_id;
        timestamp = Date.parse(new Date());
-      let token = app.globalData.token || userInfokey.token
+      let token = userInfokey.token
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
       //支付订单
@@ -140,7 +140,7 @@ Page({
         data: {
           request_object: app.globalData.request_object,
           store_id,
-          user_id: app.globalData.user_id || userInfokey.user_id,
+          user_id:userInfokey.user_id,
           openid: app.globalData.openid || userInfokey.openid,
           token,
           timestamp: timestamp,
@@ -187,7 +187,8 @@ Page({
                 signType: 'MD5',
                 paySign: mypaySign,
                 success(res) {
-                  wx.clearStorageSync('ol')
+                  wx.clearStorageSync('ol');
+
                   that.setData({
                     isMask:true
                   })
@@ -256,5 +257,22 @@ Page({
    */
   onHide: function () { 
     
+  },
+  /**
+   * 用户点击右上角分享
+   */
+  onShareAppMessage: function (res) {
+    let store_info = wx.getStorageSync('store_info');
+    console.log(store_info)
+    if (res.from === 'button') {
+    }
+    return {
+      title: '转发',
+      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id,
+      success: function (res) {
+
+      }
+    }
+
   },
 })

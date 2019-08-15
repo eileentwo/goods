@@ -13,99 +13,6 @@ App({
         var me=this; 
         var userInfokey = wx.getStorageSync('userInfokey');
         
-         // 店铺详情
-         wx.request({
-           url: 'https://exbuy.double.com.cn/api/store_detail/get_store_info_new',
-           data: {
-             store_id: me.globalData.store_id,
-             request_object: me.globalData.request_object,
-           },
-           method: 'POST',
-           header: {
-             'Content-Type': "application/x-www-form-urlencoded"
-           },
-           success: function (res) {
-             if (res.data.status == 1) {
-               // console.log(48, res.data.data)
-               me.globalData.store_info = res.data.data.store_info; 
-               me.globalData.category_id = res.data.data.category_id;
-               me.globalData.store_name = res.data.data.store_info.store_name;
-               me.globalData.business_hours = res.data.data.store_info.business_hours;
-               me.globalData.store_logo = res.data.data.store_info.store_logo;
-               me.globalData.store_score = res.data.data.store_info.store_score;
-               me.globalData.store_address = res.data.data.store_info.store_address;
-               me.globalData.effective_end = res.data.data.store_info.effective_end;
-               me.globalData.effective_start = res.data.data.store_info.effective_start;
-               wx.setStorageSync('store_info', res.data.data.store_info)
-             } else {
-               wx.showToast({
-                 title: '加载失败',
-                 icon: 'none',
-                 duration: 2000
-               })
-             }
-           },
-           fail: function () {
-             console.log("店铺详情请求失败");
-             wx.showToast({
-               title: '服务器响应失败',
-               icon: 'none',
-               duration: 3000,
-             })
-           },
-           complete: function () {
-             // complete
-           }
-         })
-
-         //商品列表
-         wx: wx.request({
-           url: 'https://exbuy.double.com.cn/api/store_detail/list_store_goods',
-           data: {
-             request_object: me.globalData.request_object,
-             store_id: me.globalData.store_id,
-             page: 1,
-             limit: 100
-           },
-           method: 'POST',
-           dataType: 'json',
-           responseType: 'text',
-           success: function (res) {
-             console.log('商品列表',res)
-             if (res.data.status == 1) {
-               let goodsItem = res.data.data;
-               for(let i=0;i<goodsItem.length;i++){
-                 goodsItem[i].id='id'+i;
-                 goodsItem[i].select_nums=0;
-                 let goods = goodsItem[i].list_goods;
-                 for (let j = 0; j < goods.length;j++){
-                   goods[j].num=0;
-                 }
-               }
-               me.globalData.goodsItem = goodsItem;
-              //  console.log(121)
-               wx.setStorageSync('goodsItem', goodsItem)
-               
-             } else {
-               wx.showToast({
-                 title: '营业日期加载失败',
-                 icon: 'none',
-                 duration: 2000
-               })
-             }
-           },
-           fail: function (res) {
-             wx.showToast({
-               title: '服务器响应失败',
-               icon: 'none',
-               duration: 3000,
-             })
-           },
-           complete: function (res) { },
-         })
-      //  },300);
-      //  clearTimeout(timer);
-      //登录console.log(1555, userInfokey.hasOwnProperty('openid'))
       if (userInfokey.hasOwnProperty('openid')) {
         return false;
       }
@@ -161,32 +68,38 @@ App({
         return img;
     },
     onShow: function (options) {
-      let option = JSON.stringify(options);
-      console.log('app.js option-----' + option)
-      console.log('app.js>>options.scene--------------------' + options.scene);
-      this.sceneInfo(options.scene);
+      // let option = JSON.stringify(options);
+      // console.log('app.js option-----' + option)
+      // console.log('app.js>>options.scene--------------------' + options.scene);
+      // this.sceneInfo(options.scene);
      
     },
     //场景值判断
-    sceneInfo: function (s) {
+    /*sceneInfo: function (s) {
       var scene = [];
       switch (s) {
         case 1001:
+          console.log(s, 1001)
           scene.push(s, "发现栏小程序主入口");
           break;
         case 1005:
+          console.log(s, 1005)
           scene.push(s, "顶部搜索框的搜索结果页");
           break;
         case 1006:
+          console.log(s, 1006)
           scene.push(s, "发现栏小程序主入口搜索框的搜索结果页");
           break;
         case 1007:
+          console.log(s, 1007)
           scene.push(s, "单人聊天会话中的小程序消息卡片");
           break;
         case 1008:
+          console.log(s, 1008)
           scene.push(s, "群聊会话中的小程序消息卡片");
           break;
         case 1011:
+          console.log(s, 1011)
           scene.push(s, "扫描二维码");
           break;
         case 1012:
@@ -317,8 +230,8 @@ App({
           break;
       }
       return scene;
-    },
-   // 其中只有在传递 1020、1035、1036、1037、1038、1043 这几个场景值时，才会返回referrerInfo.appid
+    },*/
+    
     globalData: {
       userInfo: '',
       store_info: {},
@@ -326,9 +239,9 @@ App({
         store_logo:'',
         orderList: {},
         orderCost: 0,
-        store_id:2,
+        store_id:'',
         goods_id:'',
-      user_id: '',
+        user_id: '',
         account_money:'',
         service_money:'',
         save_money:'',
@@ -340,6 +253,6 @@ App({
         store_address:'',
         actual_money:'',
       request_object: 'mini_program',
-        // remark:''
+        url:'https://exbuy.double.com.cn'
     }
 })

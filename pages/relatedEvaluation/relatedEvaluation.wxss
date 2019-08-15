@@ -1,4 +1,7 @@
-.wrap{
+
+
+ @import "/template/wxss/waterfall.wxss"; 
+ .wrap{
     position: relative;
     width: 100%;
 }
@@ -81,7 +84,7 @@
   left: 317rpx;
   top: 36rpx;
   font-size: 24rpx;
-  color: #F94D1E;
+  color: #FF1D3A;
 }
 /* 详细评价 */
 .evaDetails{
