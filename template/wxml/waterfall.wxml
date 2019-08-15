@@ -6,30 +6,28 @@
   </view>
 </template>
 <template name ='waterfall'>
-    <navigator class="store_item radiusbox flexbox" wx:for='{{store_info}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ' wx:key="item">  
-      <image src="../../images/cake.png" lazy-load="true" mode="aspectFit"></image>
+    <navigator class="store_item radiusbox flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ' wx:key="item">  
+      <image src="{{url}}{{item.store_logo}}" lazy-load="true" mode="aspectFill"></image>
       <view class="store_info">
          <view class="store_title">
-            <text>长沙南站希尔顿欢朋酒店</text>高档型
+            <text>{{item.store_name}}</text>
         </view>
         <view class="store_score">
-          <text class="pinkB">4.8</text><text class="smallsize">分</text>55条点评
+          <text class="pinkB">{{item.store_score}}</text><text class="smallsize">分</text>{{item.discount}}条点评
         </view>
         <view class="marks">
-          <text>点评</text>
-          <text>点评</text>
-          <text>点点评评</text>
+          <text wx:for="{{item.list_store_tag}}" wx:for-item='tag'>{{tag}}</text>
         </view>
         <view class="address flexbox">
-          <text>长沙・中国</text>
-          <text class="textover">高铁南站/国际会展中心/国际会展中心</text>
+          <text>{{item.store_area}}</text>
+          <text class="textover">{{}}</text>
         </view>
         <view class="money  flexbox">
-          <text>距您4.8公里</text>
+          <text>距您{{item.distance}}公里</text>
           <view>
-            <text class="formal">￥567</text>
+            <!-- <text class="formal">￥567</text> -->
             <text class="pink">￥</text>
-            <text class="pinkB">467</text>起
+            <text class="pinkB">{{item.average_price}}</text>起
           </view>
         </view>
       </view>

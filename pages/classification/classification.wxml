@@ -2,5 +2,7 @@
 <import src="/template/wxml/waterfall.wxml" />
 <template is="head" data="{{titlename}}"></template>
 
-<template is="waterfall" data="{{stores}}"></template>
+<scroll-view class="scrollview">
+  <template is="waterfall" data="{{stores}}"></template>
+</scroll-view>
 

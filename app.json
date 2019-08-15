@@ -1,5 +1,6 @@
 {
     "pages": [
+      "pages/select/select",
       "pages/index/index",
       "pages/classification/classification",
       "pages/orderOrPayment/orderOrPayment",

@@ -123,3 +123,8 @@
     transform: rotate3d(0, 0, 1, 360deg);
   }
 }
+
+
+.address,.money{
+  justify-content: space-between;
+}

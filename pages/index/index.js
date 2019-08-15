@@ -25,21 +25,8 @@ Page({
   onLoad: function () {
     let that=this;
     homedata = wx.getStorageSync('homedata') ||[];
-    console.log(homedata)
-    var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
-    myAmapFun.getWeather({
-      success: function (data) {
-        //成功回调
-        // console.log(data,32)
-        that.setData({
-          curCity:data.city.data
-        })
-      },
-      fail: function (info) {
-        //失败回调
-        console.log(info)
-      }
-    })
+    console.log(homedata,28)
+    
 
     if (homedata.length > 0) {
       let list_ad = homedata.data.list_ad;
@@ -48,6 +35,7 @@ Page({
       let list_headlines = homedata.data.list_headlines;
       let list_recommend = homedata.data.list_recommend;
       let list_goods_choice = homedata.data.list_goods_choice;
+      let list_goods_save = homedata.data.list_goods_save;
       
       this.setData({
         list_ad,
@@ -55,6 +43,8 @@ Page({
         list_headlines,
         list_recommend,
         list_goods_choice,
+        list_goods_save,
+        curCity,
         weather
       })
     } else {
@@ -65,7 +55,23 @@ Page({
         type: 'gcj02',
         altitude: true,
         success: function (res) {
-          that.getHomedata(res.longitude, res.latitude);
+          let curCity=that.data.curCity
+          console.log(21, curCity)
+          var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
+          myAmapFun.getRegeo({
+            success: function (data) {
+              //成功回调
+              let city = data[0].regeocodeData.addressComponent.city
+              
+              that.getHomedata(res.longitude, res.latitude, city);
+              
+            },
+            fail: function (info) {
+              //失败回调
+              console.log(info)
+            }
+          })
+          
         },
         fail: function (res) { },
         complete: function (res) { },
@@ -73,7 +79,8 @@ Page({
     }
    
   },
-  getHomedata: function (longitude, latitude) {
+  getHomedata: function (longitude, latitude, curCity) {
+    console.log(longitude, latitude, 78, curCity)
     let that = this;
     let userInfokey = wx.getStorageSync('userInfokey');
     var timestamp = Date.parse(new Date());
@@ -84,6 +91,7 @@ Page({
       url: app.globalData.url + '/api/mini_homepage/get_home_info',
       method: "get",
       data: {
+        store_city:curCity,
         latitude,
         longitude,
         timestamp,
@@ -91,7 +99,7 @@ Page({
         token,
       },
       success: function (res) {
-        // console.log('index', res.data.status)
+        console.log('index', res.data)
         if (res.data.status == '1') {
           let stores = res.data.data;
           wx.hideLoading();
@@ -104,15 +112,11 @@ Page({
           let list_goods_choice = stores.list_goods_choice;
           let list_goods_save = stores.list_goods_save;
           
-          let str ='https://exbuy.double.com.cn'; 
-               
-          for (let i = 0; i < list_goods_choice.length;i++){
-            list_goods_choice[i].store_logo= list_goods_choice[i].store_logo.replace(str, '');
-          }
+          list_goods_choice = that.deleUrl(list_goods_choice);
+          list_goods_save = that.deleUrl(list_goods_save);
 
-          console.log('index117', homedata)
           homedata.data = res.data.data;
-          console.log('index', homedata)
+          homedata.curCity = curCity;
           wx.setStorageSync('homedata', homedata);
           
           that.setData({
@@ -123,6 +127,7 @@ Page({
             list_recommend,
             list_goods_choice,
             list_goods_save,
+            curCity,
             weather
           })
 
@@ -130,7 +135,13 @@ Page({
       }
     })
   },
- 
+  deleUrl: function (obj) {
+    let str = 'https://exbuy.double.com.cn'; 
+    for (let i = 0; i < obj.length; i++) {
+      obj[i].store_logo = obj[i].store_logo.replace(str, '');
+    }
+    return obj
+  },
   swiperChange: function (e) {
     console.log(205, e)
     this.setData({

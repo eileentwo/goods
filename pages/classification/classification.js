@@ -1,4 +1,7 @@
 // pages/classification/classification.js
+var app = getApp();
+var util = require('../../utils/util.js');
+var md5 = require('../../utils/md5.js');
 Page({
 
   /**
@@ -6,6 +9,7 @@ Page({
    */
   data: {
     titlename:'分类',
+    url:app.globalData.url,
   },
 
   /**
@@ -13,6 +17,7 @@ Page({
    */
   onLoad: function (options) {
     console.log(options)
+    this.getData(options.latitude, options.longitude,);
     this.setData({
       titlename: options.category_name
     })
@@ -48,7 +53,9 @@ Page({
         console.log('class', res)
         if (res.data.status == '1') {
           let stores = res.data.data;
-
+          that.setData({
+            stores
+          })
         }
       }
     })
@@ -58,13 +65,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let homedata = wx.getStorageSync('homedata');
-    console.log(62, homedata)
-    let latitude = homedata.latitude;
-    let longitude = homedata.longitude;
-    if (homedata.longitude) {
-      this.getData(latitude, longitude)
-    }
+    
   },
 
   /**

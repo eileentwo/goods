@@ -66,6 +66,29 @@
     <view class="goods_item_body">
       
       <scroll-view scroll-x='true' class="goods_item_scroll flexbox" style="">
+        <navigator class="goods_item_detail" wx:for="{{list_goods_save}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
+          <view class="goods_img">
+            <image  lazy-load="true"  src="{{url}}{{item.store_logo}}"  mode="scaleToFill"></image>
+          </view>
+          <view class="goods_title ellipsis">{{item.store_name}}</view>
+          <view class="flexbox">
+            <image class="stars"src="../../images/redstar.png"  mode="aspectFit"></image>
+            <text class="pink">{{item.store_score}}</text>
+            <text>月售{{item.month_count}}</text>
+          </view>
+        </navigator>
+
+      </scroll-view>
+    </view>
+  </view>
+  <view class="goods_item radiusbox">
+    <view class="goods_item_head flexbox">
+      <text>小鹿精选</text>
+      <navigator>更多 ></navigator>
+    </view>
+    <view class="goods_item_body">
+      
+      <scroll-view scroll-x='true' class="goods_item_scroll flexbox" style="">
         <navigator class="goods_item_detail" wx:for="{{list_goods_choice}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
           <view class="goods_img">
             <image  lazy-load="true"  src="{{url}}{{item.store_logo}}"  mode="scaleToFill"></image>
