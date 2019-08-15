@@ -33,3 +33,7 @@
   -o-text-overflow: ellipsis;
   white-space: nowrap;
 }
+.navigator-hover {
+  background-color:transparent;
+
+}

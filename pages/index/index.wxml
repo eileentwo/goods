@@ -11,10 +11,10 @@
         </view>
         <view>{{weather.wea}} {{weather.tem}}</view>
       </view>
-      <view class="selectbtn flexbox">
+      <navigator class="selectbtn flexbox"  url="../../pages/select/select">
         <label><image src="../../images/select.png" mode="aspectFit"></image></label>
         <input placeholder="一鹿省全新升级  " placeholder-class="placeholder"></input>
-      </view>
+      </navigator>
     </view>
     <navigator class="moreSelect" url="../../pages/classification/classification?category_id=0&category_name=全部&longitude={{longitude}}&latitude={{latitude}}">
       <image src="../../images/more10.png" mode="aspectFit"></image>更多
