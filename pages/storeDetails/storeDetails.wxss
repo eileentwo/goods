@@ -549,24 +549,25 @@ navigator {
 
 .shoppingNum {
     position: absolute;
-    top: 13rpx;
-    left: 79rpx;
-    width: 35rpx;
-    height: 35rpx;
+    top: -26rpx;
+    left: 104rpx;
+    width: 30rpx;
+    height: 30rpx;
     background: rgba(255, 0, 0, 1);
     border-radius: 50%;
     text-align: center;
-    line-height: 35rpx;
+    line-height: 30rpx;
     color: #fff;
-    font-size: 20rpx;
+    font-size: 18rpx;
+    border: 2rpx solid #fff;
 }
 
 .anInco {
     position: absolute;
     bottom: 22rpx;
     left: 24rpx;
-    width: 73rpx;
-    height: 73rpx;
+    width: 140rpx;
+    height: 180rpx;
     /* border: 1px solid black; */
 }
 .rest{
@@ -577,22 +578,24 @@ navigator {
 .money {
     position: absolute;
     bottom: 30rpx;
-    left: 127rpx;
+    left: 168rpx;
     color: #fff;
     font-weight: bold;
     font-size: 40rpx;
 }
 .settlement {
     position: absolute;
-    bottom: 0;
-    right: 0rpx;
+    bottom: 24rpx;
+    right: 24rpx;
     background-color: #FF1D3A;
-    width: 272rpx;
-    height: 118rpx;
+    width: 188rpx;
+    height: 72rpx;
     color: #fff;
-    line-height: 118rpx;
+    line-height: 72rpx;
     font-size: 36rpx;
     text-align: center;
+    border-radius: 40rpx;
+
 }
 .settlementmask{
     position: absolute;

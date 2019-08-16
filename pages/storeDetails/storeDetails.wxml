@@ -243,7 +243,7 @@
      <!-- tabBar 是否营业 business-->
         <view class="tab-bar"  hidden="{{currentTab!='0'}}">
            <!-- <block wx:if="{{business}}">   -->
-              <image class="anInco" src="../../images/storeDetails/shopcar.png" bindtap="openCart" data-num="{{total_num}}"></image>
+              <image class="anInco" mode="aspectFit" src="../../images/storeDetails/shopcar.png" bindtap="openCart" data-num="{{total_num}}"></image>
               <view class="shoppingNum" hidden="{{total_num==0}}">{{total_num}}</view>
               <view class="money">￥{{order_cost}}</view>
               <view class="settlement">
