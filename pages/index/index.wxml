@@ -17,9 +17,9 @@
           <input placeholder="一鹿省全新升级  " placeholder-class="placeholder"></input>
         </navigator>
       </view>
-      <navigator class="moreSelect" url="../../pages/classification/classification?store_url=list_store_more&category_name=全部&store_city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
+      <!-- <view class="moreSelect" bindtap="saoma">
         <image src="../../images/more10.png" mode="aspectFit"></image>更多
-      </navigator>
+      </view> -->
     </view>
   </view>
   <view class="swiperbox">

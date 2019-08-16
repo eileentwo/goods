@@ -31,7 +31,7 @@ page{
   z-index: 9999;
 }
 .selectbtn{
-  width: 418rpx;
+  width: 522rpx;
   height: 64rpx;
   overflow: hidden;
   background-color: #fff;

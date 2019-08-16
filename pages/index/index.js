@@ -42,6 +42,9 @@ Page({
     }
 
   },
+  // saoma: function(){
+  //   wx.sc
+  // },
   onShow:function(){
     let that = this;
     homedata = wx.getStorageSync('homedata') || [] ;

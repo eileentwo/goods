@@ -207,7 +207,7 @@ Page({
     }
     return {
       title: '转发',
-      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id,
+      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id + '&store_name=' + store_info.store_name,
       success: function (res) {
 
       }
