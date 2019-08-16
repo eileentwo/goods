@@ -17,7 +17,14 @@ Page({
    */
   onLoad: function (options) {
     console.log(options)
-    this.getData(options.latitude, options.longitude,);
+    if (options.latitude){
+      this.getData(options.latitude, options.longitude);
+    }
+    if (options.store_url){
+      
+      this.getMoreData(options.store_url, options.store_city);
+    }
+    
     this.setData({
       titlename: options.category_name
     })
@@ -35,6 +42,7 @@ Page({
       url: app.globalData.url + '/api/mini_program/list_store',
       method: "POST",
       data: {
+        request_object: app.globalData.request_object,
         store_city: '厦门市',
         latitude,
         longitude,
@@ -60,6 +68,38 @@ Page({
       }
     })
 
+  },
+  // 获取更多结果
+  getMoreData: function (store_url, store_city) {
+    let that = this;
+    var timestamp = Date.parse(new Date());
+    // let userInfokey = wx.getStorageSync('userInfokey');
+    // let token = userInfokey.token || '';
+    // var val = 'fanbuyhainan' + timestamp.toString() + token;
+    var val = 'fanbuyhainan' + timestamp.toString() ;
+    var process = md5.hexMD5(val);
+    wx.request({
+      url: app.globalData.url + '/api/mini_program/' + store_url,
+      method: "POST",
+      data: {
+        timestamp,
+        process,
+        request_object:app.globalData.request_object,
+
+        store_city: store_city,
+        
+        store_area: '',
+      },
+      success: function (res) {
+        console.log('class', res)
+        if (res.data.status == '1') {
+          let stores = res.data.data;
+          that.setData({
+            stores
+          })
+        }
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面显示

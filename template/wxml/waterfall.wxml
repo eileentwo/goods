@@ -33,6 +33,6 @@
       </view>
     </navigator>
     <view>
-      <view class="loading"></view>
+      <!-- <view class="loading"></view> -->
     </view>
 </template>

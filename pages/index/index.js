@@ -34,7 +34,7 @@ Page({
       let list_category = homedata.data.list_category;
       let list_headlines = homedata.data.list_headlines;
       let list_recommend = homedata.data.list_recommend;
-      let list_goods_choice = homedata.data.list_goods_choice;
+      let list_store_choice = homedata.data.list_store_choice;
       let list_goods_save = homedata.data.list_goods_save;
       
       this.setData({
@@ -42,7 +42,7 @@ Page({
         list_category,
         list_headlines,
         list_recommend,
-        list_goods_choice,
+        list_store_choice,
         list_goods_save,
         curCity,
         weather
@@ -55,13 +55,12 @@ Page({
         type: 'gcj02',
         altitude: true,
         success: function (res) {
-          let curCity=that.data.curCity
-          console.log(21, curCity)
           var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
           myAmapFun.getRegeo({
             success: function (data) {
               //成功回调
-              let city = data[0].regeocodeData.addressComponent.city
+              let city = data[0].regeocodeData.addressComponent.city;
+              that.data.curCity = city;
               
               that.getHomedata(res.longitude, res.latitude, city);
               
@@ -80,23 +79,24 @@ Page({
    
   },
   getHomedata: function (longitude, latitude, curCity) {
-    console.log(longitude, latitude, 78, curCity)
     let that = this;
     let userInfokey = wx.getStorageSync('userInfokey');
+    console.log(longitude, latitude, 78, curCity, userInfokey)
     var timestamp = Date.parse(new Date());
-    let token = userInfokey.token || '';
-    var val = 'fanbuyhainan' + timestamp.toString() + token;
+    // let token = userInfokey.token || '';
+    var val = 'fanbuyhainan' + timestamp.toString() ;
     var process = md5.hexMD5(val);
     wx.request({
       url: app.globalData.url + '/api/mini_homepage/get_home_info',
-      method: "get",
+      method: "POST",
       data: {
         store_city:curCity,
+        store_area:'',
         latitude,
         longitude,
         timestamp,
         process,
-        token,
+        request_object:'mini_program',
       },
       success: function (res) {
         console.log('index', res.data)
@@ -109,10 +109,10 @@ Page({
           let list_category = stores.list_category
           let list_headlines = stores.list_headlines
           let list_recommend = stores.list_recommend
-          let list_goods_choice = stores.list_goods_choice;
+          let list_store_choice = stores.list_store_choice;
           let list_goods_save = stores.list_goods_save;
           
-          list_goods_choice = that.deleUrl(list_goods_choice);
+          list_store_choice = that.deleUrl(list_store_choice);
           list_goods_save = that.deleUrl(list_goods_save);
 
           homedata.data = res.data.data;
@@ -125,7 +125,7 @@ Page({
             list_category,
             list_headlines,
             list_recommend,
-            list_goods_choice,
+            list_store_choice,
             list_goods_save,
             curCity,
             weather
@@ -147,6 +147,17 @@ Page({
     this.setData({
       swiperCurrent: e.detail.current
     })
+  },
+  tomore: function (store_key){
+    console.log(store_key)
+    let that=this;
+    let store_url = store_key.currentTarget.dataset.store_url;
+    let name = store_key.currentTarget.dataset.name;
+    if(that.data.curCity){
+      wx.navigateTo({
+        url: '../../pages/classification/classification?store_url=' + store_url + '&category_name=' + name + '&store_city=' + that.data.curCity,
+      })
+    }
   },
   /**
    * 用户点击右上角分享

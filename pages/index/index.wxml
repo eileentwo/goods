@@ -11,12 +11,12 @@
         </view>
         <view>{{weather.wea}} {{weather.tem}}</view>
       </view>
-      <navigator class="selectbtn flexbox"  url="../../pages/select/select">
+      <navigator class="selectbtn flexbox"  url="../../pages/select/select?city={{curCity}}">
         <label><image src="../../images/select.png" mode="aspectFit"></image></label>
         <input placeholder="一鹿省全新升级  " placeholder-class="placeholder"></input>
       </navigator>
     </view>
-    <navigator class="moreSelect" url="../../pages/classification/classification?category_id=0&category_name=全部&longitude={{longitude}}&latitude={{latitude}}">
+    <navigator class="moreSelect" url="../../pages/classification/classification?key=list_store_more&category_name=全部&store_city={{curCity}}">
       <image src="../../images/more10.png" mode="aspectFit"></image>更多
     </navigator>
   </view>
@@ -61,12 +61,12 @@
   <view class="goods_item radiusbox">
     <view class="goods_item_head flexbox">
       <text>省到爆</text>
-      <navigator>更多 ></navigator>
+      <view data-store_url="list_store_save_more"  data-name="省到爆" bindtap="tomore">更多 ></view>
     </view>
     <view class="goods_item_body">
       
       <scroll-view scroll-x='true' class="goods_item_scroll flexbox" style="">
-        <navigator class="goods_item_detail" wx:for="{{list_goods_save}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
+        <navigator class="goods_item_detail" wx:for="{{list_store_save}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
           <view class="goods_img">
             <image  lazy-load="true"  src="{{url}}{{item.store_logo}}"  mode="scaleToFill"></image>
           </view>
@@ -84,12 +84,12 @@
   <view class="goods_item radiusbox">
     <view class="goods_item_head flexbox">
       <text>小鹿精选</text>
-      <navigator>更多 ></navigator>
+      <view data-store_url="choice"  data-name="小鹿精选"  bindtap="tomore">更多 ></view>
     </view>
     <view class="goods_item_body">
       
       <scroll-view scroll-x='true' class="goods_item_scroll flexbox" style="">
-        <navigator class="goods_item_detail" wx:for="{{list_goods_choice}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
+        <navigator class="goods_item_detail" wx:for="{{list_store_choice}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
           <view class="goods_img">
             <image  lazy-load="true"  src="{{url}}{{item.store_logo}}"  mode="scaleToFill"></image>
           </view>
