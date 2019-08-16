@@ -2,7 +2,7 @@
 <import src="/template/wxml/waterfall.wxml" />
 <template is="head" data="{{titlename}}"></template>
 
-<scroll-view class="scrollview">
-  <template is="waterfall" data="{{stores}}"></template>
+<scroll-view class="scrollBox" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
+  <template is="waterfall" data="{{stores,floorstatus}}"></template>
 </scroll-view>
 

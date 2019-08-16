@@ -1,30 +1,32 @@
 <import src="/template/wxml/waterfall.wxml" />
-<view class="content">
+<scroll-view class="scrollBox" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
     <image class="bgimg" mode="aspectFit" src="../../images/redimg.png"></image>
    <template is="head" data="{{titlename}}"></template>
-  <view class="selection flexbox">
-    <view class="flexbox">
-       <image class="logo"  lazy-load="true" mode="aspectFit" src="../../images/logo.png"></image>
-      <view class="location">
-        <view class="curcity"> {{curCity}}
-          <!-- <image mode="aspectFit" src="../../images/bottom.png"></image> -->
+  <view class="selectionBox">
+    <view class="selection flexbox ">
+      <view class="flexbox">
+        <image class="logo"  lazy-load="true" mode="aspectFit" src="../../images/logo.png"></image>
+        <view class="location">
+          <view class="curcity"> {{curCity}}
+            <!-- <image mode="aspectFit" src="../../images/bottom.png"></image> -->
+          </view>
+          <view>{{weather.wea}} {{weather.tem}}</view>
         </view>
-        <view>{{weather.wea}} {{weather.tem}}</view>
+        <navigator class="selectbtn flexbox"  url="../../pages/select/select?city={{curCity}}">
+          <label><image src="../../images/select.png" mode="aspectFit"></image></label>
+          <input placeholder="一鹿省全新升级  " placeholder-class="placeholder"></input>
+        </navigator>
       </view>
-      <navigator class="selectbtn flexbox"  url="../../pages/select/select?city={{curCity}}">
-        <label><image src="../../images/select.png" mode="aspectFit"></image></label>
-        <input placeholder="一鹿省全新升级  " placeholder-class="placeholder"></input>
+      <navigator class="moreSelect" url="../../pages/classification/classification?store_url=list_store_more&category_name=全部&store_city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
+        <image src="../../images/more10.png" mode="aspectFit"></image>更多
       </navigator>
     </view>
-    <navigator class="moreSelect" url="../../pages/classification/classification?key=list_store_more&category_name=全部&store_city={{curCity}}">
-      <image src="../../images/more10.png" mode="aspectFit"></image>更多
-    </navigator>
   </view>
   <view class="swiperbox">
     <swiper id='loop'	 circular class="swiper" current="{{swiperCurrent}}"  bindchange="swiperChange">
       <block wx:for="{{list_ad}}"  wx:key="item">
           <swiper-item>
-              <image lazy-load='true' src="{{url}}{{item.ad_pic}}" mode="aspectFill" class="slide-image" />
+              <image lazy-load='true' src="{{item.ad_pic}}" mode="aspectFill" class="slide-image" />
           </swiper-item>
       </block>
     </swiper>
@@ -37,8 +39,8 @@
       </view> 
   </view>
   <view class="nav flexbox">
-   <navigator class="nav_item" wx:for='{{list_category}}'  url="../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}" hover-class="navigator-hover" wx:key='index'>
-    <image src="{{url}}{{item.category_pic}}"></image>
+   <navigator class="nav_item" wx:for='{{list_category}}'  url="../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}&store_city={{curCity}}" hover-class="navigator-hover" wx:key='index'>
+    <image src="{{item.category_pic}}"></image>
     <view>{{item.category_name}}</view>
    </navigator>
   </view>
@@ -54,21 +56,21 @@
     <view class="new">NEW</view>
     <view class="add">
       <swiper  autoplay="true" vertical='true' circular='true' interval='1500'>
-        <swiper-item wx:for='{{list_headlines}}'>{{item.content}}</swiper-item>
+        <swiper-item wx:for='{{list_headlines}}' wx:key='item'>{{item.content}}</swiper-item>
       </swiper>
     </view>
   </view>
   <view class="goods_item radiusbox">
-    <view class="goods_item_head flexbox">
+    <navigator class="goods_item_head flexbox" url="../../pages/classification/classification?store_url=list_store_save_more&category_name=省到爆&store_city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
       <text>省到爆</text>
-      <view data-store_url="list_store_save_more"  data-name="省到爆" bindtap="tomore">更多 ></view>
-    </view>
+      <view>更多 ></view>
+    </navigator>
     <view class="goods_item_body">
       
-      <scroll-view scroll-x='true' class="goods_item_scroll flexbox" style="">
+      <scroll-view scroll-x='true' class="goods_item_scroll" enable-flex='true' style="">
         <navigator class="goods_item_detail" wx:for="{{list_store_save}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
           <view class="goods_img">
-            <image  lazy-load="true"  src="{{url}}{{item.store_logo}}"  mode="scaleToFill"></image>
+            <image  lazy-load="true"  src="{{item.store_logo}}"  mode="scaleToFill"></image>
           </view>
           <view class="goods_title ellipsis">{{item.store_name}}</view>
           <view class="flexbox">
@@ -82,16 +84,16 @@
     </view>
   </view>
   <view class="goods_item radiusbox">
-    <view class="goods_item_head flexbox">
+    <navigator class="goods_item_head flexbox" url="../../pages/classification/classification?store_url=list_store_choice_more&category_name=小鹿精选&store_city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
       <text>小鹿精选</text>
-      <view data-store_url="choice"  data-name="小鹿精选"  bindtap="tomore">更多 ></view>
-    </view>
+      <view>更多 ></view>
+    </navigator>
     <view class="goods_item_body">
       
-      <scroll-view scroll-x='true' class="goods_item_scroll flexbox" style="">
+      <scroll-view scroll-x='true' class="goods_item_scroll" enable-flex='true' style="">
         <navigator class="goods_item_detail" wx:for="{{list_store_choice}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
           <view class="goods_img">
-            <image  lazy-load="true"  src="{{url}}{{item.store_logo}}"  mode="scaleToFill"></image>
+            <image  lazy-load="true"  src="{{item.store_logo}}"  mode="scaleToFill"></image>
           </view>
           <view class="goods_title ellipsis">{{item.store_name}}</view>
           <view class="flexbox">
@@ -104,9 +106,8 @@
       </scroll-view>
     </view>
   </view>
-  <!-- <view class="store_items">
-    <template is="waterfall" data="{{stores}}"></template>
-    
-    
-  </view> -->
-</view>
+  <scroll-view class="store_items" style="height:">
+    <template is="morefall" data="{{stores,floorstatus}}"></template>
+  </scroll-view>
+  
+</scroll-view>

@@ -35,4 +35,71 @@
     <view>
       <!-- <view class="loading"></view> -->
     </view>
+    <image src="../../images/logo.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+</template>
+<template name ='selectShow'>
+    <navigator class="store_item radiusbox flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ' wx:key="item">  
+      <image src="{{url}}{{item.store_logo}}" lazy-load="true" mode="aspectFill"></image>
+      <view class="store_info">
+         <view class="store_title">
+            <text>{{item.store_name}}</text>
+        </view>
+        <view class="store_score">
+          <text class="pinkB">{{item.store_score}}</text><text class="smallsize">分</text>{{item.comment_count}}条点评
+        </view>
+        <view class="marks">
+          <text wx:for="{{item.list_store_tag}}" wx:for-item='tag'>{{tag.tag_name}}</text>
+        </view>
+        <view class="address flexbox">
+          <text>{{item.store_area}}</text>
+          <text class="textover">{{}}</text>
+        </view>
+        <view class="money  flexbox">
+          <text>距您{{item.distance}}公里</text>
+          <view>
+            <text class="formal">￥{{item.goods_price}}</text>
+            <text class="pink">￥</text>
+            <text class="pinkB">{{item.discount_price}}</text>起
+          </view>
+        </view>
+      </view>
+    </navigator>
+    <view>
+      <!-- <view class="loading"></view> -->
+    </view>
+    <image src="../../images/logo.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+</template>
+
+
+<template name ='morefall'>
+    <navigator class="store_item radiusbox flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ' wx:key="item">  
+      <image src="{{url}}{{item.store_logo}}" lazy-load="true" mode="aspectFill"></image>
+      <view class="store_info">
+         <view class="store_title">
+            <text>{{item.store_name}}</text>
+        </view>
+        <view class="store_score">
+          <text class="pinkB">{{item.store_score}}</text><text class="smallsize">分</text>{{item.comment_count}}条点评
+        </view>
+        <view class="marks">
+          <text wx:for="{{item.list_store_tag}}" wx:for-item='tag'>{{tag.tag_name}}</text>
+        </view>
+        <view class="address flexbox">
+          <text>{{item.store_area}}</text>
+          <text class="textover">{{}}</text>
+        </view>
+        <view class="money  flexbox">
+          <text>距您{{item.distance}}公里</text>
+          <view>
+            <text class="formal">￥{{item.goods_price}}</text>
+            <text class="pink">￥</text>
+            <text class="pinkB">{{item.discount_price}}</text>起
+          </view>
+        </view>
+      </view>
+    </navigator>
+    <image src="../../images/logo.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+    <view>
+      <!-- <view class="loading"></view> -->
+    </view>
 </template>

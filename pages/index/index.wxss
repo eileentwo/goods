@@ -6,6 +6,7 @@ page{
   position: relative;
   z-index: -2;
 }
+
 .backhome{
   display: none;
 }
@@ -14,11 +15,20 @@ page{
   position: absolute;
   z-index: -1;
 }
-.selection{
+.selectionBox{
   height: 110rpx;
+}
+.selection{
+  width: 94%;
+  height: 90rpx;
+
   color: #fff;
   font-size: 18rpx;
-  padding: 0 20rpx;
+  padding:20rpx 3% 0;
+  position: fixed;
+  top: 158rpx;
+  background-color: #FF2041;
+  z-index: 9999;
 }
 .selectbtn{
   width: 418rpx;
@@ -232,3 +242,4 @@ page{
   font-size: 20rpx;
   margin: 0 20rpx 20rpx 6rpx;
 }
+

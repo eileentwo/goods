@@ -1,76 +1,82 @@
 //app.js
 var md5 = require('./utils/md5.js');
+var amap = require('./utils/amap-wx.js');
+var util = require('./utils/util.js');
 var timestamp = Date.parse(new Date());
 var val = 'fanbuyhainan' + timestamp.toString() ;
 var hexMD5 = md5.hexMD5(val);
 
 App({
-    onLaunch: function() {
-        // 展示本地存储能力
-        var logs = wx.getStorageSync('logs') || []
-        logs.unshift(Date.now())
-        wx.setStorageSync('logs', logs)
-        var me=this; 
-        var userInfokey = wx.getStorageSync('userInfokey');
-        
-      if (userInfokey.hasOwnProperty('openid')) {
-        return false;
-      }
-      wx.login({
-        success: function (res) {
-          console.log(200, res.code)
-          if (res.code) {
-            //发起网络请求
-            wx.request({
-              url: 'https://exbuy.double.com.cn/api/mini_program/get_openid',
-              data: {
-                request_object: me.globalData.request_object,
-                timestamp,
-                process: hexMD5,
-                code: res.code,
-
-              },
-              method: 'POST',
-              success: function (openIdRes) {
-                // 判断openId是否获取成功
-                console.log('openId', openIdRes)
-                if (openIdRes.data.status == '1') {
-                  me.globalData.openid = openIdRes.data.data.openid;
-                  me.globalData.session_key = openIdRes.data.data.session_key;
-                  let userInfokey = {};
-                  userInfokey.openid = openIdRes.data.data.openid;
-                  wx.setStorageSync('userInfokey', userInfokey)
-                }
-
-              }
-            })
-          } else {
-            console.log('获取用户登录态失败！' + res.errMsg)
-          }
-        }
-      });
+  onLaunch: function() {
+      // 展示本地存储能力
+      var logs = wx.getStorageSync('logs') || []
+      logs.unshift(Date.now())
+      wx.setStorageSync('logs', logs)
+      var me=this; 
+      var userInfokey = wx.getStorageSync('userInfokey');
       
-    },
-    formatImg: function(img) {
-        var compic = "https://www.baidu.com/img/baidu_jgylogo3.gif";
-        if (!img) {
-            return compic;
-        }
-        var host = "https://exbuy.double.com.cn";
-        if (!img || img.length < 4) {
-            return img;
-        }
-        if (img.substr(0, 4) == 'http') {
-            return img;
+    if (userInfokey.hasOwnProperty('openid')) {
+      return false;
+    }
+    // me.getLocal();
+    wx.login({
+      success: function (res) {
+        console.log(200, res.code)
+        if (res.code) {
+          //发起网络请求
+          wx.request({
+            url: 'https://exbuy.double.com.cn/api/mini_program/get_openid',
+            data: {
+              request_object: me.globalData.request_object,
+              timestamp,
+              process: hexMD5,
+              code: res.code,
+
+            },
+            method: 'POST',
+            success: function (openIdRes) {
+              // 判断openId是否获取成功
+              console.log('openId', openIdRes)
+              if (openIdRes.data.status == '1') {
+                me.globalData.openid = openIdRes.data.data.openid;
+                me.globalData.session_key = openIdRes.data.data.session_key;
+                let userInfokey = {};
+                userInfokey.openid = openIdRes.data.data.openid;
+                wx.setStorageSync('userInfokey', userInfokey)
+              }
+
+            }
+          })
         } else {
-            img = host + img;
+          console.log('获取用户登录态失败！' + res.errMsg)
         }
+      }
+    });
+    
+  },
+  
+  formatImg: function(img) {
+    var compic = "https://www.baidu.com/img/baidu_jgylogo3.gif";
+    if (!img) {
+        return compic;
+    }
+    var host = "https://exbuy.double.com.cn";
+    if (!img || img.length < 4) {
         return img;
-    },
+    }
+    if (img.substr(0, 4) == 'http') {
+        return img;
+    } else {
+        img = host + img;
+    }
+    return img;
+  },
+
+  
     onShow: function (options) {
       // let option = JSON.stringify(options);
-      // console.log('app.js option-----' + option)
-      // console.log('app.js>>options.scene--------------------' + options.scene);
+      // console.log('me.js option-----' + option)
+      // console.log('me.js>>options.scene--------------------' + options.scene);
       // this.sceneInfo(options.scene);
      
     },

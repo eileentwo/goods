@@ -7,6 +7,9 @@
   box-sizing: border-box;
   overflow-y: scroll;
 } 
+.scrollBox{
+  overflow-y: scroll;
+}
 /*flexbox盒模型  */
 .flexbox{
   display: flex;

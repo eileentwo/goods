@@ -13,7 +13,7 @@
   left: 98rpx;
   width: 240rpx;
   height: 240rpx;
-  background-color: #FF1D3A;
+  background-color: #f95529;
 }
 /* 付款框 */
 .payment{

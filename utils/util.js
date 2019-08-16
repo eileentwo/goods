@@ -26,8 +26,25 @@ function throttle(fn,gapTime){
     }
   }
 }
-
+// 处理没http的图片
+function addUrl(obj) {
+  let re = /^\//;
+  let str = 'https://exbuy.double.com.cn/';
+  for (let i = 0; i < obj.length; i++) {
+    if (obj[i].store_logo) {
+      obj[i].store_logo = obj[i].store_logo.replace(re, str);
+    }
+    if (obj[i].category_pic) {
+      obj[i].category_pic = obj[i].category_pic.replace(re, str);
+    }
+    if (obj[i].ad_pic) {
+      obj[i].ad_pic = obj[i].ad_pic.replace(re, str);
+    }
+  }
+  return obj
+}
 module.exports = {
   formatTime,
   throttle,
+  addUrl
 }

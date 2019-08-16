@@ -128,3 +128,11 @@
 .address,.money{
   justify-content: space-between;
 }
+
+.toTop{
+  position: fixed;
+  bottom: 100rpx;
+  right: 50rpx;
+  width: 48rpx;
+  height: 48rpx;
+}

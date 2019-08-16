@@ -12,152 +12,20 @@ Page({
     titlename:'一鹿省',
     url:app.globalData.url,
     currentSwiper:0,
-    imgUrls: ['../../images/cake.png','../../images/cake.png'],
-    currentSwiper:0,
-    goodsItem1: ['', '李记自助餐厅', '李记自助餐厅'],
-    goodsItem2: ['李记自助餐厅', '李记自助餐厅', '李记自助餐厅'],
-    stores:[],
     curCity:'',//当前城市
     weather:'下雨',
-    
-    store_info: [{ store_id: "2", store_name:'甜品'}],
+    page:1,
+    isAdd:true,
+    stores:[],
+    topNum:0,
   },
-  onLoad: function () {
-    let that=this;
-    homedata = wx.getStorageSync('homedata') ||[];
-    console.log(homedata,28)
-    
-
-    if (homedata.length > 0) {
-      let list_ad = homedata.data.list_ad;
-      let weather = stores.weather;
-      let list_category = homedata.data.list_category;
-      let list_headlines = homedata.data.list_headlines;
-      let list_recommend = homedata.data.list_recommend;
-      let list_store_choice = homedata.data.list_store_choice;
-      let list_goods_save = homedata.data.list_goods_save;
-      
-      this.setData({
-        list_ad,
-        list_category,
-        list_headlines,
-        list_recommend,
-        list_store_choice,
-        list_goods_save,
-        curCity,
-        weather
-      })
-    } else {
-      wx.showLoading({
-        title: '加载中',
-      })
-      wx: wx.getLocation({
-        type: 'gcj02',
-        altitude: true,
-        success: function (res) {
-          var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
-          myAmapFun.getRegeo({
-            success: function (data) {
-              //成功回调
-              let city = data[0].regeocodeData.addressComponent.city;
-              that.data.curCity = city;
-              
-              that.getHomedata(res.longitude, res.latitude, city);
-              
-            },
-            fail: function (info) {
-              //失败回调
-              console.log(info)
-            }
-          })
-          
-        },
-        fail: function (res) { },
-        complete: function (res) { },
-      })
-    }
-   
-  },
-  getHomedata: function (longitude, latitude, curCity) {
-    let that = this;
-    let userInfokey = wx.getStorageSync('userInfokey');
-    console.log(longitude, latitude, 78, curCity, userInfokey)
-    var timestamp = Date.parse(new Date());
-    // let token = userInfokey.token || '';
-    var val = 'fanbuyhainan' + timestamp.toString() ;
-    var process = md5.hexMD5(val);
-    wx.request({
-      url: app.globalData.url + '/api/mini_homepage/get_home_info',
-      method: "POST",
-      data: {
-        store_city:curCity,
-        store_area:'',
-        latitude,
-        longitude,
-        timestamp,
-        process,
-        request_object:'mini_program',
-      },
-      success: function (res) {
-        console.log('index', res.data)
-        if (res.data.status == '1') {
-          let stores = res.data.data;
-          wx.hideLoading();
-
-          let weather = stores.weather
-          let list_ad = stores.list_ad
-          let list_category = stores.list_category
-          let list_headlines = stores.list_headlines
-          let list_recommend = stores.list_recommend
-          let list_store_choice = stores.list_store_choice;
-          let list_goods_save = stores.list_goods_save;
-          
-          list_store_choice = that.deleUrl(list_store_choice);
-          list_goods_save = that.deleUrl(list_goods_save);
-
-          homedata.data = res.data.data;
-          homedata.curCity = curCity;
-          wx.setStorageSync('homedata', homedata);
-          
-          that.setData({
-            longitude, latitude,
-            list_ad,
-            list_category,
-            list_headlines,
-            list_recommend,
-            list_store_choice,
-            list_goods_save,
-            curCity,
-            weather
-          })
-
-        }
-      }
-    })
-  },
-  deleUrl: function (obj) {
-    let str = 'https://exbuy.double.com.cn'; 
-    for (let i = 0; i < obj.length; i++) {
-      obj[i].store_logo = obj[i].store_logo.replace(str, '');
-    }
-    return obj
-  },
+  onLoad: function () {},
+ 
   swiperChange: function (e) {
     console.log(205, e)
     this.setData({
       swiperCurrent: e.detail.current
     })
-  },
-  tomore: function (store_key){
-    console.log(store_key)
-    let that=this;
-    let store_url = store_key.currentTarget.dataset.store_url;
-    let name = store_key.currentTarget.dataset.name;
-    if(that.data.curCity){
-      wx.navigateTo({
-        url: '../../pages/classification/classification?store_url=' + store_url + '&category_name=' + name + '&store_city=' + that.data.curCity,
-      })
-    }
   },
   /**
    * 用户点击右上角分享
@@ -173,5 +41,198 @@ Page({
       }
     }
 
-  }
+  },
+  onShow:function(){
+    let that = this;
+    homedata = wx.getStorageSync('homedata') || [] ;
+    // console.log(homedata, 28)
+
+
+    if (homedata.curCity) {
+      that.setHomeData(homedata)
+    } else {
+      this.getLocal();
+    }
+    wx.getSystemInfo({
+      success: function(res) {
+        console.log(res)
+        that.setData({
+          contentH:res.screenHeight
+        })
+      },
+    })
+  },
+// 获取地址
+  getLocal() {
+    let that = this;
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx: wx.getLocation({
+      type: 'gcj02',
+      altitude: true,
+      success: function (res) {
+        var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
+        myAmapFun.getRegeo({
+          success: function (data) {
+            //成功回调
+            let city = data[0].regeocodeData.addressComponent.city;
+            that.getHomedata(res.longitude, res.latitude, city)
+          },
+          fail: function (info) {
+            //失败回调
+            console.log(info)
+          }
+        })
+
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
+  // 获取数据
+  getHomedata: function (longitude, latitude, curCity) {
+    let that = this;
+    var timestamp = Date.parse(new Date());
+    var val = 'fanbuyhainan' + timestamp.toString();
+    var process = md5.hexMD5(val);
+    wx.request({
+      url: app.globalData.url + '/api/mini_homepage/get_home_info',
+      method: "POST",
+      data: {
+        store_city: curCity,
+        store_area: '',
+        latitude,
+        longitude,
+        timestamp,
+        process,
+        request_object: 'mini_program',
+      },
+      success: function (res) {
+        console.log('index', res.data)
+        if (res.data.status == '1') {
+          let homedata = res.data.data;
+          wx.hideLoading();
+
+          homedata.curCity = curCity;
+          homedata.longitude = longitude;
+          homedata.latitude = latitude;
+          wx.setStorageSync('homedata', homedata);
+          that.setHomeData(homedata);
+        }
+      }
+    })
+  },
+  // 渲染数据
+  setHomeData: function (homedata){
+    let that=this;
+    let list_ad = homedata.list_ad;
+    let weather = homedata.weather;
+    let list_category = homedata.list_category;
+    let list_headlines = homedata.list_headlines;
+    let list_store_choice = homedata.list_store_choice;
+    let list_store_save = homedata.list_store_save;
+    let curCity = homedata.curCity;
+    let longitude = homedata.longitude;
+    let latitude = homedata.latitude;
+
+    list_ad = util.addUrl(list_ad);
+    list_category = util.addUrl(list_category);
+    list_store_choice = util.addUrl(list_store_choice);
+    list_store_save = util.addUrl(list_store_save);
+
+    that.setData({
+      list_ad,
+      list_category,
+      list_headlines,
+      list_store_choice,
+      list_store_save,
+      longitude,
+      latitude,
+      curCity,
+      weather
+    })
+  },
+  
+  //监听屏幕滚动 判断上下滚动
+
+  contentScroll: function (ev) {
+    console.log(ev);
+    let that = this;
+    if (that.data.isAdd) {
+      that.data.isAdd = false;
+      that.data.page++;
+      that.getMoreData(that.data.page);
+
+    }
+
+    
+  },
+  getMoreData: function (page){
+    let that=this;
+    var timestamp = Date.parse(new Date());
+    var val = 'fanbuyhainan' + timestamp.toString();
+    var process = md5.hexMD5(val);
+    wx.request({
+      url: app.globalData.url + '/api/mini_homepage/list_store_more',
+      method: "POST",
+      data: {
+        store_city: that.data.curCity,
+        latitude: that.data.latitude,
+        longitude: that.data.longitude,
+        page,
+        store_area: '',
+        timestamp,
+        process,
+        request_object: 'mini_program',
+        limit: 5,
+      },
+      success: function (res) {
+        console.log('moredata', res.data)
+        if (res.data.status == '1') {
+          let newData = res.data.data
+
+          let stores=that.data.stores;
+
+
+          if (newData.length>0){
+            util.addUrl(newData);
+            for(let i=0;i<newData.length;i++){
+              stores.push(newData[i])
+            }
+            that.data.isAdd=true
+            that.setData({
+              stores,
+              page,
+            })
+          }else{
+            wx.showToast({
+              title: '没有更多数据了！',
+            })
+          }
+          
+        }
+      }
+    })
+  },
+  // 获取滚动条当前位置
+  scrolltoupper: function (e) {
+    // console.log(e)
+    if (e.detail.scrollTop > 100) {
+      this.setData({
+        floorstatus: true
+      });
+    } else {
+      this.setData({
+        floorstatus: false
+      });
+    }
+  },
+  //回到顶部
+  toTop: function (e) {  // 一键回到顶部
+    this.setData({
+      topNum: 0
+    });
+  },
+
 })

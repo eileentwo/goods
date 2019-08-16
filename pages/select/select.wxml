@@ -1,0 +1,41 @@
+<!--pages/select/select.wxml-->
+<import src="/template/wxml/waterfall.wxml" />
+<template is="head" data="{{titlename}}"></template>
+
+<view class="selection flexbox">
+  <view class="selectbtn flexbox">
+    <label><image src="../../images/select.png" mode="aspectFit"></image></label>
+    <input  placeholder="一鹿省全新升级" bindinput='inputup' value="{{value}}" placeholder-class="placeholder" ></input> 
+  </view>
+    <text bindtap="select" data-fromselect="select">搜索</text>
+</view>
+
+
+<view class="hot paddingbox" wx:if="{{hotList}}" hidden="{{result}}">
+  <view class="hottitle">热门搜索</view>
+  <view class="tags">
+    <text class="ellipsis" wx:for="{{hotList}}" wx:key='item' bindtap="gotoselect" data-value="{{item.store_name}}" data-discount_id="{{item.discount_id}}">{{item.store_name}}</text>
+  </view>
+</view>
+
+<view class="nearTime  paddingbox" wx:if="{{nearList}}" hidden="{{result}}">
+  <view class="hottitle flexbox">
+    <text>最近搜索</text>
+    <image bindtap="delefn" src="../../images/storeDetails/dele.png" mode="aspectFit"></image>
+    
+  </view>
+  <view class="tags">
+    <block  wx:for='{{nearList}}' wx:key='item'>
+      <text data-value="{{item}}">{{item}}</text>
+    </block>
+  </view>
+</view>
+
+<view class="noStore" style="height:{{noStoreH}}px" hidden="{{noResult}}">
+  <image src="../../images/nodata.png" mode="aspectFit"></image>
+  <view>暂无数据</view>
+</view>
+
+<scroll-view class="scrollBox" wx:if="{{noResult}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
+  <template is="selectShow" data="{{stores,floorstatus}}"></template>
+</scroll-view>
