@@ -60,8 +60,8 @@ Page({
     console.log('getData')
     let that = this;
     var timestamp = Date.parse(new Date());
-    let userInfokey = wx.getStorageSync('userInfokey');
-    let token = userInfokey.token || '';
+    let global = wx.getStorageSync('global');
+    let token = global.token || '';
     var val = 'fanbuyhainan' + timestamp.toString() + token;
     var process = md5.hexMD5(val);
     wx.request({
@@ -77,7 +77,7 @@ Page({
         timestamp,
         process,
         token,
-        user_id: userInfokey.user_id || '',
+        user_id: global.user_id || '',
         store_area: '',
         store_name: '',
         category_id: category_id || '',

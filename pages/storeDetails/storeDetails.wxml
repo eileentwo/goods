@@ -4,10 +4,10 @@
 <view class="container">
      <!-- 轮播图 -->
     <view class="swipercontainer">
-        <swiper id='loop'   circular class="swiper" current="{{swiperCurrent}}"  bindchange="swiperChange">
+        <swiper id='loop'   circular class="swiper" current="{{swiperCurrent}}" source  bindchange="swiperChange">
             <block wx:for="{{imgUrls}}"  wx:key="item">
                 <swiper-item>
-                    <image lazy-load='true' src="{{item}}" class="slide-image" />
+                    <image lazy-load='true' src="{{item.store_pic}}" class="slide-image" />
                 </swiper-item>
             </block>
         </swiper>
@@ -155,7 +155,7 @@
                   <view class="comment_item flexbox">
                     
                       <view  class="userimg">
-                        <image mode="aspectFill" src="{{list_evaluate1.head_pic}}" ><view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap=""></view>
+                        <image mode="aspectFit" src="{{list_evaluate1.head_pic}}" ><view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap=""></view>
                                             <view class="item" style="left:30rpx" data-key="{{item+1}}" bindtap=""></view></image>
                       </view>
                       <view class="comment_infos {{index==len-1?'noBor':''}}">

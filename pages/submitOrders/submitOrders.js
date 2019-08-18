@@ -6,7 +6,8 @@ var timestamp =0;
 
 var textcontent = '';
 var table_number = ''; 
-
+var store_id='';
+var user_id='';
 Page({ 
   data: {
     titlename: '提交订单',
@@ -79,7 +80,10 @@ Page({
             });
         }
     },
- 
+  onLoad:function(option){
+    store_id = option.store_id;
+    user_id = option.user_id
+  },
   onShow: function () {
     let store_info = wx.getStorageSync('store_info');
     let userInfokey= wx.getStorageSync('userInfokey')
@@ -129,7 +133,6 @@ Page({
   wechatPay: function () {
       var that = this;
       let userInfokey = wx.getStorageSync('userInfokey');
-      var store_id =wx.getStorageSync('store_info').store_id;
        timestamp = Date.parse(new Date());
       let token = userInfokey.token
       var val = 'fanbuyhainan' + timestamp.toString() + token;
@@ -140,7 +143,7 @@ Page({
         data: {
           request_object: app.globalData.request_object,
           store_id,
-          user_id:userInfokey.user_id,
+          user_id: userInfokey.user_id || user_id,
           openid: app.globalData.openid || userInfokey.openid,
           token,
           timestamp: timestamp,
@@ -268,7 +271,7 @@ Page({
     }
     return {
       title: '转发',
-      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id + '&store_name=' + store_info.store_name,
+      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_id + '&store_name=' + store_info.store_name,
       success: function (res) {
 
       }

@@ -25,7 +25,7 @@ App({
         if (res.code) {
           //发起网络请求
           wx.request({
-            url: 'https://exbuy.double.com.cn/api/mini_program/get_openid',
+            url: me.globalData.url+'/api/mini_program/get_openid',
             data: {
               request_object: me.globalData.request_object,
               timestamp,
@@ -55,22 +55,22 @@ App({
     
   },
   
-  formatImg: function(img) {
-    var compic = "https://www.baidu.com/img/baidu_jgylogo3.gif";
-    if (!img) {
-        return compic;
-    }
-    var host = "https://exbuy.double.com.cn";
-    if (!img || img.length < 4) {
-        return img;
-    }
-    if (img.substr(0, 4) == 'http') {
-        return img;
-    } else {
-        img = host + img;
-    }
-    return img;
-  },
+  // formatImg: function(img) {
+  //   var compic = "https://www.baidu.com/img/baidu_jgylogo3.gif";
+  //   if (!img) {
+  //       return compic;
+  //   }
+  //   var host = "https://exbuy.double.com.cn";
+  //   if (!img || img.length < 4) {
+  //       return img;
+  //   }
+  //   if (img.substr(0, 4) == 'http') {
+  //       return img;
+  //   } else {
+  //       img = host + img;
+  //   }
+  //   return img;
+  // },
 
   
     onShow: function (options) {
@@ -239,6 +239,7 @@ App({
     },*/
     
     globalData: {
+      openNum:1,
       userInfo: '',
       store_info: {},
         store_name:'',

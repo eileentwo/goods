@@ -3,6 +3,8 @@ var util = require('../../utils/util.js');
 var md5 = require('../../utils/md5.js');
 var timestamp = 0;
 
+var store_id = '';
+var user_id = '';
 var currentid = 0;
 var textcontent = '';
 var contentCount = '';
@@ -147,10 +149,10 @@ Page({
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
         wx.request({
-            url: 'https://exbuy.double.com.cn/api/store_detail/insert_report',
+            url: app.globalData.url+'/api/store_detail/insert_report',
           data: {
             request_object: app.globalData.request_object,
-              user_id: app.globalData.user_id || userInfokey.user_id,
+              user_id: user_id || userInfokey.user_id,
                 store_id,
                 token,
                 type: currentid,
@@ -170,7 +172,7 @@ Page({
                        title: '提交成功',
                     //    icon: 'none',
                     //    duration: 2000,
-                       success: res => {
+                       success: function(res){
                            wx.reLaunch({
                                url: '/pages/storeDetails/storeDetails',
                                //如果已经评价成功了的话就把评论按钮隐藏
@@ -210,9 +212,11 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
+      store_id = options.store_info;
+      let store_info = wx.getStorageSync('store_info')
         this.setData({
-            store_name: app.globalData.store_name,
-            store_logo: app.globalData.store_logo,
+          store_name: store_info.store_name,
+          store_logo: store_info.store_logo,
         })
     },
 
@@ -262,13 +266,11 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
-    let store_info = wx.getStorageSync('store_info');
-    console.log(store_info)
     if (res.from === 'button') {
     }
     return {
       title: '转发',
-      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id,
+      path: 'pages/orderOrPayment/orderOrPayment?store_id=' +store_id,
       success: function (res) {
 
       }

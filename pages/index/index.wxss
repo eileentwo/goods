@@ -10,6 +10,15 @@ page{
 .backhome{
   display: none;
 }
+
+.welcome{
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, .6);
+  z-index: 99999999999999999999;
+}
 .bgimg{
   width: 100%;
   position: absolute;

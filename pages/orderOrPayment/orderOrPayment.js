@@ -3,7 +3,8 @@ var app = getApp();
 var md5 = require('../../utils/md5.js');
 var util = require('../../utils/util.js');
 var timestamp =0;
-
+var store_id='';
+var userInfoKey=[];
 Page({
 
   /**
@@ -19,18 +20,23 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(wx.getStorageSync('userInfoKey'),23)
     let store_info = wx.getStorageSync('store_info') || [];
     let that=this;
-    store_info.store_id = options.store_id;
-    wx.setStorageSync('store_info', store_info)
-    console.log(store_info, 22, !store_info.store_address)
-
-    if (!store_info.store_address) {
+    // store_id = 2
+    store_id = options.store_id
+    if (!store_info.store_id != store_id) {
+      let choosedList=[];
+      let order_info = [];
+      wx.setStorageSync('choosedList', choosedList);
+      wx.setStorageSync('order_info', order_info);
+      
+      store_info.store_id = store_id
       // 店铺详情
       wx.request({
-        url: 'https://exbuy.double.com.cn/api/store_detail/get_store_info_new',
+        url: app.globalData.url+'/api/store_detail/get_store_info_new',
         data: {
-          store_id: options.store_id,
+          store_id: store_id,
           request_object: app.globalData.request_object,
         },
         method: 'POST',
@@ -64,10 +70,10 @@ Page({
 
       //商品列表
       wx: wx.request({
-        url: 'https://exbuy.double.com.cn/api/store_detail/list_store_goods',
+        url: app.globalData.url+'/api/store_detail/list_store_goods',
         data: {
           request_object: app.globalData.request_object,
-          store_id :options.store_id,
+          store_id :store_id,
           page: 1,
           limit: 100
         },
@@ -82,11 +88,13 @@ Page({
               goodsItem[i].id = 'id' + i;
               goodsItem[i].select_nums = 0;
               let goods = goodsItem[i].list_goods;
+              goods = util.addUrl(goods)
               for (let j = 0; j < goods.length; j++) {
                 goods[j].num = 0;
+
               }
             }
-            
+            // console.log(goodsItem)
             wx.setStorageSync('goodsItem', goodsItem)
 
           } else {
@@ -108,7 +116,8 @@ Page({
       })
     }
     this.setData({
-      titlename: options.store_name
+      titlename: options.store_name,
+      store_id
     })
   },
   /*getPhoneNumber:function(e) {
@@ -126,7 +135,7 @@ Page({
       let encryptedData = e.detail.encryptedData
       let iv=e.detail.iv
       wx.request({
-        url: 'https://exbuy.double.com.cn/api/mini_program/get_phone_number',
+        url: app.globalData.url+'/api/mini_program/get_phone_number',
         data: {
           request_object: app.globalData.request_object,
               process:md5,
@@ -158,23 +167,20 @@ Page({
   },*/
   getUserInfo: function(e){
     let that=this;
-    var userInfokey = wx.getStorageSync('userInfokey');
-    userInfokey.user_id = 0;
-    userInfokey.token = 0;
+    var global = wx.getStorageSync('global') || {};
+    console.log(global,173)
     timestamp=Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var hexMd5 = md5.hexMD5(val);
-    console.log(!userInfokey.hasOwnProperty('userInfo'))
-    if (!userInfokey.hasOwnProperty('userInfo')){
+    if (!global.user_id){
       wx.getUserInfo({
         success(res) {
-          console.log("获取用户信息成功", res)
+          console.log("获取用户信息成功", res,171)
           if ('getUserInfo:ok' == res.errMsg) {
-            let userinfo = res.userInfo;
-            userInfokey.userInfo = userinfo
-
+            var userinfo = res.userInfo;
+            
             wx.request({
-              url: 'https://exbuy.double.com.cn/api/mini_program/login',
+              url: app.globalData.url+'/api/mini_program/login',
               data: {
                 request_object: app.globalData.request_object,
                 nickname: userinfo.nickName,
@@ -185,7 +191,7 @@ Page({
                 province: userinfo.province,
                 unionid: '',
                 nickname: userinfo.nickName,
-                openid: userInfokey.openid,
+                openid: global.openid || app.globalData.openid,
                 timestamp,
                 process: hexMd5,
 
@@ -195,9 +201,12 @@ Page({
                 console.log(res, 86)
                 if (res.data.status == 1) {
 
-                  userInfokey.user_id = res.data.data.user_id;
-                  userInfokey.token = res.data.data.token;
-                  wx.setStorageSync('userInfokey', userInfokey)
+                  global.user_id = res.data.data.user_id;
+                  global.token = res.data.data.token;
+
+                  userInfoKey.push(userinfo)
+                  wx.setStorageSync('global', global)
+                  wx.setStorageSync('userInfoKey', userInfoKey)
                   that.setData({
                     isUser: false
                   })
@@ -207,10 +216,6 @@ Page({
                 }
 
               }
-            })
-          } else {
-            that.setData({
-              isUser: true
             })
           }
         },
@@ -272,9 +277,9 @@ Page({
    */
   onShow: function () {
 
-    let userInfokey = wx.getStorageSync('userInfokey');
-    console.log(userInfokey,207)
-    if (userInfokey.hasOwnProperty('token') || userInfokey.user_id) {
+    let global = wx.getStorageSync('global');
+    
+    if (global.hasOwnProperty('token') || global.user_id) {
       this.setData({
         isPhone: false,
         isUser: false
@@ -321,7 +326,7 @@ Page({
     }
     return {
       title: '转发',
-      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id + '&store_name=' + store_info.store_name ,
+      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_id + '&store_name=' + store_info.store_name ,
       success: function (res) {
 
       }

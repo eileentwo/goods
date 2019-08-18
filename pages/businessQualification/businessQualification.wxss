@@ -62,6 +62,7 @@
     color: #666666;
     width: 462rpx;
     height: 80rpx;
+    overflow-y: scroll;
     /* border: 1rpx solid red; */
 }
 /* 商家资质信息公示外框*/

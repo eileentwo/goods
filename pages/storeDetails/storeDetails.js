@@ -7,6 +7,7 @@ var category_list = new Array();
 var good_list = new Array();
 var discount_id = null;
 var store_id = '';
+var user_id='';
 var orderName = "";
 var orderNum = "";
 var orderCost = "";
@@ -93,17 +94,10 @@ Page({
     leftToTop: 0
   },
   onLoad: function (options) {
-    console.log(7888, options)
-    let store_info= wx.getStorageSync('store_info')
-    if(options.store_id){
-      store_id = options.store_id
-      store_info.store_id = options.store_id
-      wx.setStorageSync('store_info', store_info)
-    }else{
-      store_id = wx.getStorageSync('store_info').store_id
-    }
-    console.log(212, store_info)
-
+    console.log(7888, wx.getStorageInfoSync('userInfokey'), options)
+    let store_info = wx.getStorageSync('store_info')
+    store_id = options.store_id;
+    user_id = options.user_id;
     wx.showLoading({
       title: '加载中',
     })
@@ -112,12 +106,10 @@ Page({
     }, 3000)
     var that = this;
     // 店铺详情
-    var array = new Array();
 
-    var list = store_info.list_store_pics;
-    for (var i = 0; i < list.length; i++) {
-      array.push(app.formatImg(list[i]["store_pic"]));
-    }
+    var list = store_info.list_store_pics
+        list = util.addUrl(list) ;
+    // console.log(list)
     var array1 = new Array();
     var tips = store_info.list_tips;
     for (var index in tips) {
@@ -126,11 +118,11 @@ Page({
     //判断是否在当前营业时间内
     let business_hours = store_info.business_hours.split('-');
     that.time_range(business_hours[0], business_hours[1])
-    // //console.log(105,store_info)
+    // console.log(105,list)
     that.setData({
       storeDetails: store_info,
-      imgUrls: array,
-      totalSwiper: array.length,
+      imgUrls: list,
+      totalSwiper: list.length,
       tips: array1,
       store_score: store_info.store_score,
       isMask:false,
@@ -140,8 +132,9 @@ Page({
     //商品列表
     let choosedList = wx.getStorageSync('choosedList') || [];
     let order_info = wx.getStorageSync('order_info') || {};
-    goodsItem = wx.getStorageSync('goodsItem') || app.globalData.goodsItem;
-    console.log(order_info,1333)
+    goodsItem = wx.getStorageSync('goodsItem') ;
+    goodsItem = util.addUrl(goodsItem)
+    // console.log(goodsItem,1333)
     if (choosedList.length > 0 || wx.getStorageInfoSync('goodsItem').length>0){
       for (let i = 0; i < choosedList.length;i++){
         for(let j=0;j<goodsItem.length;j++){
@@ -216,19 +209,24 @@ Page({
 
   swiperChange: function (e) {
     console.log(205,e)
-    this.setData({
-      swiperCurrent: e.detail.current
-    })
+    let index = e.detail.index
+    if (e.detail.source == 'touch') {
+      this.setData({
+        swiperCurrent: e.detail.current,
+        
+      })
+
+    }
   },
   toPay:function (e) {
     let that = this;
     // 判断是否有选中商品
     if (this.data.total_num > 0) {
-      var choosedList = wx.getStorageSync('choosedList') || that.data.choosedList;
-      console.log(choosedList,21666)
+      var choosedList = wx.getStorageSync('choosedList') || that.data.choosedList;  
         var discount_goods = new Array();
         var activity_goods = new Array();
         let userInfokey = wx.getStorageSync('userInfokey');
+      console.log(userInfokey,229)
         for (var item in choosedList) {
             var obj1 = {
               goods_id: choosedList[item]["goodsid"],
@@ -253,10 +251,10 @@ Page({
       var hexMD5 = md5.hexMD5(val);
         // 生成订单号
         wx: wx.request({
-          url: 'https://exbuy.double.com.cn/api/store_detail/insert_order_new',
+          url:app.globalData.url+'/api/store_detail/insert_order_new',
           data: {
             request_object: app.globalData.request_object,
-            user_id: app.globalData.user_id || userInfokey.user_id ,
+            user_id:user_id || userInfokey.user_id ,
             store_id,
             discount_goods: discount_goods,
             timestamp: timestamp,
@@ -292,7 +290,7 @@ Page({
               userInfokey.actual_money = res.data.data.actual_money
               wx.setStorageSync('userInfokey', userInfokey)
               wx.navigateTo({
-                url: '../submitOrders/submitOrders'
+                url: '../submitOrders/submitOrders?store_id=' + store_id + '&user_id=' + user_id
               });
             } else {
               if (res.data.message){
@@ -664,7 +662,7 @@ Page({
     var that = this
     // var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
     wx.request({
-      url: 'https://exbuy.double.com.cn/api/store_detail/list_user_evaluate',
+      url:app.globalData.url+'/api/store_detail/list_user_evaluate',
       data: {
         store_id,
         type: 0//全部
@@ -674,7 +672,7 @@ Page({
         'Content-Type': "application/x-www-form-urlencoded"
       }, // 设置请求的 header
       success: function (res) {
-        console.log(709, res)
+        // console.log(709, res)
         if (res.data.status == 1) {
           let evaluate = res.data.data;
           that.data.evaluate = evaluate;
@@ -738,10 +736,10 @@ Page({
       }
     }
     if (current == 3) {
-      templist = evaluate_list
+      templist = util.addUrl(evaluate_list) 
     }
     let len = templist.length;
-    //console.log(700,templist, evaluate_list)
+    console.log(700,templist, evaluate_list)
     this.setData({
       len: len,
       menuTapCurrenta: current,
@@ -865,13 +863,13 @@ Page({
   },
   navigator() {
     wx.navigateTo({
-      url: '../businessQualification/businessQualification?store_id=' +store_id,
+      url: '../businessQualification/businessQualification?store_id=' + store_id + '&user_id=' + user_id
     })
   },
 
   report() {
     wx.navigateTo({
-      url: '../reportBusiness/reportBusiness?store_id=' +store_id,
+      url: '../reportBusiness/reportBusiness?store_id=' + store_id + '&user_id=' + user_id,
     })
       
   },

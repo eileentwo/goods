@@ -229,17 +229,17 @@ Page({
             check=0
         }
         console.log("匿名否？", check);
-      let userInfokey = wx.getStorageSync('userInfokey');
+      let global = wx.getStorageSync('global');
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
 
-      let token = app.globalData.token || userInfokey.token;
+      let token = app.globalData.token || global.token;
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
         wx.request({
-            url: 'https://exbuy.double.com.cn/api/store_order/insert_user_evaluate',
+          url: app.globalData.url +'/api/store_order/insert_user_evaluate',
           data: {
             request_object: app.globalData.request_object,
-              user_id: app.globalData.user_id || userInfokey.user_id,
+            user_id: app.globalData.user_id || global.user_id,
                 order_id: app.globalData.order_id,
                 score: key,
                 store_id,

@@ -16,6 +16,7 @@ Page({
     isAdd: true,//是否下拉增加
     selectNum:1,
     stores:[],
+    nomore:1,
   },
 
   /**
@@ -79,6 +80,7 @@ Page({
   },
   // 点击搜索
   select: function () {
+    let fromSelect=true;
     let that = this;
     if (that.data.isOk){
       that.data.isOk=false;
@@ -86,10 +88,10 @@ Page({
         that.data.isOk = true;
        },1000)
       // console.log(that.value,63)
-      that.getSelectData(that.value, that.data.city,1)
+      that.getSelectData(that.value, that.data.city, 1, fromSelect)
     }
   },
-  getSelectData: function (store_name, store_city, selectNum) {
+  getSelectData: function (store_name, store_city, selectNum, fromSelect) {
     console.log(92, selectNum)
     let that = this;
     let nearList = wx.getStorageSync('nearList') || [];
@@ -121,11 +123,16 @@ Page({
           let newData = that.addUrl(res.data.data);
           let stores = that.data.stores;
           
-          for (let i = 0; i < newData.length;i++){
-            stores.push(newData[i])
-          }
+          if (fromSelect == 1) {
+            stores = newData
+          }else{
 
-          if (stores.length > 0) {
+            for (let i = 0; i < newData.length;i++){
+              stores.push(newData[i])
+            }
+          }
+          
+          if (newData.length > 0) {
             that.data.isAdd = true
             that.setData({
               stores,
@@ -134,9 +141,14 @@ Page({
               selectNum,
             })
           }else{
+            that.data.nomore=2
+            wx.showToast({
+              title: '没有数据了哦！',
+            })
             that.setData({
               noResult: false,
-              result: false
+              result: false,
+              nomore:2
             })
           }
         }
@@ -217,9 +229,12 @@ Page({
     if (that.data.isAdd) {
       that.data.isAdd = false;
       selectNum++;
-      console.log(selectNum)
+      console.log(that.data.nomore)
 
-      that.getSelectData(that.value, that.data.city, selectNum)
+      if (that.data.nomore==1){
+        that.getSelectData(that.value, that.data.city, selectNum)
+
+      }
 
     }
 

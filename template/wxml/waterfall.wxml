@@ -1,6 +1,6 @@
 
 <template name ='head'>
-  <navigator  open-type='navigateBack' target delta='1' class="backhome"><image  src="../../images/left.png"></image></navigator>
+  <navigator  open-type='navigateBack' target delta='1' class="backhome" ><image  src="../../images/left.png"></image></navigator>
   <view class="header">
     <view>{{titlename}}</view>
   </view>
@@ -16,7 +16,7 @@
           <text class="pinkB">{{item.store_score}}</text><text class="smallsize">分</text>{{item.discount}}条点评
         </view>
         <view class="marks">
-          <text wx:for="{{item.list_store_tag}}" wx:for-item='tag'>{{tag}}</text>
+          <text wx:for="{{item.list_store_tag}}" wx:key='item' wx:for-item='tag'>{{tag}}</text>
         </view>
         <view class="address flexbox">
           <text>{{item.store_area}}</text>
@@ -35,7 +35,7 @@
     <view>
       <!-- <view class="loading"></view> -->
     </view>
-    <image src="../../images/logo.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
 </template>
 <template name ='selectShow'>
     <navigator class="store_item radiusbox flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ' wx:key="item">  
@@ -48,7 +48,7 @@
           <text class="pinkB">{{item.store_score}}</text><text class="smallsize">分</text>{{item.comment_count}}条点评
         </view>
         <view class="marks">
-          <text wx:for="{{item.list_store_tag}}" wx:for-item='tag'>{{tag.tag_name}}</text>
+          <text wx:for="{{item.list_store_tag}}" wx:key='item' wx:for-item='tag'>{{tag.tag_name}}</text>
         </view>
         <view class="address flexbox">
           <text>{{item.store_area}}</text>
@@ -67,7 +67,7 @@
     <view>
       <!-- <view class="loading"></view> -->
     </view>
-    <image src="../../images/logo.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
 </template>
 
 
@@ -82,7 +82,7 @@
           <text class="pinkB">{{item.store_score}}</text><text class="smallsize">分</text>{{item.comment_count}}条点评
         </view>
         <view class="marks">
-          <text wx:for="{{item.list_store_tag}}" wx:for-item='tag'>{{tag.tag_name}}</text>
+          <text wx:for="{{item.list_store_tag}}" wx:key='item' wx:for-item='tag'>{{tag.tag_name}}</text>
         </view>
         <view class="address flexbox">
           <text>{{item.store_area}}</text>
@@ -98,7 +98,7 @@
         </view>
       </view>
     </navigator>
-    <image src="../../images/logo.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
     <view>
       <!-- <view class="loading"></view> -->
     </view>

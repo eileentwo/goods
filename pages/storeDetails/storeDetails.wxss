@@ -754,8 +754,10 @@ navigator {
   overflow: hidden;
   margin-top: 20rpx;
 }
-.comment_item .userimg image{
-  width: 100%;
+.userimg image{
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
 }
 .comment_infos{
   width: 90%;

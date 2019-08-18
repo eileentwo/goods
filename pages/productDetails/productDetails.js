@@ -1,5 +1,7 @@
 var app=getApp();
 var goods_id = null;
+
+var util = require('../../utils/util.js');
 Page({
   data: {
     titlename: '商品详情',
@@ -22,7 +24,7 @@ Page({
         }
         goods_id= options.goods_id;
         wx.request({
-            url: 'https://exbuy.double.com.cn/api/store_detail/get_goods_info',
+            url:app.globalData.url + '/api/store_detail/get_goods_info',
           data: {
             request_object: app.globalData.request_object,
                 goods_id: goods_id
@@ -32,16 +34,19 @@ Page({
                 'Content-Type': "application/x-www-form-urlencoded"
             }, 
             success: function (res) {
-                var pics = app.formatImg(res.data.data.goods_pics)
-                var pictures = pics.split(',');
-                for (var item in pictures){
-                    pictures[item]=app.formatImg(pictures[item])
+                var pics = res.data.data.goods_pics;
+                    pics =  pics.split(',')
+                var pictures = [];
+                for (let i = 0; i < pics.length;i++){
+                  let goods_pic={};
+                  goods_pic.goods_pic = pics[i]
+                  pictures.push(goods_pic)
                 }
-                res.data.data.goods_pics=pictures
-              console.log(res.data.data)
+              pictures = util.addUrl(pictures)
+              console.log(pictures)
               that.setData({
                     goodsDetails: res.data.data,
-                    imgUrls: res.data.data.goods_pics
+                imgUrls: pictures
                 })
                
             },
@@ -55,7 +60,7 @@ Page({
       })
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
         wx.request({
-            url: 'https://exbuy.double.com.cn/api/store_detail/list_user_evaluate',
+            url: app.globalData.url+'/api/store_detail/list_user_evaluate',
           data: {
             request_object: app.globalData.request_object,
                 store_id

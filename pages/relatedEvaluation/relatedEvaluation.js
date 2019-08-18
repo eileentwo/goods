@@ -1,4 +1,6 @@
-var app = getApp()
+var app = getApp();
+
+var util = require('../../utils/util.js');
 Page({
     data: {
         menuTapCurrent: 0,
@@ -22,7 +24,7 @@ Page({
       var that = this
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
         wx.request({
-            url: 'https://exbuy.double.com.cn/api/store_detail/list_user_evaluate',
+            url: app.globalData.url+'/api/store_detail/list_user_evaluate',
             data: {
                 store_id
             },
@@ -43,7 +45,7 @@ Page({
                 var array2 = new Array();
                 var list = res.data.data.list_evaluate;
                 for (var i = 0; i < list.length; i++) {
-                    array1.push(app.formatImg(list[i]["head_pic"]));
+                    array1.push(util.addUrl(list[i]["head_pic"]));
                     array.push(list[i])
                 }
                 that.setData({

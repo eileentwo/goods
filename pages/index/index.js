@@ -9,7 +9,7 @@ var time=1000;
 let homedata=[];
 Page({
   data: {
-    titlename:'一鹿省',
+    titlename:'一鹿省1',
     url:app.globalData.url,
     currentSwiper:0,
     curCity:'',//当前城市
@@ -18,14 +18,27 @@ Page({
     isAdd:true,
     stores:[],
     topNum:0,
+    hide:false
   },
-  onLoad: function () {},
+  onLoad: function () {
+    
+
+  },
+  welcome:function(){
+    this.getLocal();
+    this.setData({
+      hide:true
+    })
+  },
  
   swiperChange: function (e) {
     console.log(205, e)
-    this.setData({
-      swiperCurrent: e.detail.current
-    })
+    if (e.detail.source=='touch'){
+
+      this.setData({
+        swiperCurrent: e.detail.current
+      })
+    }
   },
   /**
    * 用户点击右上角分享
@@ -48,11 +61,14 @@ Page({
   onShow:function(){
     let that = this;
     homedata = wx.getStorageSync('homedata') || [] ;
-    // console.log(homedata, 28)
+    console.log(homedata, 28)
 
 
     if (homedata.curCity) {
-      that.setHomeData(homedata)
+      that.setHomeData(homedata);
+      that.setData({
+        hide:true
+      })
     } else {
       this.getLocal();
     }
@@ -75,9 +91,13 @@ Page({
       type: 'gcj02',
       altitude: true,
       success: function (res) {
+        console.log(res)
+      
         var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
         myAmapFun.getRegeo({
+          location: '' + res.longitude + ',' + res.latitude+'',
           success: function (data) {
+            
             //成功回调
             let city = data[0].regeocodeData.addressComponent.city;
             that.getHomedata(res.longitude, res.latitude, city)
@@ -85,6 +105,9 @@ Page({
           fail: function (info) {
             //失败回调
             console.log(info)
+            wx.showLoading({
+              title: 'myAmapFunW',
+            })
           }
         })
 
@@ -112,16 +135,21 @@ Page({
         request_object: 'mini_program',
       },
       success: function (res) {
-        console.log('index', res.data)
-        if (res.data.status == '1') {
-          let homedata = res.data.data;
+        console.log('index', res.data,128)
+        var data = res.data;
+        if (typeof data === 'string') {
+          data = JSON.parse(data.trim());
+        }
+        if (data.status == '1') {
+          let homedata = data.data;
           wx.hideLoading();
 
           homedata.curCity = curCity;
           homedata.longitude = longitude;
           homedata.latitude = latitude;
-          wx.setStorageSync('homedata', homedata);
+
           that.setHomeData(homedata);
+          wx.setStorageSync('homedata', homedata);
         }
       }
     })
@@ -199,10 +227,12 @@ Page({
 
 
           if (newData.length>0){
-            util.addUrl(newData);
+            newData=util.addUrl(newData);
             for(let i=0;i<newData.length;i++){
               stores.push(newData[i])
             }
+            console.log(stores)
+
             that.data.isAdd=true
             that.setData({
               stores,

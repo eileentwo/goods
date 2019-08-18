@@ -14,8 +14,8 @@
     </view>
     <view class="qualificationWrap">
         <text class="qualificationTitle">商家资质信息公示</text>
-        <block wx:for="{{pics}}" wx:for-item="pics">
-            <image class="qualificationPic" src="{{pics}}"></image>
+        <block wx:for="{{pics}}" wx:key='item'>
+            <image class="qualificationPic" src="{{item.pic}}"></image>
         </block>
     </view>
 </view>

@@ -23,7 +23,7 @@
     </view>
   </view>
   <view class="swiperbox">
-    <swiper id='loop'	 circular class="swiper" current="{{swiperCurrent}}"  bindchange="swiperChange">
+    <swiper id='loop'	 circular class="swiper" source current="{{swiperCurrent}}"  bindchange="swiperChange">
       <block wx:for="{{list_ad}}"  wx:key="item">
           <swiper-item>
               <image lazy-load='true' src="{{item.ad_pic}}" mode="aspectFill" class="slide-image" />
