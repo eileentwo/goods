@@ -86,21 +86,21 @@ Page({
   },
   onShow: function () {
     let store_info = wx.getStorageSync('store_info');
-    let userInfokey= wx.getStorageSync('userInfokey')
+    let globalKey = wx.getStorageSync('globalKey')
       let that = this;
         that.setData({
-          account_money: userInfokey.account_money,
-          discount_price: userInfokey.discount_price,
-          service_money: userInfokey.service_money,
-          save_money: userInfokey.save_money,
-          no_discount_price: userInfokey.no_discount_price,
-          actual_money: userInfokey.actual_money,
+          account_money: globalKey.account_money,
+          discount_price: globalKey.discount_price,
+          service_money: globalKey.service_money,
+          save_money: globalKey.save_money,
+          no_discount_price: globalKey.no_discount_price,
+          actual_money: globalKey.actual_money,
           store_name: store_info.store_name,
           store_logo: store_info.store_logo,
           store_address: store_info.store_address,
           isMask:false,
         })
-        var no_discount_price = userInfokey.no_discount_price;
+        var no_discount_price = globalKey.no_discount_price;
         var ol = wx.getStorageSync('ol');
        
         if (!ol) {
@@ -132,9 +132,9 @@ Page({
     },
   wechatPay: function () {
       var that = this;
-      let userInfokey = wx.getStorageSync('userInfokey');
+      let globalKey = wx.getStorageSync('globalKey');
        timestamp = Date.parse(new Date());
-      let token = userInfokey.token
+      let token = globalKey.token
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
       //支付订单
@@ -143,12 +143,12 @@ Page({
         data: {
           request_object: app.globalData.request_object,
           store_id,
-          user_id: userInfokey.user_id || user_id,
-          openid: app.globalData.openid || userInfokey.openid,
+          user_id: globalKey.user_id || user_id,
+          openid: app.globalData.openid || globalKey.openid,
           token,
           timestamp: timestamp,
           process: hexMD5,
-          order_id: userInfokey.order_id,
+          order_id: globalKey.order_id,
           paid_type: 2,
           remark: that.data.userInput || '',//备注
           table_number: that.data.table_number || ''

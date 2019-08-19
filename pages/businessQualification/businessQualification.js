@@ -40,7 +40,7 @@ Page({
               
               var data = res.data.data;
             var list_pic = util.addUrl(data.list_pic, 'pic');   
-            console.log(list_pic,40)
+            console.log(list_pic, 40, data.list_pic)
             
             that.setData({
                 businessQualification: data,

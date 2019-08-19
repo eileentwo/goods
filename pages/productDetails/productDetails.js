@@ -42,7 +42,7 @@ Page({
                   goods_pic.goods_pic = pics[i]
                   pictures.push(goods_pic)
                 }
-              pictures = util.addUrl(pictures)
+              pictures = util.addUrl(pictures,'pic')
               console.log(pictures)
               that.setData({
                     goodsDetails: res.data.data,

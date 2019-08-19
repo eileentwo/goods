@@ -60,8 +60,9 @@ Page({
     console.log('getData')
     let that = this;
     var timestamp = Date.parse(new Date());
-    let global = wx.getStorageSync('global');
-    let token = global.token || '';
+    let userInfokey = wx.getStorageSync('userInfokey');
+    let globalKey = wx.getStorageSync('globalKey');
+    let token = globalKey.token || '';
     var val = 'fanbuyhainan' + timestamp.toString() + token;
     var process = md5.hexMD5(val);
     wx.request({
@@ -77,7 +78,7 @@ Page({
         timestamp,
         process,
         token,
-        user_id: global.user_id || '',
+        user_id: globalKey.user_id || '',
         store_area: '',
         store_name: '',
         category_id: category_id || '',
@@ -86,7 +87,7 @@ Page({
       success: function (res) {
         console.log('class', res)
         if (res.data.status == '1') {
-          let newData = util.addUrl(res.data.data);
+          let newData = util.addUrl(res.data.data, 'store_logo');
           if(newData.length>0){
             let stores = that.data.stores
             for (let i = 0; i < newData.length; i++) {

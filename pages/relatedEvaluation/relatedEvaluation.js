@@ -45,7 +45,7 @@ Page({
                 var array2 = new Array();
                 var list = res.data.data.list_evaluate;
                 for (var i = 0; i < list.length; i++) {
-                    array1.push(util.addUrl(list[i]["head_pic"]));
+                  array1.push(util.addUrl(list[i]["head_pic"],'head_pic'));
                     array.push(list[i])
                 }
                 that.setData({

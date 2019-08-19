@@ -142,9 +142,9 @@ Page({
                 icon: 'none'
             })
       }
-      let userInfokey = wx.getStorageSync('userInfokey');
+      let globalKey = wx.getStorageSync('globalKey');
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
-      let token = app.globalData.token || userInfokey.token
+      let token = app.globalData.token || globalKey.token
       timestamp = Date.parse(new Date())
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
@@ -152,7 +152,7 @@ Page({
             url: app.globalData.url+'/api/store_detail/insert_report',
           data: {
             request_object: app.globalData.request_object,
-              user_id: user_id || userInfokey.user_id,
+            user_id: user_id || globalKey.user_id,
                 store_id,
                 token,
                 type: currentid,
@@ -212,7 +212,7 @@ Page({
      * 生命周期函数--监听页面加载
      */
     onLoad: function(options) {
-      store_id = options.store_info;
+      store_id = options.store_id;
       let store_info = wx.getStorageSync('store_info')
         this.setData({
           store_name: store_info.store_name,

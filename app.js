@@ -13,9 +13,9 @@ App({
       logs.unshift(Date.now())
       wx.setStorageSync('logs', logs)
       var me=this; 
-      var userInfokey = wx.getStorageSync('userInfokey');
+      var globalKey = wx.getStorageSync('globalKey');
       
-    if (userInfokey.hasOwnProperty('openid')) {
+    if (globalKey.hasOwnProperty('openid')) {
       return false;
     }
     // me.getLocal();
@@ -40,9 +40,9 @@ App({
               if (openIdRes.data.status == '1') {
                 me.globalData.openid = openIdRes.data.data.openid;
                 me.globalData.session_key = openIdRes.data.data.session_key;
-                let userInfokey = {};
-                userInfokey.openid = openIdRes.data.data.openid;
-                wx.setStorageSync('userInfokey', userInfokey)
+                let globalKey = {};
+                globalKey.openid = openIdRes.data.data.openid;
+                wx.setStorageSync('globalKey', globalKey)
               }
 
             }

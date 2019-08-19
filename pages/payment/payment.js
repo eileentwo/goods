@@ -98,22 +98,23 @@ Page({
   payForWechat:function(){//微信支付
     let that=this
     let userInfokey = wx.getStorageSync('userInfokey');
-    let token = app.globalData.token || userInfokey.token
+    let globalKey = wx.getStorageSync('globalKey');
+    let token = app.globalData.token || globalKey.token
     var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
     timestamp= Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString() + token;
     var hexMD5 = md5.hexMD5(val);
     let payment_money = that.data.value
     wx.request({
-      url: 'https://exbuy.double.com.cn/api/mini_program/payment',
+      url: app.globalData.url+'/api/mini_program/payment',
       data: {
         request_object: app.globalData.request_object,
-        user_id: app.globalData.user_id || userInfokey.user_id,
+        user_id: app.globalData.user_id || globalKey.user_id,
         token: token,
         timestamp: timestamp,
         process: hexMD5,
         store_id,
-        openid: app.globalData.openid || userInfokey.openid,
+        openid: app.globalData.openid || globalKey.openid,
         remark: that.data.userInput || '',
         table_number: that.data.table_number ||'',
         payment_money,

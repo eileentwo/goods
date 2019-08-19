@@ -98,8 +98,8 @@ Page({
     nearList.push(store_name);
     wx.setStorageSync('nearList', nearList)
     
-    let userInfokey = wx.getStorageSync('userInfokey');
-    // let token = userInfokey.token || '';
+    let globalKey = wx.getStorageSync('globalKey');
+    // let token = globalKey.token || '';
     // var val = 'fanbuyhainan' + timestamp.toString() + token;
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();

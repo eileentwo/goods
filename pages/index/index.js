@@ -9,7 +9,7 @@ var time=1000;
 let homedata=[];
 Page({
   data: {
-    titlename:'一鹿省1',
+    titlename:'一鹿省',
     url:app.globalData.url,
     currentSwiper:0,
     curCity:'',//当前城市
@@ -167,10 +167,11 @@ Page({
     let longitude = homedata.longitude;
     let latitude = homedata.latitude;
 
-    list_ad = util.addUrl(list_ad);
-    list_category = util.addUrl(list_category);
-    list_store_choice = util.addUrl(list_store_choice);
-    list_store_save = util.addUrl(list_store_save);
+    list_ad = util.addUrl(list_ad,'ad_pic');
+    list_category = util.addUrl(list_category,'category_pic');
+
+    list_store_choice = util.addUrl(list_store_choice,'store_logo');
+    list_store_save = util.addUrl(list_store_save, 'store_logo');
 
     that.setData({
       list_ad,
@@ -227,7 +228,7 @@ Page({
 
 
           if (newData.length>0){
-            newData=util.addUrl(newData);
+            newData = util.addUrl(newData, 'store_logo');
             for(let i=0;i<newData.length;i++){
               stores.push(newData[i])
             }

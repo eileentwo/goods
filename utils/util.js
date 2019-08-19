@@ -27,48 +27,19 @@ function throttle(fn,gapTime){
   }
 }
 // 处理没http的图片
-function addUrl(obj,src) {
+function addUrl(obj, src) {
+  console.log(obj,'util')
   let re = /^\//;
   let str = 'https://exbuy.double.com.cn/';
-  // if (src) {
-  //   for (let i = 0; i < obj.length; i++) {
-  //     if (obj[i].src) {
-  //       obj[i].src = obj[i].src.replace(re, str);
-  //     }
-  //   }
-  // }else{
-
-  for (let i = 0; i < obj.length; i++) {
-    
-    if (obj[i].store_logo) {
-    obj[i].store_logo = obj[i].store_logo.replace(re, str);
+  if (src) {
+    src= src.substring(0, src.length);
+    // console.log(src)
+    for (let i = 0; i < obj.length; i++) {
+      if (obj[i][src]) {
+        obj[i][src] = obj[i][src].replace(re, str);
+      }
     }
-    if (obj[i].category_pic) {
-      obj[i].category_pic = obj[i].category_pic.replace(re, str);
-    }
-    if (obj[i].ad_pic) {
-      obj[i].ad_pic = obj[i].ad_pic.replace(re, str);
-    }
-    if (obj[i].goods_pic) {
-      obj[i].goods_pic = obj[i].goods_pic.replace(re, str);
-
-    }
-    if (obj[i].goods_pics) {
-      obj[i].goods_pics = obj[i].goods_pics.replace(re, str);
-
-    }
-    if (obj[i].store_pic) {
-      obj[i].store_pic = obj[i].store_pic.replace(re, str);
-
-    }
-    if (obj[i].head_pic) {
-      obj[i].head_pic = obj[i].head_pic.replace(re, str);
-
-    }
-    
-
   }
-// }
   return obj
 }
 module.exports = {

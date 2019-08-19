@@ -4,7 +4,7 @@
 <template is="head" data="{{titlename}}"></template>
 <view class="container" style="background-image:url(../../images/orderOrPayment/bg.png)">
     <!-- <button class="usermask phonemask" wx:if='{{isPhone}}' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> -->
-    <button class="usermask" wx:if='{{isUser}}' data-openNum="{{openNum}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo"></button>
+    <button class="usermask" wx:if='{{isUser}}' bindtap='showLoading'  open-type="getUserInfo" bindgetuserinfo="getUserInfo"></button>
     <navigator url="../storeDetails/storeDetails?store_id={{store_id}}?user_id={{user_id}}">
        <button class="order">
             <image class="orderInco" src="../../images/orderOrPayment/order.png"></image>

@@ -94,7 +94,7 @@ Page({
     leftToTop: 0
   },
   onLoad: function (options) {
-    console.log(7888, wx.getStorageInfoSync('userInfokey'), options)
+    console.log(7888, wx.getStorageInfoSync('globalKey'), options)
     let store_info = wx.getStorageSync('store_info')
     store_id = options.store_id;
     user_id = options.user_id;
@@ -108,7 +108,7 @@ Page({
     // 店铺详情
 
     var list = store_info.list_store_pics
-        list = util.addUrl(list) ;
+    list = util.addUrl(list,'store_pic') ;
     // console.log(list)
     var array1 = new Array();
     var tips = store_info.list_tips;
@@ -133,12 +133,12 @@ Page({
     let choosedList = wx.getStorageSync('choosedList') || [];
     let order_info = wx.getStorageSync('order_info') || {};
     goodsItem = wx.getStorageSync('goodsItem') ;
-    goodsItem = util.addUrl(goodsItem)
-    // console.log(goodsItem,1333)
+    
+    console.log(goodsItem,1333)
     if (choosedList.length > 0 || wx.getStorageInfoSync('goodsItem').length>0){
       for (let i = 0; i < choosedList.length;i++){
         for(let j=0;j<goodsItem.length;j++){
-          let list_goods = goodsItem[j].list_goods;
+          let list_goods = util.addUrl(goodsItem[j].list_goods,'goods_pic') ;
           goodsItem[j].select_nums=0
           for (let k = 0; k < list_goods.length;k++){
             if (choosedList[i].goodsid == list_goods[k].goods_id){
@@ -225,8 +225,8 @@ Page({
       var choosedList = wx.getStorageSync('choosedList') || that.data.choosedList;  
         var discount_goods = new Array();
         var activity_goods = new Array();
-        let userInfokey = wx.getStorageSync('userInfokey');
-      console.log(userInfokey,229)
+      let globalKey = wx.getStorageSync('globalKey');
+      console.log(globalKey,229)
         for (var item in choosedList) {
             var obj1 = {
               goods_id: choosedList[item]["goodsid"],
@@ -239,14 +239,10 @@ Page({
 
       wx.setStorageSync('ol', choosedList);
        
-       // ------------------------------
-        // var activity_goods = JSON.stringify(activity_goods);
         var discount_goods = JSON.stringify(discount_goods);
-        // app.globalData.activity_goods = activity_goods;
         app.globalData.discount_goods = discount_goods;
-      // var store_id = wx.getStorageSync('store_info').store_id;
       var timestamp = Date.parse(new Date());
-      let token = app.globalData.token || userInfokey.token;
+      let token = globalKey.token;
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
         // 生成订单号
@@ -254,7 +250,7 @@ Page({
           url:app.globalData.url+'/api/store_detail/insert_order_new',
           data: {
             request_object: app.globalData.request_object,
-            user_id:user_id || userInfokey.user_id ,
+            user_id: user_id || globalKey.user_id ,
             store_id,
             discount_goods: discount_goods,
             timestamp: timestamp,
@@ -266,29 +262,29 @@ Page({
             'Content-Type': "application/x-www-form-urlencoded"
           },
           success: function (res) {
-            console.log(token,243,userInfokey,'生成订单号', res)
+            console.log(token, 243, globalKey,'生成订单号', res)
             if (res.data.status == 1) {
               that.setData({
                 actual_money: res.data.data.actual_money, isMask:true
               })
               // 订单号
-              userInfokey.order_id = res.data.data.order_id
+              globalKey.order_id = res.data.data.order_id
               // 订单金额
-              userInfokey.account_money = res.data.data.account_money
+              globalKey.account_money = res.data.data.account_money
               // 翻倍金额
               // ////console.log("翻倍金额", res.data.data.discount_price)
-              userInfokey.discount_price = res.data.data.discount_price
+              globalKey.discount_price = res.data.data.discount_price
               // 服务费用
               // ////console.log("服务费用", res.data.data.service_money)
-              userInfokey.service_money = res.data.data.service_money
+              globalKey.service_money = res.data.data.service_money
               // 本单节省
               // ////console.log("本单节省", res.data.data.save_money)
-              userInfokey.save_money = res.data.data.save_money
+              globalKey.save_money = res.data.data.save_money
               // 未翻金额
               // ////console.log("未翻金额", res.data.data.no_discount_price)
-              userInfokey.no_discount_price = res.data.data.no_discount_price
-              userInfokey.actual_money = res.data.data.actual_money
-              wx.setStorageSync('userInfokey', userInfokey)
+              globalKey.no_discount_price = res.data.data.no_discount_price
+              globalKey.actual_money = res.data.data.actual_money
+              wx.setStorageSync('globalKey', globalKey)
               wx.navigateTo({
                 url: '../submitOrders/submitOrders?store_id=' + store_id + '&user_id=' + user_id
               });
@@ -735,11 +731,12 @@ Page({
         templist.push(evaluate_list[i])
       }
     }
+    console.log(current,734)
     if (current == 3) {
-      templist = util.addUrl(evaluate_list) 
+      templist = util.addUrl(evaluate_list,'head_pic') 
     }
     let len = templist.length;
-    console.log(700,templist, evaluate_list)
+    // console.log(700,templist, evaluate_list)
     this.setData({
       len: len,
       menuTapCurrenta: current,

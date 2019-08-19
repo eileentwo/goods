@@ -4,7 +4,6 @@ var md5 = require('../../utils/md5.js');
 var util = require('../../utils/util.js');
 var timestamp =0;
 var store_id='';
-var userInfoKey=[];
 Page({
 
   /**
@@ -20,7 +19,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(wx.getStorageSync('userInfoKey'),23)
     let store_info = wx.getStorageSync('store_info') || [];
     let that=this;
     // store_id = 2
@@ -88,7 +86,7 @@ Page({
               goodsItem[i].id = 'id' + i;
               goodsItem[i].select_nums = 0;
               let goods = goodsItem[i].list_goods;
-              goods = util.addUrl(goods)
+              goods = util.addUrl(goods, 'goods_pic')
               for (let j = 0; j < goods.length; j++) {
                 goods[j].num = 0;
 
@@ -120,59 +118,17 @@ Page({
       store_id
     })
   },
-  /*getPhoneNumber:function(e) {
-    var that = this;
-    if ("getPhoneNumber:ok" != e.detail.errMsg) {
-      wx.showToast({
-        icon: 'none',
-        title: '快捷登陆失败'
-      })
-      return;
-    }
-    let userInfokey = wx.getStorageSync('userInfokey');
-    console.log(userInfokey,4222,app.globalData.session_key)
-    if (!userInfokey.hasOwnProperty('phoneNum')) {
-      let encryptedData = e.detail.encryptedData
-      let iv=e.detail.iv
-      wx.request({
-        url: app.globalData.url+'/api/mini_program/get_phone_number',
-        data: {
-          request_object: app.globalData.request_object,
-              process:md5,
-              timestamp,
-              session_key: app.globalData.session_key,
-               encryptedData,
-               iv },
-        method: 'POST',
-        success: function (phone) {
-          console.log(phone)
-          if(phone.data.status==1){
-            userInfokey.phoneNum = phone.data.data.phoneNumber;
-
-            that.data.phoneNum= phone.data.data.phoneNumber
-            wx.setStorageSync('userInfokey', userInfokey)
-            that.setData({
-              isPhone: false,
-            })
-          }
-        }
-      })
-    }else{
-      that.setData({
-        isPhone: false
-      })
-    }
-     
-    
-  },*/
+  
   getUserInfo: function(e){
-    let that=this;
-    var global = wx.getStorageSync('global') || {};
-    console.log(global,173)
+    let that = this;
+    let userInfoKey = wx.getStorageSync('userInfoKey') || [];
+    let globalKey = wx.getStorageSync('globalKey');
+    console.log(128)
     timestamp=Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var hexMd5 = md5.hexMD5(val);
-    if (!global.user_id){
+    if (!globalKey.user_id){
+    
       wx.getUserInfo({
         success(res) {
           console.log("获取用户信息成功", res,171)
@@ -191,7 +147,7 @@ Page({
                 province: userinfo.province,
                 unionid: '',
                 nickname: userinfo.nickName,
-                openid: global.openid || app.globalData.openid,
+                openid: app.globalData.openid || globalKey.openid ,
                 timestamp,
                 process: hexMd5,
 
@@ -200,13 +156,13 @@ Page({
               success: function (res) {
                 console.log(res, 86)
                 if (res.data.status == 1) {
+                  wx.hideLoading();
 
-                  global.user_id = res.data.data.user_id;
-                  global.token = res.data.data.token;
-
-                  userInfoKey.push(userinfo)
-                  wx.setStorageSync('global', global)
-                  wx.setStorageSync('userInfoKey', userInfoKey)
+                  userInfoKey.userinfo = userinfo;
+                  globalKey.user_id = res.data.data.user_id;
+                  globalKey.token = res.data.data.token;
+                  wx.setStorageSync('globalKey', globalKey);
+                  wx.setStorageSync('userInfoKey', userInfoKey);
                   that.setData({
                     isUser: false
                   })
@@ -240,6 +196,11 @@ Page({
   
   
   
+  },
+  showLoading:function(e){
+    wx.showLoading({
+      title: '加载中',
+    })
   },
   // 打开权限设置页提示框
   showSettingToast: function (e) {
@@ -276,10 +237,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-
-    let global = wx.getStorageSync('global');
+    let globalKey = wx.getStorageSync('globalKey');
     
-    if (global.hasOwnProperty('token') || global.user_id) {
+    if (globalKey.hasOwnProperty('token') || globalKey.user_id) {
       this.setData({
         isPhone: false,
         isUser: false

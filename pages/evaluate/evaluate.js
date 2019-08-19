@@ -229,17 +229,18 @@ Page({
             check=0
         }
         console.log("匿名否？", check);
-      let global = wx.getStorageSync('global');
+      let userInfoKey = wx.getStorageSync('userInfoKey');
       var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
 
-      let token = app.globalData.token || global.token;
+      let globalKey = wx.getStorageSync('globalKey');
+      let token = app.globalData.token || globalKey.token;
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
         wx.request({
           url: app.globalData.url +'/api/store_order/insert_user_evaluate',
           data: {
             request_object: app.globalData.request_object,
-            user_id: app.globalData.user_id || global.user_id,
+            user_id: app.globalData.user_id || globalKey.user_id,
                 order_id: app.globalData.order_id,
                 score: key,
                 store_id,
