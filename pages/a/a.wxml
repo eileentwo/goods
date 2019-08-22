@@ -1,42 +1,71 @@
-<!--pages/allCategories /allCategories.wxml-->
+
 <import src="/template/wxml/waterfall.wxml" />
 <template is="head" data="{{titlename,redBack}}"></template>
-
-<view class="selection flexbox">
-  <view class="selectbtn flexbox">
-    <label><image src="../../images/select.png" mode="aspectFit"></image></label>
-    <input  placeholder="数呗花全新升级" bindinput='inputup' value="{{value}}" placeholder-class="placeholder" ></input> 
+<!-- 条件选择 -->
+<view class="conditions">
+  <view class="conditions_title flexbox">
+    <view class="categories" bindtap="changeC" data-key="key1">
+      <text>美食餐饮</text><image mode="aspectFit" src="{{icon}}"></image>
+    </view>
+    <view class="categories" bindtap="changeC" data-key="key2">
+      <text>附近</text><image mode="aspectFit" src="{{icon}}"></image>
+    </view>
+    <view class="categories" bindtap="changeC" data-key="key3">
+      <text>智能排序</text><image mode="aspectFit" src="{{icon}}"></image>
+    </view>
   </view>
-    <text bindtap="select" class="allSelect" data-fromselect="select">搜索</text>
-</view>
-
-<!-- 分类导航 -->  
-<scroll-view class="nav_fl nav_content"  scroll-x="true"  scroll-left="{{scrollLeft}}" >
- 
-    <view bindtap="toLoop"  wx:for="{{goodlist}}" data-index="{{index}}" wx:key='index' data-category_id="a{{item.category_id}}"  catchtouchend="clickcategory"  class='nav_label {{index==navActive?"navactive":""}}' ><view>{{item.category_name}}  </view>     
-    </view>  
-
-</scroll-view >  
-<view style='clear:both;'></view> 
-<!-- 上下滚动部分 -->  
-<!-- <swiper class='scrollView' current="{{current}}" bindchange="change"  vertical='true' style="height:{{loopH}}px;" display-multiple-items='8'>    
-
-    <swiper-item class="scrollItem scrollItem{{index}}" style='height:{{swiperH}}'> 
-   </swiper-item>
-</swiper> -->  
-<scroll-view class="scrollView" scroll-y="true" style="height:{{winHeight}}px"  scroll-with-animation='true' scroll-into-view="{{scrollTopId}}" scroll-top="{{scrollTop}}" bindscroll="contentScroll">  
-
-  <block  wx:for="{{goodlist}}" wx:key='index'>
-    <view id="a{{item.category_id}}">
-      <view class="scrollTitle" >
-        <image  src="{{item.category_pic}}" mode="aspectFit"></image>
+  
+  <view class="fruit" wx:if="{{showFruit}}" catchtouchmove="touchHandler" style="height:{{fruitH}}px">
+    <view class="categories_list flexbox">
+      <view class="categories_list_left" wx:if='{{showList == "key1"}}'>
+        <view>全部 (789)</view>
+        <view>美食餐饮 (278)</view>
+        <view>娱乐 (201)</view>
+        <view>酒店 (92)</view>
+        <view>旅游 (71)</view>
+        <view>家居 (60)</view>
+        <view>服装 (87)</view>
       </view>
-      <view class="categoriesUl flexbox" >
-          <navigator wx:for="{{item.list_second}}" wx:for-item='second' wx:key='index' data-category_id="{{second.category_id}}"  class="categoriesLi">
-            {{second.category_name}}
-          </navigator>
+      <view class="categories_list_right" wx:if='{{showList == "key2"}}'>
+        <view>中餐</view>
+        <view>中餐</view>
+        <view>中餐</view>
+        <view>中餐</view>
+        
       </view>
     </view>
+    <view class="categories_list flexbox">
+    
+      <view class="categories_list_left distance">
+        <view>附近</view>
+        <view>附近</view>
+        <view>附近</view>
+        <view>附近</view>
+        <view>附近</view>
+      </view>
+      <view class="categories_list_right">
+        <view>1km</view>
+        <view>3km</view>
+        <view>5km</view>
+        <view>10km</view>
+        
+      </view>
+    </view>
+    <view class="categories_list flexbox"  wx:if='{{showList == "key3"}}'>
+      <view class="categories_list_left">
+        <view>智能排序</view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<scroll-view class="scrollBox {{is_choice?'scrollBoxGray':''}}" style="height:{{contentH}}px"  scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
   
-  </block>
-</scroll-view> 
+  <template is="waterfall_save" wx:if="{{is_save}}" data="{{stores,floorstatus,city,half,num}}"></template>
+  <template is="waterfall_choice" wx:elif="{{is_choice}}" data="{{stores,floorstatus,city}}"></template>
+
+  <template is="waterfall" wx:else data="{{stores,floorstatus,city}}"></template>
+  <!-- <template is="waterfall" data="{{stores,floorstatus,city}}"></template> -->
+
+</scroll-view>
+

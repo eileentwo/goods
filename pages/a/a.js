@@ -1,174 +1,188 @@
-// pages/allCategories /allCategories.js
+// pages/classification/classification.js
 var app = getApp();
 var util = require('../../utils/util.js');
 var md5 = require('../../utils/md5.js');
-var allDis=[];
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    titlename: '数呗花',
-    redBack: '1',
-    scrollTopId: '',//置顶id
-    scrollTop: 0,//置顶高度
-    scrollLeft: 0,
-    goodlist: [
-      // { name: '美食1',
-      //   list:[
-      //     { name1: '烤肉' },
-      //     { name1: '烧烤/烤肉' },
-      //     { name1: '烧烤肉' },
-      //     { name1: '烧烤/烤肉' },
-      //     { name1: '烧肉' }
-      //   ]
-      // },
-      // {
-      //   name: '美食2',
-      //   list: [
-      //     { name1: '烧烤/烤肉' },
-      //     { name1: '烧烤/烤肉' },
-      //     { name1: '烧烤/烤肉' },
-      //     { name1: '烧烤/烤肉' },
-      //     { name1: '烧烤/烤肉' },
-      //     { name1: '烧烤/烤肉' }
-      //   ]
-      // },
-      // { name: '美美食食3' },
-      // { name: '美美食食4' },
-      // { name: '美食5' },
-      // { name: '美美食食6' },
-      // { name: '美食7' },
-      // { name: '美食8' },
-    ],
-    navActive: 0
+    titlename: '分类',
+    url: app.globalData.url,
+    icons: ['../../images/graybottom.png', '../../images/redtop.png'],
+    icon:'',
+    page: 1,
+    stores: [],
+    isAdd: true,
+    num: 5,
+    half: 0,
+    showFruit: false,
+    showList:'key1',
+    fruitH:0,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options, 'classif')
     let that = this;
-
-    var sysInfo = wx.getSystemInfoSync();
-    var winHeight = sysInfo.windowHeight - 162;
-    this.setData({
-      winHeight
+    wx.showLoading({
+      title: '加载中',
     })
-    that.getData();
-  },
 
-  clickcategory: function (e) {
-    var category_id = e.currentTarget.dataset.category_id;
-    var index = e.currentTarget.dataset.index;
-    console.log(index)
-    let scrollLeft = 0;
-    if (index > 2) {
-      scrollLeft = 88 * (index - 2)
+    let store_url = '';
+    let redBack = false;
+    let is_save = false;
+    let is_choice = false;
+    that.data.latitude = options.latitude;
+    that.data.longitude = options.longitude;
+    that.data.store_city = options.store_city;
+    if (options.store_url) {
+      store_url = 'mini_homepage/' + options.store_url;
+
+      that.data.store_url = options.store_url;
+      that.getData(store_url, options.latitude, options.longitude, options.store_city, '', 1);
+    } else {
+      store_url = 'mini_program/list_store';
+      that.data.category_id = options.category_id;
+      that.data.store_url = store_url;
+      that.getData(store_url, options.latitude, options.longitude, options.store_city, options.category_id, 1);
     }
-    this.setData({
-      scrollTopId: category_id,
-      navActive: index,
-      scrollLeft
+
+    if (options.category_name == '省到爆' || options.category_name == '精选') {
+      redBack = true;
+      if (options.category_name == '省到爆') {
+        is_save = true
+      } else {
+        is_choice = true
+      }
+    }
+    // console.log('redBack', redBack)
+    that.setData({
+      titlename: options.category_name,
+      city: options.store_city,
+      redBack, is_save, is_choice,
+      icon:that.data.icons[0],
+    })
+
+    wx.getSystemInfo({
+      success: function (res) {
+        console.log(res)
+        
+        that.setData({
+          contentH: res.screenHeight,
+          fruitH: res.screenHeight-115,
+
+        })
+      },
     })
   },
-  contentScroll: function (e) {
-    console.log(e)
-    let scrollTop=e.detail.scrollTop
-    for (let i = 0; i < allDis.length;i++){
-      if (allDis[i] < scrollTop < allDis[i+1]){}
+  changeC:function(e){
+    let key =e.currentTarget.dataset.key;
+    // console.log(e,key)
+    if (key == 'key1') {
+      showList = 'key1'
+    } else if (key == 'key2') {
+      showList = 'key2'
+    } else if (key == 'key3'){
+      showList ='key3'
     }
+    this.setData({
+      showFruit:true,
+      showList,
+    })
   },
-
-  // 获取bar 到顶部的距离，用来做后面的计算。
-  getNum: function (data) {
-    var totop = 0;
-    var titleBox = 140;
-    var oneContent = 82;
-    let arr=[]
-    // 第一类肯定是到顶部的距离为 0
-    // 循环来计算每个子类到顶部的高度
-    for (let i = 1; i < (data.length + 1); i++) {
-      var obj = {};
-      totop += (titleBox + data[i - 1].list_second.length / 4 * oneContent);
-      obj['num'] = totop;
-      arr.push(obj)
-    }
-    console.log(arr,96)
-    return arr
+  touchHandler: function(){
+    return
   },
-  getData: function () {
+  getData: function (store_url, latitude, longitude, store_city, category_id, page) {//list_store
+    console.log('getData')
     let that = this;
     var timestamp = Date.parse(new Date());
-    var val = 'fanbuyhainan' + timestamp.toString();
+    let userInfokey = wx.getStorageSync('userInfokey');
+    let globalKey = wx.getStorageSync('globalKey');
+    let token = globalKey.token || '';
+    var val = 'fanbuyhainan' + timestamp.toString() + token;
     var process = md5.hexMD5(val);
-
     wx.request({
-      url: app.globalData.url + "/api/mini_homepage/list_category",
+      url: app.globalData.url + '/api/' + store_url,
       method: "POST",
       data: {
         request_object: app.globalData.request_object,
-        process,
+        store_city,
+        latitude,
+        longitude,
+        page: page,
+        limit: 10,
         timestamp,
+        process,
+        token,
+        user_id: globalKey.user_id || '',
+        store_area: '',
+        store_name: '',
+        category_id: category_id || '',
+        sec_category_id: '',
       },
       success: function (res) {
-        console.log(res, res.data.status);
-        //  请求到数据 存在本地
-        if (res.data.status == 1) {
-          let data = res.data.data;
-          let dataL = data.length;
-          if (dataL > 0) {
-            util.addUrl(data, 'category_pic')
+        console.log('class', res)
+        if (res.data.status == '1') {
+          let num = [];
+          let half = 0;
+          let newData = util.addUrl(res.data.data, 'store_logo');
+          if (newData.length > 0) {
+            let stores = that.data.stores
+            for (let i = 0; i < newData.length; i++) {
+              //评分
+              let score = newData[i].store_score;
+
+              if (score) {
+                if (score.length > 0) {
+                  num.length = score.substr(0, 1);
+                  half = 1;
+                } else {
+                  num.length = score;
+                }
+              }
+              //商品图片
+              if (newData[i].list_goods) {
+                newData[i].list_goods = util.addUrl(newData[i].list_goods, 'goods_pic')
+              }
+
+
+              stores.push(newData[i])
+            }
+            wx.hideLoading();
+
+            that.data.isAdd = true
+            that.setData({
+              stores,
+              page,
+              num,
+              half
+            })
+          } else {
+            if (page > 1) {
+              wx.showToast({
+                title: '没有更多数据了哦！',
+              })
+            } else {
+              wx.showToast({
+                title: '没有相关店铺哦！',
+              })
+            }
           }
-          that.getNum(data);
-          that.setData({
-            goodlist: data
-          })
-        } else {
-          wx.showToast({
-            title: '数据加载失败请稍后重试',
-          })
         }
       }
     })
-  },
-  // getNum:function(data){
 
-  //   var titleBox = 130;
-  //   var oneContent = 82;
-  //   let dataL=data.length;
-  //   let num=0;
-  //   let allDis=[]
-  //   for(let i=0;i<dataL;i++){
-  //     let temp1 = (i+1) * titleBox;
-  //     num = data[i].list_second.length /4;
-  //     let temp2 = num * oneContent;
-
-  //     allDis.push(temp1 + temp2)
-  //   }
-  //   console.log(allDis)
-  // },
-  toLoop: function (e) {
-    let index = e.currentTarget.dataset.index;
-    let goodlist = this.data.goodlist;
-    for (let i = 0; i < goodlist.length; i++) {
-      if (goodlist[i] == this.data.toView) {
-        this.setData({
-          toView: goodlist[i] + 1
-        })
-      }
-    }
-    this.setData({
-      current: index,
-    })
   },
-  change: function (e) {
-    console.log(e.detail.current)
-    let navActive = e.detail.current;
-    this.setData({
-      navActive
-    })
+  /**
+   * 生命周期函数--监听页面显示
+   */
+  onShow: function () {
+
   },
 
   /**
@@ -178,12 +192,6 @@ Page({
 
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-
-  },
 
   /**
    * 生命周期函数--监听页面隐藏
@@ -213,10 +221,58 @@ Page({
 
   },
 
+
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
+  onShareAppMessage: function (res) {
+    if (res.from === 'button') {
+    }
+    return {
+      title: '转发',
+      path: 'pages/index/index',
+      success: function (res) {
 
-  }
+      }
+    }
+
+  },
+  contentScroll: function (ev) {
+    console.log(ev);
+    let that = this;
+    let page = that.data.page;
+    if (that.data.isAdd) {
+      that.data.isAdd = false;
+      page++;
+      console.log(page)
+      if (that.data.category_id) {
+        that.getData(that.data.store_url, that.data.latitude, that.data.longitude, that.data.store_city, that.data.category_id, page);
+      } else {
+        that.getData(that.data.store_url, that.data.latitude, that.data.longitude, that.data.store_city, page);
+      }
+
+
+    }
+
+
+  },
+  // 获取滚动条当前位置
+  scrolltoupper: function (e) {
+    // console.log(e)
+    if (e.detail.scrollTop > 100) {
+      this.setData({
+        floorstatus: true
+      });
+    } else {
+      this.setData({
+        floorstatus: false
+      });
+    }
+  },
+  //回到顶部
+  toTop: function (e) {  // 一键回到顶部
+    this.setData({
+      topNum: 0
+    });
+  },
 })

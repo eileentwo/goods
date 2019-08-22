@@ -2,17 +2,14 @@
 
  @import "/template/wxss/waterfall.wxss"; 
  .header{
-   border-bottom: 2rpx solid #020202;
+   margin-bottom: 20rpx;
+   border-bottom: 2rpx solid #ccc;
    
+ }
+ .header1{
+   margin-bottom: 0;
  }
  .store_item {
    border-bottom: 1px solid #ebf0ea;
  }
- .header view{
-   color: #2F2E2E;
-   background-color: #fff;
-   font-size: 30rpx;
- }
-.backhome image {
-  width: 26rpx;
-}
+ 

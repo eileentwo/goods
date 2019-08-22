@@ -17,13 +17,39 @@
     </view>  
 
 </scroll-view >  
-<view style='clear:both;'></view> 
-<!-- 上下滚动部分 -->  
-<!-- <swiper class='scrollView' current="{{current}}" bindchange="change"  vertical='true' style="height:{{loopH}}px;" display-multiple-items='8'>    
+<!-- 条件选择 -->
+<view class="conditions flexbox">
+  <view class="categories">
+    <text>美食餐饮</text>
+  </view>
+  <view class="categories">
+    <text>附近</text>
+  </view>
+  <view class="categories">
+    <text>智能排序</text>
+  </view>
+</view>
+<view class="fruit flexbox">
+  <view class="categories_list">
+    
+    <view class="categories_list_left">
+      
+    </view>
+    <view class="categories_list_right">
+      
+    </view>
+  </view>
+  <view class="categories_list">
+  
+  </view>
+  <view class="categories_list">
+  
+  </view>
+</view>
 
-    <swiper-item class="scrollItem scrollItem{{index}}" style='height:{{swiperH}}'> 
-   </swiper-item>
-</swiper> -->  
+
+<view style='clear:both;'></view> 
+
 <scroll-view class="scrollView" scroll-y="true" style="height:{{winHeight}}px"  scroll-with-animation='true' scroll-into-view="{{scrollTopId}}" scroll-top="{{scrollTop}}" bindscroll="contentScroll">  
 
   <block  wx:for="{{goodlist}}" wx:key='index'>
