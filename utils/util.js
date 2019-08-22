@@ -28,12 +28,10 @@ function throttle(fn,gapTime){
 }
 // 处理没http的图片
 function addUrl(obj, src) {
-  console.log(obj,'util')
   let re = /^\//;
   let str = 'https://exbuy.double.com.cn/';
   if (src) {
-    src= src.substring(0, src.length);
-    // console.log(src)
+    src = src.substring(0, src.length);
     for (let i = 0; i < obj.length; i++) {
       if (obj[i][src]) {
         obj[i][src] = obj[i][src].replace(re, str);
@@ -42,6 +40,8 @@ function addUrl(obj, src) {
   }
   return obj
 }
+
+
 module.exports = {
   formatTime,
   throttle,

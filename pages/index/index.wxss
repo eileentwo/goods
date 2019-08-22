@@ -40,7 +40,7 @@ page{
   z-index: 9999;
 }
 .selectbtn{
-  width: 522rpx;
+  width: 520rpx;
   height: 64rpx;
   overflow: hidden;
   background-color: #fff;
@@ -55,7 +55,7 @@ page{
   border-radius: 50%;
 }
 .location{
-  width: 100rpx;
+  width: 120rpx;
 
 }
 .curcity{
@@ -78,12 +78,12 @@ page{
   height: 60rpx;
 }
 .moreSelect image{
-  width: 40rpx;
-  height: 40rpx;
-  margin-bottom:4rpx;
+  width:60rpx;
+  height: 60rpx;
 }
 .moreSelect {
   width: 40rpx;
+  padding-right: 20rpx;
   text-align: center;
 }
 .placeholder{

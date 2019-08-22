@@ -7,7 +7,8 @@ var category_list = new Array();
 var good_list = new Array();
 var discount_id = null;
 var store_id = '';
-var user_id='';
+var user_id = '';
+var token = '';
 var orderName = "";
 var orderNum = "";
 var orderCost = "";
@@ -94,10 +95,12 @@ Page({
     leftToTop: 0
   },
   onLoad: function (options) {
-    console.log(7888, wx.getStorageInfoSync('globalKey'), options)
+    console.log(7888, options)
     let store_info = wx.getStorageSync('store_info')
-    store_id = options.store_id;
-    user_id = options.user_id;
+    let globalKey = wx.getStorageSync('globalKey')
+    store_id = options.store_id ;
+    user_id = options.user_id || globalKey.user_id;
+    token = options.token || globalKey.token;
     wx.showLoading({
       title: '加载中',
     })
@@ -225,8 +228,6 @@ Page({
       var choosedList = wx.getStorageSync('choosedList') || that.data.choosedList;  
         var discount_goods = new Array();
         var activity_goods = new Array();
-      let globalKey = wx.getStorageSync('globalKey');
-      console.log(globalKey,229)
         for (var item in choosedList) {
             var obj1 = {
               goods_id: choosedList[item]["goodsid"],
@@ -242,7 +243,6 @@ Page({
         var discount_goods = JSON.stringify(discount_goods);
         app.globalData.discount_goods = discount_goods;
       var timestamp = Date.parse(new Date());
-      let token = globalKey.token;
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
         // 生成订单号
@@ -250,7 +250,7 @@ Page({
           url:app.globalData.url+'/api/store_detail/insert_order_new',
           data: {
             request_object: app.globalData.request_object,
-            user_id: user_id || globalKey.user_id ,
+            user_id: user_id ,
             store_id,
             discount_goods: discount_goods,
             timestamp: timestamp,
@@ -262,13 +262,14 @@ Page({
             'Content-Type': "application/x-www-form-urlencoded"
           },
           success: function (res) {
-            console.log(token, 243, globalKey,'生成订单号', res)
+            console.log(token, 243,'生成订单号', res)
             if (res.data.status == 1) {
               that.setData({
                 actual_money: res.data.data.actual_money, isMask:true
               })
+              let globalKey = wx.getStorageSync('globalKey');
               // 订单号
-              globalKey.order_id = res.data.data.order_id
+              globalKey.order_id = res.data.data.order_id;
               // 订单金额
               globalKey.account_money = res.data.data.account_money
               // 翻倍金额
@@ -286,7 +287,7 @@ Page({
               globalKey.actual_money = res.data.data.actual_money
               wx.setStorageSync('globalKey', globalKey)
               wx.navigateTo({
-                url: '../submitOrders/submitOrders?store_id=' + store_id + '&user_id=' + user_id
+                url: '../submitOrders/submitOrders?store_id=' + store_id + '&user_id=' + user_id + '&token=' + token 
               });
             } else {
               if (res.data.message){
@@ -860,13 +861,13 @@ Page({
   },
   navigator() {
     wx.navigateTo({
-      url: '../businessQualification/businessQualification?store_id=' + store_id + '&user_id=' + user_id
+      url: '../businessQualification/businessQualification?store_id=' + store_id + '&user_id=' + user_id + '&token=' + token 
     })
   },
 
   report() {
     wx.navigateTo({
-      url: '../reportBusiness/reportBusiness?store_id=' + store_id + '&user_id=' + user_id,
+      url: '../reportBusiness/reportBusiness?store_id=' + store_id + '&user_id=' + user_id + '&token=' + token 
     })
       
   },

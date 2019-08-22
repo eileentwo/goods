@@ -8,6 +8,7 @@ var textcontent = '';
 var table_number = ''; 
 var store_id='';
 var user_id='';
+var token='';
 Page({ 
   data: {
     titlename: '提交订单',
@@ -80,13 +81,18 @@ Page({
             });
         }
     },
-  onLoad:function(option){
+  onLoad: function (option) {
+    let globalKey = wx.getStorageSync('globalKey');
+
     store_id = option.store_id;
-    user_id = option.user_id
+    token = option.token || globalKey.token;
+    user_id = option.user_id || globalKey.user_id
+    
   },
   onShow: function () {
     let store_info = wx.getStorageSync('store_info');
-    let globalKey = wx.getStorageSync('globalKey')
+    let globalKey = wx.getStorageSync('globalKey');
+    
       let that = this;
         that.setData({
           account_money: globalKey.account_money,
@@ -131,10 +137,11 @@ Page({
       console.log(this.data.table_number, e.detail.value)
     },
   wechatPay: function () {
+    let globalKey = wx.getStorageSync('globalKey');
+    let store_info = wx.getStorageSync('store_info') 
+
       var that = this;
-      let globalKey = wx.getStorageSync('globalKey');
        timestamp = Date.parse(new Date());
-      let token = globalKey.token
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
       //支付订单
@@ -143,7 +150,7 @@ Page({
         data: {
           request_object: app.globalData.request_object,
           store_id,
-          user_id: globalKey.user_id || user_id,
+          user_id:  user_id,
           openid: app.globalData.openid || globalKey.openid,
           token,
           timestamp: timestamp,
@@ -201,7 +208,7 @@ Page({
                   })
                   setTimeout(function(){
                     wx.reLaunch({
-                      url: '../orderOrPayment/orderOrPayment'
+                      url: '../orderOrPayment/orderOrPayment?store_id=' + store_id + '&user_id=' + user_id + '&token=' + token + '&openid=' + globalKey.openid + '&store_name=' + store_info.store_name
                     })
                   },1000)
                 },

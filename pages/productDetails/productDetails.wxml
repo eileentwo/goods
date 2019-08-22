@@ -3,7 +3,7 @@
 <template is="head" data="{{titlename}}"></template>
     <!-- 轮播图 -->
     <view class="swiperWrap">
-        <swiper autoplay="{{true}}" interval="{{5000}}" duration="{{1000}}" class="swiper" >
+        <swiper autoplay="{{true}}" source interval="{{5000}}" duration="{{1000}}" class="swiper" >
             <block wx:for="{{imgUrls}}" wx:key='index'>
                 <swiper-item>
                     <image src="{{item.goods_pic}}" mode="aspectFit" class="slide-image" />

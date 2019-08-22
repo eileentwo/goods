@@ -23,11 +23,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // let city=options.city;
-    let city='厦门市';
+    let city=options.city;
     let that=this;
     if (city) {
       this.data.city = city;
+      this.setData({ city});
       this.hotList(city);
     }
 
@@ -98,8 +98,6 @@ Page({
     nearList.push(store_name);
     wx.setStorageSync('nearList', nearList)
     
-    let globalKey = wx.getStorageSync('globalKey');
-    // let token = globalKey.token || '';
     // var val = 'fanbuyhainan' + timestamp.toString() + token;
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
@@ -132,7 +130,7 @@ Page({
             }
           }
           
-          if (newData.length > 0) {
+          if (newData.length > 0 ) {
             that.data.isAdd = true
             that.setData({
               stores,
@@ -145,11 +143,13 @@ Page({
             wx.showToast({
               title: '没有数据了哦！',
             })
-            that.setData({
-              noResult: false,
-              result: false,
-              nomore:2
-            })
+            if (selectNum==1){
+              that.setData({
+                noResult: false,
+                result: false,
+                nomore: 2
+              })
+            }
           }
         }
       }

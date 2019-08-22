@@ -37,5 +37,5 @@
 </view>
 
 <scroll-view class="scrollBox" wx:if="{{noResult}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
-  <template is="selectShow" data="{{stores,floorstatus}}"></template>
+  <template is="selectShow" data="{{stores,floorstatus,city}}"></template>
 </scroll-view>

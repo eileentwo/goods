@@ -6,9 +6,9 @@
     <view class="selection flexbox ">
       <view class="flexbox">
         <image class="logo"  lazy-load="true" mode="aspectFit" src="../../images/logo.png"></image>
-        <view class="location">
+        <view class="location" bindtap="changeCity">
           <view class="curcity"> {{curCity}}
-            <!-- <image mode="aspectFit" src="../../images/bottom.png"></image> -->
+            <image mode="aspectFit" src="../../images/bottom.png"></image>
           </view>
           <view>{{weather.wea}} {{weather.tem}}</view>
         </view>
@@ -18,7 +18,7 @@
         </navigator>
       </view>
       <!-- <view class="moreSelect" bindtap="saoma">
-        <image src="../../images/more10.png" mode="aspectFit"></image>更多
+        <image src="../../images/saoma.png" mode="aspectFit"></image>
       </view> -->
     </view>
   </view>
@@ -39,10 +39,17 @@
       </view> 
   </view>
   <view class="nav flexbox">
-   <navigator class="nav_item" wx:for='{{list_category}}'  url="../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}&store_city={{curCity}}" hover-class="navigator-hover" wx:key='index'>
-    <image src="{{item.category_pic}}"></image>
-    <view>{{item.category_name}}</view>
-   </navigator>
+    <block  wx:for='{{list_category}}' wx:key='index'>
+      <navigator class="nav_item"  wx:if="{{item.category_name=='全部'}}"  url="../../pages/allCategories/allCategories?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}&store_city={{curCity}}" hover-class="navigator-hover" >
+      <image src="{{item.category_pic}}"></image>
+      <view>{{item.category_name}}</view>
+      </navigator>
+        <navigator class="nav_item" wx:else  url="../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}&store_city={{curCity}}" hover-class="navigator-hover" >
+        <image src="{{item.category_pic}}"></image>
+        <view>{{item.category_name}}</view>
+      </navigator>
+    
+    </block>
   </view>
   <!-- 二级分类导航 -->
   <!-- <view class="nav nav1 flexbox"> 
@@ -107,7 +114,7 @@
     </view>
   </view>
   <scroll-view class="store_items" style="height:">
-    <template is="morefall" data="{{stores,floorstatus}}"></template>
+    <template is="morefall" data="{{stores,floorstatus,curCity}}"></template>
   </scroll-view>
   
 </scroll-view>

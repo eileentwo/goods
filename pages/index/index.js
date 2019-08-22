@@ -18,10 +18,10 @@ Page({
     isAdd:true,
     stores:[],
     topNum:0,
-    hide:false
+    hide:false,
+    status:0
   },
   onLoad: function () {
-    
 
   },
   welcome:function(){
@@ -30,7 +30,50 @@ Page({
       hide:true
     })
   },
- 
+  changeCity: function () {
+    console.log('changeCity')
+    let city = this.data.curCity
+    wx.navigateTo({
+      url: '../citys/citys?city=' + city,
+    })
+  },
+  // 获取地址
+  getLocal: function (){
+    let that = this;
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx: wx.getLocation({
+      type: 'gcj02',
+      altitude: true,
+      success: function (res) {
+        console.log(res)
+
+        var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
+        myAmapFun.getRegeo({
+          location: '' + res.longitude + ',' + res.latitude + '',
+          success: function (data) {
+
+            //成功回调
+            let city = data[0].regeocodeData.addressComponent.city;
+            let re = new RegExp("市");
+            city = city.replace(re, "");
+            that.getHomedata(city,res.longitude, res.latitude)
+          },
+          fail: function (info) {
+            //失败回调
+            console.log(info)
+            wx.showLoading({
+              title: 'myAmapFunW',
+            })
+          }
+        })
+
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
   swiperChange: function (e) {
     console.log(205, e)
     if (e.detail.source=='touch'){
@@ -55,15 +98,49 @@ Page({
     }
 
   },
-  // saoma: function(){
-  //   wx.sc
-  // },
+  saoma: function(){
+    wx.scanCode({
+      onlyFromCamera: false,
+      scanType: ['barCode', 'qrCode', 'datamatrix', 'pdf417'],
+      success: res => {
+        console.log(res.errMsg)
+        if (res.errMsg == 'scanCode:ok') {
+          wx.navigateTo({
+            // url: '../../pages/search/search?keyword=' + res.result
+          })
+        }
+      },
+      fail: res => {
+        // 接口调用失败
+        wx.showToast({
+          icon: 'none',
+          title: '接口调用失败！'
+        })
+      },
+      complete: res => {
+        // 接口调用结束
+        console.log(res)
+      }
+    })
+  },
   onShow:function(){
     let that = this;
     homedata = wx.getStorageSync('homedata') || [] ;
     console.log(homedata, 28)
 
-
+    wx.getSystemInfo({
+      success: function (res) {
+        console.log(res)
+        that.setData({
+          contentH: res.screenHeight
+        })
+      },
+    })
+    let curCity=this.data.curCity;
+    if (this.data.status==1){
+      this.getHomedata(curCity);
+      return;
+    }
     if (homedata.curCity) {
       that.setHomeData(homedata);
       that.setData({
@@ -72,52 +149,9 @@ Page({
     } else {
       this.getLocal();
     }
-    wx.getSystemInfo({
-      success: function(res) {
-        console.log(res)
-        that.setData({
-          contentH:res.screenHeight
-        })
-      },
-    })
-  },
-// 获取地址
-  getLocal() {
-    let that = this;
-    wx.showLoading({
-      title: '加载中',
-    })
-    wx: wx.getLocation({
-      type: 'gcj02',
-      altitude: true,
-      success: function (res) {
-        console.log(res)
-      
-        var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
-        myAmapFun.getRegeo({
-          location: '' + res.longitude + ',' + res.latitude+'',
-          success: function (data) {
-            
-            //成功回调
-            let city = data[0].regeocodeData.addressComponent.city;
-            that.getHomedata(res.longitude, res.latitude, city)
-          },
-          fail: function (info) {
-            //失败回调
-            console.log(info)
-            wx.showLoading({
-              title: 'myAmapFunW',
-            })
-          }
-        })
-
-      },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
   },
   // 获取数据
-  getHomedata: function (longitude, latitude, curCity) {
+  getHomedata: function (curCity,longitude, latitude) {
     let that = this;
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();

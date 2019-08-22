@@ -23,17 +23,20 @@ Page({
             return;
         }
         goods_id= options.goods_id;
+        let goods_type = options.goods_type
+      console.log(goods_type)
         wx.request({
             url:app.globalData.url + '/api/store_detail/get_goods_info',
           data: {
             request_object: app.globalData.request_object,
-                goods_id: goods_id
+            goods_id: goods_id, goods_type
             },
             method: 'POST', 
             header: {
                 'Content-Type': "application/x-www-form-urlencoded"
             }, 
             success: function (res) {
+              console.log('goodsDetails',res.data)
                 var pics = res.data.data.goods_pics;
                     pics =  pics.split(',')
                 var pictures = [];
@@ -42,8 +45,9 @@ Page({
                   goods_pic.goods_pic = pics[i]
                   pictures.push(goods_pic)
                 }
-              pictures = util.addUrl(pictures,'pic')
-              console.log(pictures)
+
+              pictures = util.addUrl(pictures, 'goods_pic')
+              console.log(pictures,48)
               that.setData({
                     goodsDetails: res.data.data,
                 imgUrls: pictures

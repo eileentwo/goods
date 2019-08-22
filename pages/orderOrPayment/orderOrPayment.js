@@ -4,6 +4,9 @@ var md5 = require('../../utils/md5.js');
 var util = require('../../utils/util.js');
 var timestamp =0;
 var store_id='';
+var user_id = '';
+var openid = '';
+var token='';
 Page({
 
   /**
@@ -20,10 +23,20 @@ Page({
    */
   onLoad: function (options) {
     let store_info = wx.getStorageSync('store_info') || [];
+    let titlename= options.store_name ;
     let that=this;
     // store_id = 2
-    store_id = options.store_id
-    if (!store_info.store_id != store_id) {
+    store_id = options.store_id || store_info.store_id ;
+    if (options.openid){
+      openid = options.openid
+      user_id = options.user_id
+      token = options.token
+    }
+    this.setData({
+      titlename,
+      store_id
+    })
+    if (store_info.store_id != store_id) {
       let choosedList=[];
       let order_info = [];
       wx.setStorageSync('choosedList', choosedList);
@@ -44,6 +57,9 @@ Page({
         success: function (res) {
           if (res.data.status == 1) {
             console.log(res.data.data.store_info,50)
+            that.setData({
+              titlename: res.data.data.store_info.store_name
+            })
             wx.setStorageSync('store_info', res.data.data.store_info)
           } else {
             wx.showToast({
@@ -113,21 +129,17 @@ Page({
         complete: function (res) { },
       })
     }
-    this.setData({
-      titlename: options.store_name,
-      store_id
-    })
   },
   
   getUserInfo: function(e){
     let that = this;
     let userInfoKey = wx.getStorageSync('userInfoKey') || [];
-    let globalKey = wx.getStorageSync('globalKey');
-    console.log(128)
+    var globalKey = wx.getStorageSync('globalKey');
+    
     timestamp=Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var hexMd5 = md5.hexMD5(val);
-    if (!globalKey.user_id){
+    if (!user_id){
     
       wx.getUserInfo({
         success(res) {
@@ -143,28 +155,30 @@ Page({
                 sex: userinfo.gender,
                 headimgurl: userinfo.avatarUrl,
                 country: userinfo.country,
-                city: userinfo.city,
+                city: userinfo.city ,
                 province: userinfo.province,
                 unionid: '',
                 nickname: userinfo.nickName,
-                openid: app.globalData.openid || globalKey.openid ,
+                openid: app.globalData.openid || globalKey.openid || openid ,
                 timestamp,
                 process: hexMd5,
 
               },
               method: 'POST',
               success: function (res) {
-                console.log(res, 86)
+                
                 if (res.data.status == 1) {
                   wx.hideLoading();
 
                   userInfoKey.userinfo = userinfo;
+                  var globalKey = wx.getStorageSync('globalKey');
                   globalKey.user_id = res.data.data.user_id;
                   globalKey.token = res.data.data.token;
-                  wx.setStorageSync('globalKey', globalKey);
-                  wx.setStorageSync('userInfoKey', userInfoKey);
+                  wx.setStorageSync('globalKey', globalKey)
                   that.setData({
-                    isUser: false
+                    isUser: false,
+                    user_id:res.data.data.user_id,
+                    token: res.data.data.token
                   })
                   wx.showToast({
                     title: '登录成功',
@@ -183,11 +197,6 @@ Page({
           })
         }
       })
-    } else {
-      that.setData({
-        isUser: true
-      })
-
     }
    
    
@@ -238,11 +247,15 @@ Page({
    */
   onShow: function () {
     let globalKey = wx.getStorageSync('globalKey');
-    
-    if (globalKey.hasOwnProperty('token') || globalKey.user_id) {
+    console.log(user_id)
+    if (globalKey.user_id || user_id) {
       this.setData({
         isPhone: false,
         isUser: false
+      })
+    } else {
+      this.setData({
+        isUser: true
       })
     }
   },

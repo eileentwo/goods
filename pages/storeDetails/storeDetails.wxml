@@ -112,7 +112,7 @@
                           </view>
                           <view class="specificProduct"  wx:for="{{item.list_goods}}" wx:for-item='gooditem' wx:for-index="goodindex" wx:key="goodindex" >
                           <!--  -->
-                            <navigator url="../productDetails/productDetails?goods_id={{gooditem.goods_id}}">
+                            <navigator url="../productDetails/productDetails?goods_id={{gooditem.goods_id}}&goods_type={{item.goods_type}}">
                               <image class="productImage" src="{{gooditem.goods_pic}}"></image>
                             </navigator>
                             <text class="productDescription">{{gooditem.goods_name}}</text>
