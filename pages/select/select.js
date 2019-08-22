@@ -23,11 +23,14 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    // let city=options.city;
-    let city='厦门市';
+    let city=options.city;
+
+    let nearList = wx.getStorageSync('nearList') ;
+    
     let that=this;
     if (city) {
       this.data.city = city;
+      this.setData({ city, nearList});
       this.hotList(city);
     }
 
@@ -42,6 +45,15 @@ Page({
           })
         }
       },
+    })
+  },
+
+  // 删除最近搜索
+  delefn: function () {
+    let nearList=[];
+    wx.setStorageSync('nearList', nearList);
+    this.setData({
+      nearList
     })
   },
   hotList: function (city) {
@@ -70,9 +82,9 @@ Page({
   },
   // 点击热门或者最近搜索
   gotoselect: function (e) {
-    this.value = e.detail.value;
+    let store_name = e.currentTarget.dataset.value;
     console.log(e)
-    this.select();
+    this.getSelectData(store_name,this.data.city,1);
   },
   // 获取input输入值
   inputup:function(e){
@@ -87,20 +99,15 @@ Page({
       let timer =setTimeout(function () {
         that.data.isOk = true;
        },1000)
-      // console.log(that.value,63)
+      console.log(that.value,63)
       that.getSelectData(that.value, that.data.city, 1, fromSelect)
     }
   },
+ 
   getSelectData: function (store_name, store_city, selectNum, fromSelect) {
-    console.log(92, selectNum)
     let that = this;
-    let nearList = wx.getStorageSync('nearList') || [];
-    nearList.push(store_name);
-    wx.setStorageSync('nearList', nearList)
     
-    let globalKey = wx.getStorageSync('globalKey');
-    // let token = globalKey.token || '';
-    // var val = 'fanbuyhainan' + timestamp.toString() + token;
+    util.addHistory('nearList', store_name);// 加入最近搜索
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var process = md5.hexMD5(val);
@@ -132,7 +139,7 @@ Page({
             }
           }
           
-          if (newData.length > 0) {
+          if (newData.length > 0 ) {
             that.data.isAdd = true
             that.setData({
               stores,
@@ -145,11 +152,13 @@ Page({
             wx.showToast({
               title: '没有数据了哦！',
             })
-            that.setData({
-              noResult: false,
-              result: false,
-              nomore:2
-            })
+            if (selectNum==1){
+              that.setData({
+                noResult: false,
+                result: false,
+                nomore: 2
+              })
+            }
           }
         }
       }

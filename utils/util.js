@@ -28,12 +28,10 @@ function throttle(fn,gapTime){
 }
 // 处理没http的图片
 function addUrl(obj, src) {
-  console.log(obj,'util')
   let re = /^\//;
   let str = 'https://exbuy.double.com.cn/';
   if (src) {
-    src= src.substring(0, src.length);
-    // console.log(src)
+    src = src.substring(0, src.length);
     for (let i = 0; i < obj.length; i++) {
       if (obj[i][src]) {
         obj[i][src] = obj[i][src].replace(re, str);
@@ -42,8 +40,39 @@ function addUrl(obj, src) {
   }
   return obj
 }
+
+function addHistory(keyName, newData) {
+  let keyData = wx.getStorageSync(keyName) || [];
+  let tempList = {};
+
+  let len = 10;
+  if (newData != '' && !this.isInArray(keyData, newData)) {
+    tempList['name'] = newData;
+    console.log(keyData)
+    if (keyData.length < len) {
+      keyData.push(tempList);
+    } else {
+      keyData = keyData.slice(1, len);
+      keyData.push(newData);
+    }
+    console.log(92, keyData)
+    wx.setStorageSync(keyName, keyData)
+  }
+}
+// 判断是否有在数组内
+function isInArray(arr, value) {
+
+  for (var i = 0; i < arr.length; i++) {
+    if (value === arr[i].name) {
+      return i + 1;
+    }
+  }
+  return false;
+}
 module.exports = {
   formatTime,
   throttle,
-  addUrl
+  addUrl,
+  isInArray,
+  addHistory
 }

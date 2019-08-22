@@ -9,16 +9,18 @@ var time=1000;
 let homedata=[];
 Page({
   data: {
-    titlename:'一鹿省',
+    titlename:'数呗花',
     url:app.globalData.url,
     currentSwiper:0,
     curCity:'',//当前城市
-    weather:'下雨',
+    weather:'',
+    fcity:'',
     page:1,
     isAdd:true,
     stores:[],
     topNum:0,
-    hide:false
+    hide: false,
+    status: 0,
   },
   onLoad: function () {
     
@@ -30,7 +32,44 @@ Page({
       hide:true
     })
   },
- 
+
+  // 获取地址
+  getLocal: function (){
+    let that = this;
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx: wx.getLocation({
+      type: 'gcj02',
+      altitude: true,
+      success: function (res) {
+        console.log(res)
+
+        var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
+        myAmapFun.getRegeo({
+          location: '' + res.longitude + ',' + res.latitude + '',
+          success: function (data) {
+
+            //成功回调
+            let city = data[0].regeocodeData.addressComponent.city;
+            let re = new RegExp("市");
+            city = city.replace(re, "");
+            that.getHomedata( city,res.longitude, res.latitude)
+          },
+          fail: function (info) {
+            //失败回调
+            console.log(info)
+            wx.showLoading({
+              title: 'myAmapFunW',
+            })
+          }
+        })
+
+      },
+      fail: function (res) { },
+      complete: function (res) { },
+    })
+  },
   swiperChange: function (e) {
     console.log(205, e)
     if (e.detail.source=='touch'){
@@ -58,76 +97,76 @@ Page({
   // saoma: function(){
   //   wx.sc
   // },
+  changeCity: function () {
+    console.log('changeCity', this.data.status)
+    let url ='';
+    if(this.data.status==2){
+      url = '../citys/citys?city='+ this.data.curCity+'&fcity='+this.data.fcity
+    }else{
+      url = '../citys/citys?city=' + this.data.curCity
+    }
+    console.log(url)
+    wx.navigateTo({
+      url,
+    })
+  },
   onShow:function(){
     let that = this;
-    homedata = wx.getStorageSync('homedata') || [] ;
+    homedata = wx.getStorageSync('homedata') || [];
+    let cityInfos = wx.getStorageSync('cityInfos') || [];
     console.log(homedata, 28)
 
-
-    if (homedata.curCity) {
-      that.setHomeData(homedata);
-      that.setData({
-        hide:true
-      })
-    } else {
-      this.getLocal();
-    }
     wx.getSystemInfo({
-      success: function(res) {
-        console.log(res)
-        that.setData({
-          contentH:res.screenHeight
-        })
-      },
-    })
-  },
-// 获取地址
-  getLocal() {
-    let that = this;
-    wx.showLoading({
-      title: '加载中',
-    })
-    wx: wx.getLocation({
-      type: 'gcj02',
-      altitude: true,
       success: function (res) {
         console.log(res)
-      
-        var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
-        myAmapFun.getRegeo({
-          location: '' + res.longitude + ',' + res.latitude+'',
-          success: function (data) {
-            
-            //成功回调
-            let city = data[0].regeocodeData.addressComponent.city;
-            that.getHomedata(res.longitude, res.latitude, city)
-          },
-          fail: function (info) {
-            //失败回调
-            console.log(info)
-            wx.showLoading({
-              title: 'myAmapFunW',
-            })
-          }
+        that.setData({
+          contentH: res.screenHeight
         })
-
       },
-      fail: function (res) { },
-      complete: function (res) { },
     })
+    if (!Array.prototype.isPrototypeOf(homedata)) {
+      console.log(141, cityInfos, Array.prototype.isPrototypeOf(cityInfos), Array.prototype.isPrototypeOf(homedata))
+      that.setHomeData(homedata);
+      that.setData({
+        hide: true
+      })
+    } else {
+      console.log(147)
+      this.getLocal();
+    }
+    console.log(this.data.status)
+    if (!Array.prototype.isPrototypeOf(cityInfos)){
+      let curCity = cityInfos['city'];
+      if (cityInfos['isarea'] == '1') {
+        curCity = cityInfos['area'];
+      }
+      console.log(cityInfos, curCity)
+      this.setData({
+        status: cityInfos['status'], fcity: cityInfos['city'], curCity, stores:[]
+      })
+      this.getHomedata(curCity);
+      return;
+    }
   },
   // 获取数据
-  getHomedata: function (longitude, latitude, curCity) {
+  getHomedata: function (curCity, longitude, latitude) {
     let that = this;
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var process = md5.hexMD5(val);
+    let store_area = ''
+    let store_city=curCity;
+    if(that.data.status==2){
+      store_area = curCity;
+      store_city =that.data.fcity
+    }
+    
     wx.request({
       url: app.globalData.url + '/api/mini_homepage/get_home_info',
       method: "POST",
       data: {
-        store_city: curCity,
-        store_area: '',
+        store_city,
+        store_area  ,
         latitude,
         longitude,
         timestamp,
@@ -148,7 +187,7 @@ Page({
           homedata.longitude = longitude;
           homedata.latitude = latitude;
 
-          that.setHomeData(homedata);
+          that.setHomeData(homedata, longitude, latitude);
           wx.setStorageSync('homedata', homedata);
         }
       }
@@ -164,7 +203,7 @@ Page({
     let list_store_choice = homedata.list_store_choice;
     let list_store_save = homedata.list_store_save;
     let curCity = homedata.curCity;
-    let longitude = homedata.longitude;
+    let longitude= homedata.longitude ;
     let latitude = homedata.latitude;
 
     list_ad = util.addUrl(list_ad,'ad_pic');
@@ -200,7 +239,7 @@ Page({
 
     
   },
-  getMoreData: function (page){
+  getMoreData: function (page,curCity){
     let that=this;
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
@@ -209,7 +248,7 @@ Page({
       url: app.globalData.url + '/api/mini_homepage/list_store_more',
       method: "POST",
       data: {
-        store_city: that.data.curCity,
+        store_city: curCity || that.data.curCity,
         latitude: that.data.latitude,
         longitude: that.data.longitude,
         page,
@@ -227,13 +266,15 @@ Page({
           let stores=that.data.stores;
 
 
-          if (newData.length>0){
+          if (newData.length > 0) {
             newData = util.addUrl(newData, 'store_logo');
-            for(let i=0;i<newData.length;i++){
-              stores.push(newData[i])
+            if(page==1){
+              stores = newData
+            }else{
+              for(let i=0;i<newData.length;i++){
+                stores.push(newData[i])
+              }
             }
-            console.log(stores)
-
             that.data.isAdd=true
             that.setData({
               stores,
@@ -241,7 +282,7 @@ Page({
             })
           }else{
             wx.showToast({
-              title: '没有更多数据了！',
+              title: '到底了哦！',
             })
           }
           

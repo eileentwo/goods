@@ -41,9 +41,9 @@
             <!--drawer content-->
             <view class="drawer_content">
                 <view class="drawer_title">在线预约</view>
-                <view class="drawer_title" bindtap='to_call'>{{storeDetails.store_mobile}}</view>
+                <view class="drawer_title" bindtap='to_call'>{{storeDetails.store_mobile?storeDetails.store_mobile:''}}</view>
                 <view class="drawer_title lineCancle" bindtap='to_call_landline'>
-                    {{storeDetails.store_telephone}}</view>
+                    {{storeDetails.store_telephone?storeDetails.store_telephone:''}}</view>
                 <view class="drawer_title" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}">取消 </view>
             </view>
         </view>
@@ -112,7 +112,7 @@
                           </view>
                           <view class="specificProduct"  wx:for="{{item.list_goods}}" wx:for-item='gooditem' wx:for-index="goodindex" wx:key="goodindex" >
                           <!--  -->
-                            <navigator url="../productDetails/productDetails?goods_id={{gooditem.goods_id}}">
+                            <navigator url="../productDetails/productDetails?goods_id={{gooditem.goods_id}}&goods_type={{item.goods_type}}">
                               <image class="productImage" src="{{gooditem.goods_pic}}"></image>
                             </navigator>
                             <text class="productDescription">{{gooditem.goods_name}}</text>

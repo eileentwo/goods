@@ -1,20 +1,19 @@
-
+<image mode="aspectFit"  src="../../images/left.png" class="toHome" bindtap="toHome"></image>
+<image mode="aspectFit"  src="../../images/orderOrPayment/bg.png" class="bgimg" style="height:{{containerH}}px" ></image>
 
 <import src="/template/wxml/waterfall.wxml" />
 <template is="head" data="{{titlename}}"></template>
-<view class="container" style="background-image:url(../../images/orderOrPayment/bg.png)">
+<view class="container">
     <!-- <button class="usermask phonemask" wx:if='{{isPhone}}' open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber"></button> -->
     <button class="usermask" wx:if='{{isUser}}' bindtap='showLoading'  open-type="getUserInfo" bindgetuserinfo="getUserInfo"></button>
-    <navigator url="../storeDetails/storeDetails?store_id={{store_id}}?user_id={{user_id}}">
-       <button class="order">
-            <image class="orderInco" src="../../images/orderOrPayment/order.png"></image>
-        </button>
+    <navigator url="../storeDetails/storeDetails?store_id={{store_id}}&&user_id={{user_id}}&&token={{token}}">
+       <image class="orderInco" mode="aspectFit"  src="../../images/orderOrPayment/order.png"></image>
     </navigator>
      <text class="oerderText">点单</text>
     <view bindtap="gotoPay"> 
-        <button class="payment">
-        <image class="orderInco" src="../../images/orderOrPayment/pay.png"></image>
-        </button>
+      
+        <image class="paymentInco" mode="aspectFit" src="../../images/orderOrPayment/pay.png"></image>
+        
         <text class="paymentText">付款</text>
     </view>
   

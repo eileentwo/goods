@@ -6,7 +6,9 @@ page{
   position: relative;
   z-index: -2;
 }
-
+.toutiao{
+  font-size: 30rpx;color: #FF2041;
+}
 .backhome{
   display: none;
 }
@@ -55,7 +57,7 @@ page{
   border-radius: 50%;
 }
 .location{
-  width: 100rpx;
+  width: 120rpx;
 
 }
 .curcity{
@@ -88,6 +90,7 @@ page{
 }
 .placeholder{
   color: #939090;
+  line-height: 60rpx;
 }
 .swiperbox{
   width: 94%;
@@ -243,12 +246,12 @@ page{
 }
 .goods_item_detail text{
   color: #AEADAA;
-  font-size: 18rpx;
+  font-size: 19rpx;
 }
 
 .goods_item_detail .pink{
   color: #FF1D3A;
-  font-size: 20rpx;
+  font-size: 22rpx;
   margin: 0 20rpx 20rpx 6rpx;
 }
 

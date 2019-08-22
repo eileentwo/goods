@@ -519,7 +519,7 @@ navigator {
 
 .amount {
     position: absolute;
-    margin-top: 140rpx;
+    margin-top: 136rpx;
     right: 83rpx;
 }
 

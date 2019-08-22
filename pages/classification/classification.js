@@ -13,38 +13,52 @@ Page({
     page:1,
     stores:[],
     isAdd:true,
+    num:5,
+    half:0
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options,'classif')
     let that=this;
     wx.showLoading({
       title: '加载中',
     })
+    
     let store_url ='';
-    console.log(options.store_url)
+    let redBack=false;
+    let is_save=false;
+    let is_choice=false;
+    that.data.latitude = options.latitude;
+    that.data.longitude = options.longitude;
+    that.data.store_city = options.store_city;
     if (options.store_url) {
       store_url ='mini_homepage/'+ options.store_url;
-      console.log(store_url)
-      that.data.latitude = options.latitude;
-      that.data.longitude = options.longitude;
-      that.data.store_city = options.store_city;
+      
       that.data.store_url = options.store_url;
       that.getData(store_url,options.latitude, options.longitude, options.store_city,'',1);
     }else{
       store_url = 'mini_program/list_store';
-      that.data.latitude = options.latitude;
-      that.data.longitude = options.longitude;
-      that.data.store_city = options.store_city;
       that.data.category_id = options.category_id;
       that.data.store_url = store_url;
       that.getData(store_url,options.latitude, options.longitude, options.store_city, options.category_id,1 );
     }
-   
+
+    if (options.category_name == '省到爆' || options.category_name == '精选') {
+      redBack = true;
+      if (options.category_name == '省到爆') {
+        is_save = true
+      } else {
+        is_choice = true
+      }
+    }
+    // console.log('redBack', redBack)
     that.setData({
-      titlename: options.category_name
+      titlename: options.category_name,
+      city: options.store_city,
+      redBack, is_save, is_choice
     })
 
     wx.getSystemInfo({
@@ -87,10 +101,29 @@ Page({
       success: function (res) {
         console.log('class', res)
         if (res.data.status == '1') {
+          let num = [];
+          let half = 0;
           let newData = util.addUrl(res.data.data, 'store_logo');
           if(newData.length>0){
             let stores = that.data.stores
             for (let i = 0; i < newData.length; i++) {
+              //评分
+              let score = newData[i].store_score;
+              
+              if(score){
+                if (score.length > 0) {
+                  num.length = score.substr(0, 1);
+                  half = 1;
+                } else {
+                  num.length = score;
+                }
+              }
+              //商品图片
+              if (newData[i].list_goods){
+                newData[i].list_goods = util.addUrl(newData[i].list_goods, 'goods_pic')
+              }
+
+
               stores.push(newData[i])
             }
             wx.hideLoading();
@@ -99,11 +132,19 @@ Page({
             that.setData({
               stores,
               page,
+              num,
+              half
             })
           }else{
-            wx.showToast({
-              title: '没有更多数据了哦！',
-            })
+            if (page>1){
+              wx.showToast({
+                title: '没有更多数据了哦！',
+              })
+            } else {
+              wx.showToast({
+                title: '没有相关店铺哦！',
+              })
+            }
           }
         }
       }

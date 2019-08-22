@@ -5,7 +5,7 @@
 <view class="selection flexbox">
   <view class="selectbtn flexbox">
     <label><image src="../../images/select.png" mode="aspectFit"></image></label>
-    <input  placeholder="一鹿省全新升级" bindinput='inputup' value="{{value}}" placeholder-class="placeholder" ></input> 
+    <input  placeholder="" bindinput='inputup' value="{{value}}" placeholder-class="placeholder" ></input> 
   </view>
     <text bindtap="select" data-fromselect="select">搜索</text>
 </view>
@@ -18,7 +18,7 @@
   </view>
 </view>
 
-<view class="nearTime  paddingbox" wx:if="{{nearList}}" hidden="{{result}}">
+<view class="nearTime  paddingbox" wx:if="{{nearList.length>0}}" hidden="{{result}}">
   <view class="hottitle flexbox">
     <text>最近搜索</text>
     <image bindtap="delefn" src="../../images/storeDetails/dele.png" mode="aspectFit"></image>
@@ -26,7 +26,7 @@
   </view>
   <view class="tags">
     <block  wx:for='{{nearList}}' wx:key='item'>
-      <text data-value="{{item}}">{{item}}</text>
+      <text class="ellipsis" data-value="{{item.name}}">{{item.name}}</text>
     </block>
   </view>
 </view>
@@ -36,6 +36,6 @@
   <view>暂无数据</view>
 </view>
 
-<scroll-view class="scrollBox" wx:if="{{noResult}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
-  <template is="selectShow" data="{{stores,floorstatus}}"></template>
+<scroll-view class="scrollBox MT" wx:if="{{noResult}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
+  <template is="selectShow" data="{{stores,floorstatus,city}}"></template>
 </scroll-view>

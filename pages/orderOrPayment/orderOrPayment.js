@@ -4,6 +4,9 @@ var md5 = require('../../utils/md5.js');
 var util = require('../../utils/util.js');
 var timestamp =0;
 var store_id='';
+var user_id = '';
+var openid = '';
+var token='';
 Page({
 
   /**
@@ -20,10 +23,28 @@ Page({
    */
   onLoad: function (options) {
     let store_info = wx.getStorageSync('store_info') || [];
+    let titlename= options.store_name ;
     let that=this;
     // store_id = 2
-    store_id = options.store_id
-    if (!store_info.store_id != store_id) {
+    store_id = options.store_id || store_info.store_id ;
+    if (options.openid){
+      openid = options.openid
+      user_id = options.user_id
+      token = options.token
+    }
+    wx.getSystemInfo({
+      success: function(res) {
+        console.log(res)
+        that.setData({
+          containerH:res.screenHeight-80
+        })
+      },
+    })
+    this.setData({
+      titlename,
+      store_id
+    })
+    if (store_info.store_id != store_id) {
       let choosedList=[];
       let order_info = [];
       wx.setStorageSync('choosedList', choosedList);
@@ -44,6 +65,9 @@ Page({
         success: function (res) {
           if (res.data.status == 1) {
             console.log(res.data.data.store_info,50)
+            that.setData({
+              titlename: res.data.data.store_info.store_name
+            })
             wx.setStorageSync('store_info', res.data.data.store_info)
           } else {
             wx.showToast({
@@ -113,21 +137,22 @@ Page({
         complete: function (res) { },
       })
     }
-    this.setData({
-      titlename: options.store_name,
-      store_id
+  },
+  toHome:function(){
+    wx.reLaunch({
+      url: '/pages/index/index',
     })
   },
-  
+
   getUserInfo: function(e){
     let that = this;
     let userInfoKey = wx.getStorageSync('userInfoKey') || [];
-    let globalKey = wx.getStorageSync('globalKey');
-    console.log(128)
+    var globalKey = wx.getStorageSync('globalKey');
+    
     timestamp=Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var hexMd5 = md5.hexMD5(val);
-    if (!globalKey.user_id){
+    if (!user_id){
     
       wx.getUserInfo({
         success(res) {
@@ -143,28 +168,30 @@ Page({
                 sex: userinfo.gender,
                 headimgurl: userinfo.avatarUrl,
                 country: userinfo.country,
-                city: userinfo.city,
+                city: userinfo.city ,
                 province: userinfo.province,
                 unionid: '',
                 nickname: userinfo.nickName,
-                openid: app.globalData.openid || globalKey.openid ,
+                openid: app.globalData.openid || globalKey.openid || openid ,
                 timestamp,
                 process: hexMd5,
 
               },
               method: 'POST',
               success: function (res) {
-                console.log(res, 86)
+                
                 if (res.data.status == 1) {
                   wx.hideLoading();
 
                   userInfoKey.userinfo = userinfo;
+                  var globalKey = wx.getStorageSync('globalKey');
                   globalKey.user_id = res.data.data.user_id;
                   globalKey.token = res.data.data.token;
-                  wx.setStorageSync('globalKey', globalKey);
-                  wx.setStorageSync('userInfoKey', userInfoKey);
+                  wx.setStorageSync('globalKey', globalKey)
                   that.setData({
-                    isUser: false
+                    isUser: false,
+                    user_id:res.data.data.user_id,
+                    token: res.data.data.token
                   })
                   wx.showToast({
                     title: '登录成功',
@@ -183,11 +210,6 @@ Page({
           })
         }
       })
-    } else {
-      that.setData({
-        isUser: true
-      })
-
     }
    
    
@@ -225,24 +247,44 @@ Page({
 
   },
   gotoPay() {
-      wx.showModal({
-        title: '温馨提示',
-        content: '直接付款功能暂未开放，敬请期待！',
-      })
-      // wx.navigateTo({
-      //   url: '../payment/payment',
-      // })
+    timestamp = Date.parse(new Date());
+    var val = 'fanbuyhainan' + timestamp.toString();
+    var hexMd5 = md5.hexMD5(val);
+    wx.request({
+      url: app.globalData.url +'/api/mini_program/get_config_info',
+      method:"post",
+      data:{
+        timestamp, process: hexMd5
+      },
+      success:function(res){
+        // console.log(res.data.data)
+        if (res.data.data.is_open_payment==1){
+          wx.navigateTo({
+            url: '../payment/payment',
+          })
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: '该功能暂未开放，敬请期待！',
+          })
+        }
+      }
+    })
   },
   /**
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
     let globalKey = wx.getStorageSync('globalKey');
-    
-    if (globalKey.hasOwnProperty('token') || globalKey.user_id) {
+    console.log(user_id)
+    if (globalKey.user_id || user_id) {
       this.setData({
         isPhone: false,
         isUser: false
+      })
+    } else {
+      this.setData({
+        isUser: true
       })
     }
   },
@@ -258,20 +300,6 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function () {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
 
   },
 

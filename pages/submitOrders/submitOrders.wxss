@@ -159,6 +159,13 @@
   border-bottom:1px solid #f1f1f1; 
   z-index: 0;
 }
+/* 备注 */
+.inputRemarks{
+   height: 114rpx;
+   overflow: scroll;
+   padding-top: 6rpx;
+  width: 80%;
+}
 .place-holder {
     color: #939090;
     font-size: 28rpx;
@@ -169,12 +176,9 @@
     right: 20rpx;
     width: 31rpx;
     height: 31rpx;
+    z-index: 9;
 }
-/* 备注 */
-.inputRemarks{
-   height: 114rpx;
-   overflow: scroll;
-}
+
 /* 底部tarBar */
  .tab-bar {
   position: fixed;

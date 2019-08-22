@@ -1,6 +1,9 @@
 {
     "pages": [
       "pages/index/index",
+      "pages/allCategories/allCategories",
+      "pages/citys/citys",
+      "pages/a/a",
       "pages/select/select",
       "pages/classification/classification",
       "pages/orderOrPayment/orderOrPayment",

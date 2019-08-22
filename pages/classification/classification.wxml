@@ -1,8 +1,14 @@
 
 <import src="/template/wxml/waterfall.wxml" />
-<template is="head" data="{{titlename}}"></template>
+<template is="head" data="{{titlename,redBack}}"></template>
 
-<scroll-view class="scrollBox" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
-  <template is="waterfall" data="{{stores,floorstatus}}"></template>
+<scroll-view class="scrollBox {{is_choice?'scrollBoxGray':''}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
+  
+  <template is="waterfall_save" wx:if="{{is_save}}" data="{{stores,floorstatus,city,half,num}}"></template>
+  <template is="waterfall_choice" wx:elif="{{is_choice}}" data="{{stores,floorstatus,city}}"></template>
+
+  <template is="waterfall" wx:else data="{{stores,floorstatus,city}}"></template>
+  <!-- <template is="waterfall" data="{{stores,floorstatus,city}}"></template> -->
+
 </scroll-view>
 

@@ -3,7 +3,13 @@
  @import "/template/wxss/waterfall.wxss"; 
  .header{
    margin-bottom: 20rpx;
+   border-bottom: 2rpx solid #ccc;
+   
+ }
+ .header1{
+   margin-bottom: 0;
  }
  .store_item {
    border-bottom: 1px solid #ebf0ea;
  }
+ 
