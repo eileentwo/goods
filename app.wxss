@@ -10,14 +10,6 @@
 .scrollBox{
   overflow-y: scroll;
 }
-/* 隐藏滚动条 */
-
-::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  color: transparent;
-
-}
 /*flexbox盒模型  */
 .flexbox{
   display: flex;
