@@ -2,9 +2,15 @@
 
  @import "/template/wxss/waterfall.wxss"; 
  .header{
-   margin-bottom: 20rpx;
    border-bottom: 2rpx solid #ccc;
-   
+   margin-bottom: 168rpx;
+ }
+ .loadingmask{
+   position: fixed;
+   top: 160rpx;
+   width: 100%;
+   background-color: rgba(255, 255, 255, .2 );
+   z-index: 9999;
  }
  .header1{
    margin-bottom: 0;
@@ -12,4 +18,100 @@
  .store_item {
    border-bottom: 1px solid #ebf0ea;
  }
- 
+ /* 搜索 */
+
+.selection{
+  width: 100%;
+  padding-bottom:20rpx;
+  color: #fff;
+   background-color:#FF2041;
+}
+
+.selectbtn{
+  width:720rpx;
+  height: 64rpx;
+  overflow: hidden;
+  margin: 0 auto;
+  border-radius:32rpx;
+  font-size: 28rpx;
+  background-color: #fff;
+  margin-right: 20rpx;
+}
+.selectbtn image {
+  width: 36rpx;
+  height: 36rpx;
+  margin: 16rpx 20rpx 16rpx 30rpx;
+
+}
+.placeholder{
+  color: #939090;
+  display: inline-block;
+  line-height: 64rpx;
+
+}
+ /* 条件 */
+ .conditions{
+   position: fixed;
+   top: 160rpx;
+   left: 0;
+   z-index: 9;
+   background-color: #fff;
+ }
+ .conditions_title{
+   align-items: center;
+   border-bottom: 1px solid rgba(0,0,0, .2);
+   line-height: 78rpx;
+ }
+ .categories{
+   flex: auto;
+   text-align: center;
+   font-size: 26rpx;
+   color: #666;
+   width: 250rpx;
+
+ }
+ .categories .ellipsis{
+   display: inline-block;
+   max-width: 200rpx;
+   overflow: hidden;
+   vertical-align: middle;
+ }
+ .categories image{
+   width: 22rpx;
+   height: 12rpx;
+   vertical-align: text-top;
+   margin:12rpx 0 0 10rpx;
+ }
+ .fruit{
+   position: absolute;
+   top: 80rpx;
+   left: 0;
+   width: 100%;
+   z-index: 9999;
+ }
+ .mask{
+   width: 100%;
+   background-color: rgba(0, 0, 0, .2 );
+ }
+ .categories_list{
+   background-color: #fff;
+   font-size: 26rpx;
+   line-height: 2.8;
+   color: #0A0A0A;
+ }
+ .categories_list_left{
+   text-indent: 30rpx;
+   width:600rpx;
+ }
+ .categories_list scroll-view{
+   height: 514rpx;
+ }
+ .categories_list scroll-view text{
+   color: #939090;
+   font-size: 22rpx;
+ }
+ .conditions_title .active,
+ .categories_list scroll-view .active,
+ .categories_list scroll-view .active text{
+   color: #FD0D1A;
+ }

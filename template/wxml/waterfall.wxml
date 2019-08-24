@@ -9,8 +9,8 @@
 </template>
 <!-- 分类显示商铺 -->
 <template name ='waterfall'>
-    <navigator class="store_item radiusbox flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}}&city={{city}} ' wx:key="item">  
-      <image src="{{url}}{{item.store_logo}}" lazy-load="true" mode="aspectFill"></image>
+    <navigator wx:for='{{stores}}' class="store_item radiusbox flexbox {{item.list_store_tag.length==0?'addHmarks':''}}" url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}}&city={{city}} ' wx:key="item">  
+      <image src="{{item.store_logo?item.store_logo:'../../images/noImg.png'}}" lazy-load="true" mode="aspectFill"></image>
       <view class="store_info">
          <view class="store_title">
             <text>{{item.store_name}}</text>
@@ -27,7 +27,7 @@
         </view>
         <view class="money  flexbox">
           <text>距您{{item.distance}}公里</text>
-          <view wx:if="{{item.average_price !='0.00'}}">
+          <view wx:if="{{item.average_price!='0.00'}}">
             <!-- <text class="formal">￥567</text> -->
             <text class="pink">￥</text>
             <text class="pinkB">{{item.average_price}}</text>起
@@ -42,8 +42,8 @@
 </template>
 <!-- 搜索显示商铺 -->
 <template name ='selectShow'>
-    <navigator class="store_item radiusbox flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}}&city={{city}} ' wx:key="item">  
-      <image src="{{url}}{{item.store_logo}}" lazy-load="true" mode="aspectFill"></image>
+    <navigator  wx:for='{{stores}}' class="store_item radiusbox flexbox  " url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}}&city={{city}} ' wx:key="item">  
+      <image src="{{item.store_logo?item.store_logo:'../../images/noImg.png'}}" lazy-load="true" mode="aspectFill"></image>
       <view class="store_info">
          <view class="store_title">
             <text>{{item.store_name}}</text>
@@ -71,14 +71,14 @@
     <view>
       <!-- <view class="loading"></view> -->
     </view>
-    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  lazy-load="true" bindtap="toTop"> </image>
 </template>
 
 
 <!-- 更多显示商铺 -->
 <template name ='morefall'>
     <navigator class="store_item radiusbox flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}}&city={{curCity}} ' wx:key="item">  
-      <image src="{{url}}{{item.store_logo}}" lazy-load="true" mode="aspectFill"></image>
+      <image src="{{item.store_logo?item.store_logo:'../../images/noImg.png'}}" lazy-load="true" mode="aspectFill"></image>
       <view class="store_info">
          <view class="store_title">
             <text>{{item.store_name}}</text>
@@ -104,7 +104,7 @@
         </view>
       </view>
     </navigator>
-    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  lazy-load="true"  bindtap="toTop"> </image>
     
 </template>
 
@@ -112,7 +112,7 @@
 <!-- 省到爆显示 -->
 <template name ='waterfall_save'>
     <navigator class="store_item save_item flexbox" wx:for='{{stores}}' url='../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}}&city={{city}} ' wx:key="item">  
-      <image src="{{item.store_logo}}" class="showImg" lazy-load="true" mode="aspectFill"></image>
+      <image src="{{item.store_logo?item.store_logo:'../../images/noImg.png'}}" class="showImg" lazy-load="true" mode="aspectFill"></image>
       <view class="store_info">
          <view class="save_title flexbox">
             <text>{{item.store_name}}</text>
@@ -141,13 +141,13 @@
     <view>
       <!-- <view class="loading"></view> -->
     </view>
-    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+    <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  lazy-load="true" bindtap="toTop"> </image>
 </template>
 <!-- 小鹿精选显示 -->
 <template name ='waterfall_choice'>
   <view class="store_item choice_item radiusbox "  wx:for='{{stores}}' wx:key="item" >  
       <view class="flexbox">
-        <image src="{{item.store_logo}}" lazy-load="true" class="store_logo" mode="aspectFill"></image>
+        <image src="{{item.store_logo?item.store_logo:'../../images/noImg.png'}}" lazy-load="true" class="store_logo" mode="aspectFill"></image>
         <view class="store_info">
             <view class="store_title flexbox">
               <text class="store_title_name ellipsis">{{item.store_name}}</text>
@@ -169,5 +169,5 @@
       </view>
       <view class="choice_evaluate ellipsis" wx:if="{{item.evaluate !='暂无用户评价'}}">{{item.evaluate}}</view>
     </view>
-  <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  bindtap="toTop"> </image>
+  <image src="../../images/top.png" mode="aspectFit" class="toTop"  hidden='{{!floorstatus}}'  lazy-load="true" bindtap="toTop"> </image>
 </template>

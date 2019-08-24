@@ -23,13 +23,17 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let city=options.city;
+    console.log(options)
+    let city = options.city;
 
     let nearList = wx.getStorageSync('nearList') ;
     
     let that=this;
     if (city) {
       this.data.city = city;
+      this.data.longitude = options.longitude;
+      this.data.latitude = options.latitude;
+
       this.setData({ city, nearList});
       this.hotList(city);
     }
@@ -121,13 +125,15 @@ Page({
         store_city,
         store_name,
         page: selectNum ,
+        longitude: that.data.longitude||'',
+        latitude: that.data.latitude|| '',
         limit:10,
       },
       success: function (res) {
         console.log(selectNum,'select106', res.data.data)
 
         if (res.data.status == '1') {
-          let newData = that.addUrl(res.data.data);
+          let newData = util.addUrl(res.data.data,'store_logo');
           let stores = that.data.stores;
           
           if (fromSelect == 1) {
@@ -163,14 +169,6 @@ Page({
         }
       }
     })
-  },
-  addUrl: function (obj) {
-    let re=/^\//;
-    let str = 'https://exbuy.double.com.cn/'; 
-    for (let i = 0; i < obj.length; i++) {
-      obj[i].store_logo = obj[i].store_logo.replace(re, str);
-    }
-    return obj
   },
   /**
    * 生命周期函数--监听页面初次渲染完成

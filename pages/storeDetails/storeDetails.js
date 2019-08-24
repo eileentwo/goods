@@ -157,7 +157,6 @@ Page({
       
       for(let i=0;i<totalCont;i++){
         for (let j = 0; j < goodsItem[i].list_goods.length;j++){
-          ////console.log(goodsItem[i].list_goods[j].stock_count > 0,138)
           if (goodsItem[i].list_goods[j].stock_count>0){
             that.data.noGood = true;
           }else{
@@ -176,7 +175,6 @@ Page({
     }
     wx.createSelectorQuery().select('#storeDetails').boundingClientRect(function (rect) {
       that.data.rectT = rect.top;
-      console.log(that.data.rectT)
     }).exec();
 
 
@@ -211,7 +209,6 @@ Page({
   },
 
   swiperChange: function (e) {
-    console.log(205,e)
     let index = e.detail.index
     if (e.detail.source == 'touch') {
       this.setData({
@@ -273,16 +270,12 @@ Page({
               // 订单金额
               globalKey.account_money = res.data.data.account_money
               // 翻倍金额
-              // ////console.log("翻倍金额", res.data.data.discount_price)
               globalKey.discount_price = res.data.data.discount_price
               // 服务费用
-              // ////console.log("服务费用", res.data.data.service_money)
               globalKey.service_money = res.data.data.service_money
               // 本单节省
-              // ////console.log("本单节省", res.data.data.save_money)
               globalKey.save_money = res.data.data.save_money
               // 未翻金额
-              // ////console.log("未翻金额", res.data.data.no_discount_price)
               globalKey.no_discount_price = res.data.data.no_discount_price
               globalKey.actual_money = res.data.data.actual_money
               wx.setStorageSync('globalKey', globalKey)
@@ -384,13 +377,13 @@ Page({
   
   powerDrawer: function (e) {
     var currentStatu = e.currentTarget.dataset.statu;
-    this.util(currentStatu)
+    this.util(currentStatu);
+    return;
   },
   // 查看已选择的商品
   openCart:function(e){
     let num = e.currentTarget.dataset.num;
     if (num>0){
-      ////console.log(this.data.sysHeight -160 - 90 * num, this.data.catBoxtop,471)
       this.setData({
         cartBoxStatus:true,
         catBoxtop: this.data.sysHeight - 160 - 90 * num,
@@ -454,10 +447,6 @@ Page({
       this.setData({
         animationData: animation
       })
-      wx.createSelectorQuery().select('#cartBox').boundingClientRect(function (rect) {
-        ////console.log(rect, 489)
-        
-      }).exec();
       //关闭抽屉
       if (currentStatu == "close") {
         this.setData({
@@ -502,7 +491,6 @@ Page({
       return fl;
     }
     for (var i = 0; i < category_list.length; i++) {
-      // ////console.log(category + '=>' + category_list[i]);
       if (category == category_list[i]) {
         for (var j = 0; j < data_list.length; i++) {
           if (category == data_list[i]["category"]) {
@@ -523,8 +511,6 @@ Page({
               this.setData({
                 tabArr: _obj
               });
-              // ////console.log("已设置currentGoodsTypeIndex、curBdIndex => " + i);
-              // ////console.log("6666", ob);
             }
             return obj;
           }
@@ -537,7 +523,6 @@ Page({
   //增加数量
   addToCart: function (e) {
     var dataset = e.currentTarget.dataset;
-    // //console.log(473, dataset)
     if (dataset.goods_count > dataset.goods_selenum){
       this.changeNum(dataset, true);
     }else{
@@ -551,7 +536,6 @@ Page({
   //减少数量
   reduceFromCart: function (e) {
     var dataset = e.currentTarget.dataset;
-    //console.log(dataset,487)
     if (dataset.goods_selenum>0){
       this.changeNum(dataset, false);
     }
@@ -565,14 +549,12 @@ Page({
     let goodindex =dataset.goodindex;
     let goodsItem = this.data.goodsItem;
     let curGood = goodsItem[index];
-    // console.log(goodsItem, 563, index, dataset)
     let curGoodInfo = curGood.list_goods[goodindex];
     let isInArray = this.isInArray(choosedList, dataset.goodsid);
   
     if (choosedList.length>0){//判断是否有点过
       if (bool) {//当点击的是增加数量时
         if (isInArray) {
-          // console.log(522, isInArray)
           choosedList[isInArray - 1].goods_selenum += 1;
         } else {
           dataset.goods_selenum += 1
@@ -584,7 +566,6 @@ Page({
           curGoodInfo.num = 1
         }
       } else {//当点击的是减少数量时
-        //console.log(dataset.goods_selenum,5281111)
         if (dataset.goods_selenum > 0) {
           choosedList[isInArray - 1].goods_selenum -= 1
           curGoodInfo.num -= 1;
@@ -594,7 +575,6 @@ Page({
         }
       }
     } else {
-      // console.log(632)
       choosedList.push(dataset);
       choosedList[0].goods_selenum += 1;
       curGoodInfo.num = 1;
@@ -610,7 +590,6 @@ Page({
     }
     curGood.select_nums = select_nums;
 
-    // console.log(choosedList, 654)
     for (let k in choosedList) {
       order_info.total_num += choosedList[k].goods_selenum;
       order_info.order_cost += choosedList[k].discount_price * choosedList[k].goods_selenum; //计算总价
@@ -634,7 +613,6 @@ Page({
   // 判断是否有在数组内
   isInArray(arr, value) {
 
-    //console.log(577, arr, value)
     for (var i = 0; i < arr.length; i++) {
       if (value === arr[i].goodsid) {
         return i+1;
@@ -705,7 +683,6 @@ Page({
   },
   // 评价
   evaluatefn: function (e) {
-    //console.log(e)
     var current = 0;
     if(e==3){
       current =e
@@ -732,13 +709,12 @@ Page({
         templist.push(evaluate_list[i])
       }
     }
-    console.log(current,734)
     if (current == 3) {
       templist = util.addUrl(evaluate_list, 'head_pic');
       templist = util.addUrl(evaluate_list, 'pics');
     }
     let len = templist.length;
-    console.log(700,templist, evaluate_list)
+    
     this.setData({
       len: len,
       menuTapCurrenta: current,
@@ -751,8 +727,6 @@ Page({
    * 生命周期函数--监听页面初次渲染完成
    */
   onReady: function () { 
-    // oldPosition category-contents-item-0storeDetails
-    ////console.log(871)
   },
 
   /**
@@ -793,8 +767,7 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) { 
-    // let store_info = wx.getStorageSync('store_info'); 
-    console.log(store_info)
+    let store_info = wx.getStorageSync('store_info'); 
     if (res.from === 'button') { 
     } 
     return {
@@ -808,15 +781,8 @@ Page({
 
   time_range: function (beginTime, endTime) {
     var strb = beginTime.split(":");
-    // if (strb.length != 2) {
-    //   return false;
-    // }
 
     var stre = endTime.split(":");
-    ////console.log(924, stre.length, beginTime)
-    // if (stre.length != 2) {
-    //   return false;
-    // }
 
     var b = new Date();
     var e = new Date();
@@ -848,7 +814,6 @@ Page({
   },
   // 优惠商品，用户评价，温馨提醒切换
   changeTab: function (e) {
-    ////console.log(114)
     var scrollLeft = ((e.detail.current + 1) - 3) + 1;
     if (scrollLeft < 0) {
       scrollLeft = 0;

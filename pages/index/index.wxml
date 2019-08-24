@@ -12,7 +12,7 @@
           </view>
           <view>{{weather.wea}} {{weather.tem}}</view>
         </view>
-        <navigator class="selectbtn flexbox"  url="../../pages/select/select?city={{curCity}}">
+        <navigator class="selectbtn flexbox"  url="../../pages/select/select?city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
           <label><image src="../../images/select.png" mode="aspectFit"></image></label>
           <!-- <input placeholder="数呗花全新升级  " placeholder-class="placeholder"></input> -->
           <text class="placeholder">数呗花</text>
@@ -79,7 +79,7 @@
       <scroll-view scroll-x='true' class="goods_item_scroll" enable-flex='true' style="">
         <navigator class="goods_item_detail" wx:for="{{list_store_save}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
           <view class="goods_img">
-            <image  lazy-load="true"  src="{{item.store_logo}}"  mode="scaleToFill"></image>
+            <image  lazy-load="true"  src="{{item.store_logo?item.store_logo:'../../images/noImg1.png'}}"  mode="scaleToFill"></image>
           </view>
           <view class="goods_title ellipsis">{{item.store_name}}</view>
           <view class="flexbox">
@@ -102,7 +102,7 @@
       <scroll-view scroll-x='true' class="goods_item_scroll" enable-flex='true' style="">
         <navigator class="goods_item_detail" wx:for="{{list_store_choice}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
           <view class="goods_img">
-            <image  lazy-load="true"  src="{{item.store_logo}}"  mode="scaleToFill"></image>
+            <image  lazy-load="true"  src="{{item.store_logo?item.store_logo:'../../images/noImg1.png'}}"  mode="scaleToFill"></image>
           </view>
           <view class="goods_title ellipsis">{{item.store_name}}</view>
           <view class="flexbox">

@@ -148,12 +148,25 @@ Page({
       return;
     }
   },
-  // 获取数据
-  getHomedata: function (curCity, longitude, latitude) {
-    let that = this;
+  // 返回参数
+  returnGram() {
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var process = md5.hexMD5(val);
+    let gram = [{
+      timestamp,
+      val,
+      process
+    }]
+    return gram[0]
+  },
+  // 获取数据
+  getHomedata: function (curCity, longitude, latitude) {
+    let that = this;
+
+    
+    let gram = this.returnGram();
+
     let store_area = ''
     let store_city=curCity;
     if(that.data.status==2){
@@ -169,8 +182,8 @@ Page({
         store_area  ,
         latitude,
         longitude,
-        timestamp,
-        process,
+        timestamp: gram.timestamp,
+        process: gram.process,
         request_object: 'mini_program',
       },
       success: function (res) {
@@ -241,9 +254,8 @@ Page({
   },
   getMoreData: function (page,curCity){
     let that=this;
-    var timestamp = Date.parse(new Date());
-    var val = 'fanbuyhainan' + timestamp.toString();
-    var process = md5.hexMD5(val);
+
+    let gram = this.returnGram();
     wx.request({
       url: app.globalData.url + '/api/mini_homepage/list_store_more',
       method: "POST",
@@ -253,8 +265,8 @@ Page({
         longitude: that.data.longitude,
         page,
         store_area: '',
-        timestamp,
-        process,
+        timestamp: gram.timestamp,
+        process: gram.process,
         request_object: 'mini_program',
         limit: 5,
       },

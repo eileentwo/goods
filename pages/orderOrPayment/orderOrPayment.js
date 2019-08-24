@@ -139,9 +139,19 @@ Page({
     }
   },
   toHome:function(){
-    wx.reLaunch({
-      url: '/pages/index/index',
-    })
+
+    let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
+    let prevPage = pages[pages.length - 2];
+    if (prevPage) {
+      wx.navigateBack({
+        delta: 1  // 返回上一级页面。
+      })
+    } else {
+      wx.reLaunch({
+        url: '/pages/index/index',
+        //如果已经评价成功了的话就把评论按钮隐藏
+      })
+    }
   },
 
   getUserInfo: function(e){

@@ -101,6 +101,15 @@
   margin-right: 6rpx;
   color:#FF2245;
 }
+.addHmarks .address,
+.addHmarks .money text{
+  line-height: 2;
+}
+.addHmarks .money view{
+  margin-top: -8rpx;
+
+}
+
 /* 省到爆相关CSS */
 
 
@@ -187,6 +196,8 @@
   width: 100rpx;
   height: 100rpx;
   border-radius: 6rpx;
+  margin-bottom: 20rpx;
+
 }
 .choice_item .store_info{
   width: 540rpx;
@@ -282,6 +293,6 @@
   position: fixed;
   bottom: 100rpx;
   right: 50rpx;
-  width: 48rpx;
-  height: 48rpx;
+  width: 56rpx;
+  height: 56rpx;
 }

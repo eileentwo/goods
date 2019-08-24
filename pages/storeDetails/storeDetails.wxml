@@ -35,16 +35,16 @@
         <image class="contact" src="../../images/storeDetails/tel.png" bindtap="powerDrawer" data-statu="open"></image>
 
         <!--拨打商家电话-->
-        <view class="drawer_screen" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}"></view>
+        <view class="drawer_screen" bindtap="powerDrawer" catchtouchmove='powerDrawer' data-statu="close" wx:if="{{showModalStatus}}"></view>
         <!--使用animation属性指定需要执行的动画-->
         <view animation="{{animationData}}" class="drawer_attr_box" wx:if="{{showModalStatus}}">
             <!--drawer content-->
             <view class="drawer_content">
                 <view class="drawer_title">在线预约</view>
-                <view class="drawer_title" bindtap='to_call'>{{storeDetails.store_mobile?storeDetails.store_mobile:''}}</view>
-                <view class="drawer_title lineCancle" bindtap='to_call_landline'>
+                <view class="drawer_title" wx:if="{{storeDetails.store_mobile}}" bindtap='to_call'>{{storeDetails.store_mobile?storeDetails.store_mobile:''}}</view>
+                <view class="drawer_title lineCancle"  wx:if="{{storeDetails.store_telephone}}"  bindtap='to_call_landline'>
                     {{storeDetails.store_telephone?storeDetails.store_telephone:''}}</view>
-                <view class="drawer_title" bindtap="powerDrawer" data-statu="close" wx:if="{{showModalStatus}}">取消 </view>
+                <view class="drawer_title" bindtap="powerDrawer"  data-statu="close" wx:if="{{showModalStatus}}">取消 </view>
             </view>
         </view>
     </view>
@@ -216,7 +216,7 @@
       </view> 
     </view> 
     <!-- 购物车弹窗 -->
-    <view class="cartBox_mask"  bindtap="powerDrawer" data-statu="car"  wx:if="{{cartBoxStatus}}"></view> 
+    <view class="cartBox_mask"  bindtap="powerDrawer" catchtouchmove='powerDrawer'  data-statu="car"  wx:if="{{cartBoxStatus}}"></view> 
     <view class="cartBox" id='cartBox' animation="{{animationData}}" wx:if="{{cartBoxStatus}}" >
       <view class="cartInner" >
         <view class="cartTitle">
