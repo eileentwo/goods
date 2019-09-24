@@ -17,11 +17,11 @@
   z-index: 0;
 }
 .toHome{
-  width: 50rpx;
-  height: 50rpx;
+  width: 48rpx;
+  height: 44rpx;
   position: absolute;
   top: 72rpx;
-  left: 30rpx;
+  left: 10rpx;
   z-index: 9999999999999999;
 }
 
@@ -41,7 +41,7 @@
 .oerderText,.paymentText{
   position:absolute;
   top:  638rpx;
-  left: 196rpx;
+  left: 176rpx;
   color: #FF1D3A;
   font-size: 40rpx;
 }
@@ -57,18 +57,7 @@
  button{
   background: transparent;
  }
-.usermask{
-  position: fixed;
-  z-index: 99;
-  background: transparent;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-}
-.phonemask{
-  z-index: 9999
-}
+
 .backhome{
   display: none;
 }

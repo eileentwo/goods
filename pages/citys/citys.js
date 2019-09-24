@@ -29,9 +29,7 @@ Page({
 
     if(option.city==''){
 
-      wx.showLoading({
-        title: '加载中',
-      })
+      app.showMind();
       wx: wx.getLocation({
         type: 'gcj02',
         altitude: true,
@@ -69,17 +67,90 @@ Page({
       }
       that.setData({ city})
     }
-    let localData = wx.getStorageSync('localData') || [];
+    let localDataCur = wx.getStorageSync('localDataCur') || [];
 
-    if (localData.length==0){
-      that.getLocalData('list_city', winHeight)
+    if (localDataCur.length==0){
+      that.getlocalDataCur('list_city', winHeight)
      
     }else{
-      that.setLocalData(winHeight, localData);
+      that.setlocalDataCur(winHeight, localDataCur);
     }
 
   },
-  getLocalData: function (urlName, winHeight){
+  getLocal: function () {
+    let that = this;
+    var local = wx.getStorageSync('local') || {};
+    wx.showModal({
+      title: '提示',
+      content: '是否重新定位当前城市',
+      success(r){
+        if (r.confirm) {
+          app.showLoading();
+          wx: wx.getLocation({
+            type: 'gcj02',
+            altitude: true,
+            success: function (res) {
+              console.log(res, 47)
+              if (res.longitude) {
+                let longitude = res.longitude;
+                let latitude = res.latitude;
+                console.log(local, 477777)
+                local.longitude = longitude;
+                local.latitude = latitude;
+                wx.setStorageSync('local', local)
+                var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
+
+                myAmapFun.getRegeo({
+                  location: '' + longitude + ',' + latitude + '',
+                  success: function (data) {
+                    console.log(data, 53)
+                    //成功回调
+                    if (data.length > 0) {
+                      wx.hideLoading();
+                      let city = data[0].regeocodeData.addressComponent.city;
+                      let store_area = data[0].regeocodeData.addressComponent.district;
+                      let store_street = data[0].regeocodeData.addressComponent.streetNumber.street + data[0].regeocodeData.addressComponent.streetNumber.number;
+                      let re = new RegExp("市");
+                      city = city.replace(re, "");
+                      let cityInfos = wx.getStorageSync('cityInfos') || {};
+                      that.setData({
+                        city
+                      })
+
+                      that.backHome(city, '', 0)
+                      local.city = city;
+                      wx.setStorageSync('local', local);
+                    }
+                  },
+                  fail: function (info) {
+                    //失败回调
+
+                  }
+                })
+              }
+
+            },
+            fail: function (res) {
+              console.log(res, 65)
+              //判断是否获得了用户地理位置授权
+              wx.getSetting({
+                success: (res) => {
+                  if (!res.authSetting['scope.userLocation'])
+                    that.openConfirm()
+                }
+              })
+
+            },
+            complete: function (res) { },
+          })
+        } else if(r.confirm){
+          console.log(111)
+        }
+      }
+    })
+
+  },
+  getlocalDataCur: function (urlName, winHeight){
     var that=this;
     var timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
@@ -110,7 +181,7 @@ Page({
           if (urlName == 'list_city') {
             if (winHeight) {
               wx.hideLoading();
-              that.setLocalData(winHeight, data);
+              that.setlocalDataCur(winHeight, data);
             }else{
 
             }
@@ -124,10 +195,13 @@ Page({
             title: '数据加载失败请稍后重试',
           })
         }
+      },
+      fail() {
+        app.showMind();
       }
     })
   },
-  setLocalData: function (winHeight, data) {
+  setlocalDataCur: function (winHeight, data) {
     // console.log(data.list_letter,103)
     var that = this;
     var searchLetter = [];
@@ -141,16 +215,18 @@ Page({
       temp.bHeight = (i + 1) * itemH;
       tempObj.push(temp)
     }
-    console.log(data, data.list_hot, itemH, winHeight)
-    that.getAreaData(data,that.value);
-    wx.setStorageSync('localData', data);
+    console.log(data, data.list_hot, itemH, winHeight, data.is_show,218)
+    that.getAreaData(data, that.value);
+    let is_show = data.is_show;
+    
+    wx.setStorageSync('localDataCur', data);
     that.setData({
       cityList: data.list_letter,
       itemH,
       hotcityList: data.list_hot,
       searchLetter: tempObj,
       winHeight: winHeight,
-
+      is_show
     })
   },
   // 切换区县
@@ -158,7 +234,7 @@ Page({
     let that=this;
     let localH = this.data.localH;
     if (localH) {
-      that.getLocalData('list_area')
+      that.getlocalDataCur('list_area')
     }
     localH = !localH;
     this.setData({
@@ -173,15 +249,15 @@ Page({
   select: function () {
     let selectCity = this.value;
     let isSelect=false
-    let localData = wx.getStorageSync('localData') || [];
-    console.log(selectCity,localData)
+    let localDataCur = wx.getStorageSync('localDataCur') || [];
+    console.log(selectCity,localDataCur)
 
     if (selectCity ){
       isSelect = true;
-      if (localData.length == 0) {
-        this.getLocalData('list_city', this.data.winHeight);
+      if (localDataCur.length == 0) {
+        this.getlocalDataCur('list_city', this.data.winHeight);
       }else{
-        this.getAreaData(localData, selectCity);
+        this.getAreaData(localDataCur, selectCity);
       }
     }else{
       wx.showToast({
@@ -191,15 +267,15 @@ Page({
     }
     this.setData({ isSelect})
   },
-  getAreaData: function (localData, selectCity){
+  getAreaData: function (localDataCur, selectCity){
     var that=this;
     let tempList = [];
     let arr = []
-    for (let i = 0; i < localData.list_letter.length; i++) {
+    for (let i = 0; i < localDataCur.list_letter.length; i++) {
 
-      for (let j = 0; j < localData.list_letter[i].list_city.length; j++) {
+      for (let j = 0; j < localDataCur.list_letter[i].list_city.length; j++) {
 
-        tempList.push(localData.list_letter[i].list_city[j].city)
+        tempList.push(localDataCur.list_letter[i].list_city[j].city)
       }
     }
     for (let i = 0; i < tempList.length; i++) {
@@ -262,30 +338,33 @@ Page({
   //选择城市
   bindCity: function (e) {
     console.log("bindCity")
-    let cityInfos = {};
     let city = e.currentTarget.dataset.city;
+    let area =e.currentTarget.dataset.area;
+    let isarea = e.currentTarget.dataset.isarea
+    this.backHome(city, area, isarea)
+  },
+  backHome(city, area, isarea){
+    let cityInfos = {};
     cityInfos['city'] = city
-    cityInfos['area'] = e.currentTarget.dataset.area;
+    cityInfos['area'] = area
 
-    cityInfos['isarea'] = e.currentTarget.dataset.isarea
+    cityInfos['isarea'] = isarea
     let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
-    let prevPage = pages[pages.length - 2];  
+    let prevPage = pages[pages.length - 2];
     let curCity = city;
-    cityInfos['status']=1
+    cityInfos['status'] = 1
 
-    if (cityInfos['isarea'] =='1'){
-      cityInfos['status']=2;
+    if (cityInfos['isarea'] == '1') {
+      cityInfos['status'] = 2;
       curCity = cityInfos['area'];
     }
-    // console.log(cityInfos, 274, curCity)
-    
 
     util.addHistory('nearCity', city);// 加入最近搜索的城市
-    wx.setStorageSync('cityInfos', cityInfos )
+    wx.setStorageSync('cityInfos', cityInfos)
     prevPage.setData({ curCity, status: cityInfos['status'], fcity: city })
 
 
-    
+
     wx.navigateBack({
 
       delta: 1  // 返回上一级页面。

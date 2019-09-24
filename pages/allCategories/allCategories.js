@@ -9,7 +9,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    titlename: '数呗花',
+    titlename: '一鹿省',
     redBack: '1',
     scrollTopId: '',//置顶id
     scrollTop: 0,//置顶高度
@@ -18,7 +18,8 @@ Page({
     navActive: 0,
     firstI: 0,
     nextI: 1,
-    prevI: -1
+    prevI: -1,
+    result:[],
   },
 
   /**
@@ -29,15 +30,34 @@ Page({
     let that = this;
 
     var sysInfo = wx.getSystemInfoSync();
-    var winHeight = sysInfo.windowHeight - 162;
+    var winHeight = sysInfo.windowHeight - 122;
     this.setData({
       winHeight,
+      resultH: sysInfo.windowHeight - 130,
       longitude: options.longitude,
       latitude: options.latitude,
       curCity: options.store_city
     })
   },
-
+  // 点击图片跳转分类
+  navigate(e) {
+    let category_id = e.currentTarget.dataset.category_id;
+    let category_name = e.currentTarget.dataset.category_name;
+    wx.navigateTo({
+      url: '../../pages/classification/classification?category_id=' + category_id + '&category_name=' + category_name + '&longitude=' + this.data.longitude + '&latitude=' + this.data.latitude + '&store_city=' + this.data.curCity,
+    })
+  },
+  inputup(e){
+    this.value =e.detail.value;
+  },
+  select() {
+    let localData = this.data.goodlist;
+    if(this.value !=''){
+      this.getSelectData(localData, this.value);
+    }
+  },
+  // 防止穿透
+  returnTap() { return },
   clickcategory: function (e) {
     var category_id = e.currentTarget.dataset.category_id;
     var index = e.currentTarget.dataset.index;
@@ -103,6 +123,40 @@ Page({
       allDis.push(obj)
     }
   },
+  getSelectData: function (localData, selectname) {
+    var that = this;
+    let arr = []
+  //   for (AllCategoryModel * firstCategory in self.typeArray) {
+  //     for (AllSecondCategory * secondCategory in firstCategory.list_second) {
+  //       if ([secondCategory.category_name containsString: searchText]) {
+  //         NSDictionary * dic = @{
+  //                                         @"name": secondCategory.category_name,
+  //                                         @"id": [NSString stringWithFormat:@"%zd,%zd", firstCategory.category_id, secondCategory.category_id]
+  //       };
+  //       [self.searchArray addObject: dic];
+  //     }
+  //   }
+  // }
+    for (let i = 0; i < localData.length; i++) {
+      
+      for (let j = 0; j < localData[i].list_second.length; j++) {
+
+        let index = {};
+        if (localData[i].list_second[j].category_name.indexOf(selectname) >= 0) {
+
+          index['category_id'] = localData[i].category_id;
+          index['category_id_sec'] = localData[i].list_second[j].category_id;
+          index['category_name'] = localData[i].list_second[j].category_name;
+          arr.push(index);
+        }
+      }
+    }
+    console.log(arr,145)
+    
+    that.setData({
+      resultData: arr
+    })
+  },
   getData: function () {
     let that = this;
     var timestamp = Date.parse(new Date());
@@ -113,6 +167,7 @@ Page({
       url: app.globalData.url + "/api/mini_homepage/list_category",
       method: "POST",
       data: {
+
         request_object: app.globalData.request_object,
         process,
         timestamp,
@@ -135,6 +190,9 @@ Page({
             title: '数据加载失败请稍后重试',
           })
         }
+      },
+      fail(res){
+        app.showMind();
       }
     })
   },
@@ -206,7 +264,7 @@ Page({
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-
-  }
+  onShareAppMessage: function (res) {
+    app.onshare()
+  },
 })

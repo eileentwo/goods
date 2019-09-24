@@ -48,7 +48,9 @@ Page({
             })
              
           },
-          fail: function (res) { },
+        fail: function (res) {
+          app.showMind();
+        },
           complete: function (res) { },
       })
   },
@@ -101,11 +103,13 @@ Page({
    */
   onShareAppMessage: function (res) {
     let store_info = wx.getStorageSync('store_info');
-    console.log(store_info)
-    if (res.from === 'button') {
+    let title = '我在一鹿省边省边赚，你也快来吧！';
+    let that = this;
+    if (res.from === 'menu') {
+      console.log(res)
     }
     return {
-      title: '转发',
+      title,
       path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id + '&store_name=' + store_info.store_name,
       success: function (res) {
 

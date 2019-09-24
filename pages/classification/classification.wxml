@@ -33,16 +33,16 @@
   </view>
   
   <view class="fruit" wx:if="{{isShowFruit}}">
-      <view>
+      <view style="background: #fff;">
         <view class="categories_list flexbox" wx:if='{{showList == "key1"}}'>
           <scroll-view  scroll-y='true' class="categories_list_left">
             <block wx:for='{{goodlist}}' wx:for-index='cateIndex' wx:key='index'>
-              <view bindtap="changeSecond" class="{{cateIndex ==activeIndex? 'active' :''}}" data-index="{{cateIndex}}" data-category_id="{{item.category_id}}">{{item.category_name}} <text>({{item.store_count}})</text></view>
+              <view bindtap="changeSecond" class="{{cateIndex ==activeIndex? 'active' :''}}" data-index="{{cateIndex}}" data-category_id="{{item.category_id}}" >{{item.category_name}} <text>({{item.store_count}})</text></view>
             </block>
           </scroll-view>
           <scroll-view  scroll-y='true' class="categories_list_right">
             <block wx:for='{{list_second}}' wx:for-item='cateitem'  wx:for-index='cateIndex' wx:key="index">
-              <view  bindtap="secondData" class="{{cateIndex ==activeIndex1? 'active' :''}}" data-index="{{cateIndex}}" data-category_id="{{cateitem.category_id}}"  data-category_name="{{cateitem.category_name}}" >{{cateitem.category_name}} </view>
+              <view  bindtap="secondData" class="{{cateIndex ==activeIndex1? 'active' :''}}" data-index="{{cateIndex}}"  data-category_id="{{cateitem.f_id}}" data-sec_category_id="{{cateitem.category_id}}"   data-category_name="{{cateitem.category_name}}" >{{cateitem.category_name}} </view>
             </block>
           </scroll-view>
         </view>
@@ -62,11 +62,12 @@
           <scroll-view scroll-y='true' class="categories_list_left">
           
             <block wx:for='{{sortData}}' wx:for-index='cateIndex'>
-              <view   bindtap="secondData" class="{{cateIndex ==sactiveIndex? 'active' :''}}" data-store_area="{{store_area}}" data-index="{{cateIndex}}" data-sort="{{item.sort}}">{{item.name}}</view>
+              <view   bindtap="secondData" class="{{cateIndex ==sactiveIndex? 'active' :''}}" data-store_area="{{store_area}}" data-index="{{cateIndex}}" data-sort="{{item.sort}}" data-sortname="{{item.name}}">{{item.name}}</view>
             </block>
           </scroll-view>
         </view>
-        </view>
+        <image class="morec" catchtap="touchHandler" mode="aspectFit" src="../../images/morec.png"></image>
+      </view>
       
       <view class="mask"  catchtap="touchHandler" catchtouchmove="touchHandler" style="height:{{fruitH}}px"></view>
   </view>
@@ -75,12 +76,16 @@
 
 <scroll-view class="scrollBox {{is_choice?'scrollBoxGray':''}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
   
-  <template is="waterfall_save" wx:if="{{is_save}}" data="{{stores,floorstatus,city,half,num}}"></template>
-  <template is="waterfall_choice" wx:elif="{{is_choice}}" data="{{stores,floorstatus,city}}"></template>
+  <template is="waterfall_choice" wx:if="{{is_choice}}" data="{{stores,floorstatus,city}}"></template>
+  <template is="waterfall_save" wx:else data="{{stores,floorstatus,city,half,num}}"></template>
 
-  <template is="waterfall" wx:else data="{{stores,floorstatus,city}}"></template>
+  <!-- <template is="waterfall" wx:else data="{{stores,floorstatus,city}}"></template> -->
   <!-- <template is="waterfall" data="{{stores,floorstatus,city}}"></template> -->
-
+  
+  <view class="noStore" style="height:{{noStoreH}}px" hidden="{{noResult}}">
+    <image src="../../images/nodata.png" mode="aspectFit"></image>
+    <!-- <view>暂无数据</view> -->
+  </view>
 </scroll-view>
 
 

@@ -1,325 +1,61 @@
-//index.js
-//获取应用实例
-
+//logs.js
 var app = getApp();
-var util = require('../../utils/util.js');
-var amap = require('../../utils/amap-wx.js');
-var md5 = require('../../utils/md5.js');
-var time=1000;
-let homedata=[];
+const util = require('../../utils/util.js')
+
 Page({
   data: {
-    titlename:'数呗花',
-    url:app.globalData.url,
-    currentSwiper:0,
-    curCity:'',//当前城市
-    weather:'',
-    fcity:'',
-    page:1,
-    isAdd:true,
-    stores:[],
-    topNum:0,
-    hide: false,
-    status: 0,
+    isPhone: false,
+    hasPhone: false,
+    isClose: true,    //判断当前页面是打开还是返回页
+    isUser: false,
+    hasUser: false,
   },
-  onLoad: function () {
-    
-
-  },
-  welcome:function(){
-    this.getLocal();
-    this.setData({
-      hide:true
-    })
-  },
-
-  // 获取地址
-  getLocal: function (){
-    let that = this;
-    wx.showLoading({
-      title: '加载中',
-    })
-    wx: wx.getLocation({
-      type: 'gcj02',
-      altitude: true,
-      success: function (res) {
-        console.log(res)
-
-        var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
-        myAmapFun.getRegeo({
-          location: '' + res.longitude + ',' + res.latitude + '',
-          success: function (data) {
-
-            //成功回调
-            let city = data[0].regeocodeData.addressComponent.city;
-            let re = new RegExp("市");
-            city = city.replace(re, "");
-            that.getHomedata( city,res.longitude, res.latitude)
-          },
-          fail: function (info) {
-            //失败回调
-            console.log(info)
-            wx.showLoading({
-              title: 'myAmapFunW',
-            })
-          }
-        })
-
-      },
-      fail: function (res) { },
-      complete: function (res) { },
-    })
-  },
-  swiperChange: function (e) {
-    console.log(205, e)
-    if (e.detail.source=='touch'){
-
-      this.setData({
-        swiperCurrent: e.detail.current
-      })
-    }
-  },
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function (res) {
-    if (res.from === 'button') {
-    }
-    return {
-      title: '转发',
-      path: 'pages/index/index',
-      success: function (res) {
-
-      }
-    }
-
-  },
-  // saoma: function(){
-  //   wx.sc
-  // },
-  changeCity: function () {
-    console.log('changeCity', this.data.status)
-    let url ='';
-    if(this.data.status==2){
-      url = '../citys/citys?city='+ this.data.curCity+'&fcity='+this.data.fcity
-    }else{
-      url = '../citys/citys?city=' + this.data.curCity
-    }
-    console.log(url)
-    wx.navigateTo({
-      url,
-    })
-  },
-  onShow:function(){
-    let that = this;
-    homedata = wx.getStorageSync('homedata') || [];
-    let cityInfos = wx.getStorageSync('cityInfos') || [];
-    console.log(homedata, 28)
-
-    wx.getSystemInfo({
-      success: function (res) {
-        console.log(res)
-        that.setData({
-          contentH: res.screenHeight
-        })
-      },
-    })
-    if (!Array.prototype.isPrototypeOf(homedata)) {
-      console.log(141, cityInfos, Array.prototype.isPrototypeOf(cityInfos), Array.prototype.isPrototypeOf(homedata))
-      that.setHomeData(homedata);
-      that.setData({
-        hide: true
-      })
-    } else {
-      console.log(147)
-      this.getLocal();
-    }
-    console.log(this.data.status)
-    if (!Array.prototype.isPrototypeOf(cityInfos)){
-      let curCity = cityInfos['city'];
-      if (cityInfos['isarea'] == '1') {
-        curCity = cityInfos['area'];
-      }
-      console.log(cityInfos, curCity)
-      this.setData({
-        status: cityInfos['status'], fcity: cityInfos['city'], curCity, stores:[]
-      })
-      this.getHomedata(curCity);
-      return;
-    }
-  },
-  // 返回参数
-  returnGram() {
-    var timestamp = Date.parse(new Date());
-    var val = 'fanbuyhainan' + timestamp.toString();
-    var process = md5.hexMD5(val);
-    let gram = [{
-      timestamp,
-      val,
-      process
-    }]
-    return gram[0]
-  },
-  // 获取数据
-  getHomedata: function (curCity, longitude, latitude) {
-    let that = this;
-
-    
-    let gram = this.returnGram();
-
-    let store_area = ''
-    let store_city=curCity;
-    if(that.data.status==2){
-      store_area = curCity;
-      store_city =that.data.fcity
-    }
-    
-    wx.request({
-      url: app.globalData.url + '/api/mini_homepage/get_home_info',
-      method: "POST",
-      data: {
-        store_city,
-        store_area  ,
-        latitude,
-        longitude,
-        timestamp: gram.timestamp,
-        process: gram.process,
-        request_object: 'mini_program',
-      },
-      success: function (res) {
-        console.log('index', res.data,128)
-        var data = res.data;
-        if (typeof data === 'string') {
-          data = JSON.parse(data.trim());
-        }
-        if (data.status == '1') {
-          let homedata = data.data;
-          wx.hideLoading();
-
-          homedata.curCity = curCity;
-          homedata.longitude = longitude;
-          homedata.latitude = latitude;
-
-          that.setHomeData(homedata, longitude, latitude);
-          wx.setStorageSync('homedata', homedata);
-        }
-      }
-    })
-  },
-  // 渲染数据
-  setHomeData: function (homedata){
-    let that=this;
-    let list_ad = homedata.list_ad;
-    let weather = homedata.weather;
-    let list_category = homedata.list_category;
-    let list_headlines = homedata.list_headlines;
-    let list_store_choice = homedata.list_store_choice;
-    let list_store_save = homedata.list_store_save;
-    let curCity = homedata.curCity;
-    let longitude= homedata.longitude ;
-    let latitude = homedata.latitude;
-
-    list_ad = util.addUrl(list_ad,'ad_pic');
-    list_category = util.addUrl(list_category,'category_pic');
-
-    list_store_choice = util.addUrl(list_store_choice,'store_logo');
-    list_store_save = util.addUrl(list_store_save, 'store_logo');
-
-    that.setData({
-      list_ad,
-      list_category,
-      list_headlines,
-      list_store_choice,
-      list_store_save,
-      longitude,
-      latitude,
-      curCity,
-      weather
-    })
-  },
+  onLoad: function (option) {
   
-  //监听屏幕滚动 判断上下滚动
-
-  contentScroll: function (ev) {
-    console.log(ev);
-    let that = this;
-    if (that.data.isAdd) {
-      that.data.isAdd = false;
-      that.data.page++;
-      that.getMoreData(that.data.page);
-
+    let globalKey = wx.getStorageSync('globalKey');
+    if (globalKey.hasOwnProperty('newuser1') && app.globalData.newopenid1 != '' || globalKey.hasOwnProperty('newuser1') && globalKey.hasOwnProperty('newopenid1')) {
+      this.setData({ hasUser: true })
     }
-
-    
-  },
-  getMoreData: function (page,curCity){
-    let that=this;
-
-    let gram = this.returnGram();
-    wx.request({
-      url: app.globalData.url + '/api/mini_homepage/list_store_more',
-      method: "POST",
-      data: {
-        store_city: curCity || that.data.curCity,
-        latitude: that.data.latitude,
-        longitude: that.data.longitude,
-        page,
-        store_area: '',
-        timestamp: gram.timestamp,
-        process: gram.process,
-        request_object: 'mini_program',
-        limit: 5,
-      },
-      success: function (res) {
-        console.log('moredata', res.data)
-        if (res.data.status == '1') {
-          let newData = res.data.data
-
-          let stores=that.data.stores;
-
-
-          if (newData.length > 0) {
-            newData = util.addUrl(newData, 'store_logo');
-            if(page==1){
-              stores = newData
-            }else{
-              for(let i=0;i<newData.length;i++){
-                stores.push(newData[i])
-              }
-            }
-            that.data.isAdd=true
-            that.setData({
-              stores,
-              page,
-            })
-          }else{
-            wx.showToast({
-              title: '到底了哦！',
-            })
-          }
-          
-        }
-      }
-    })
-  },
-  // 获取滚动条当前位置
-  scrolltoupper: function (e) {
-    // console.log(e)
-    if (e.detail.scrollTop > 100) {
-      this.setData({
-        floorstatus: true
-      });
-    } else {
-      this.setData({
-        floorstatus: false
-      });
+    let hasPhone = false;
+    if (app.globalData.user_phone != '' || globalKey.hasOwnProperty('user_phone') && globalKey.user_phone != '') {
+      hasPhone = true;
     }
-  },
-  //回到顶部
-  toTop: function (e) {  // 一键回到顶部
     this.setData({
-      topNum: 0
-    });
+      hasPhone
+    })
+    app.getquery(app.globalData.query, globalKey)
   },
+  getPhoneNumber(e) {
+    let that = this;
+    app.getPhoneNumber(e, that, 2)
+  },
+  toIndex() {
+    let globalKey = wx.getStorageSync('globalKey')
+    if (app.globalData.query) {
+      // if (globalKey.hasOwnProperty("newuser1")) {
+      app.getquery(app.globalData.query, globalKey, 1)
+      // }else{
+      //   wx.hideLoading();
+      // }
+    }
+    // util.reLaunchindex();
+  },
+  getUserInfo(e) {
+    let that = this;
+    app.getUserInfo(e, that, 2)
+  },
+  onUnload: function () {
+    var that = this
+    setTimeout(function () {
+      that.setData({ isClose: true })
+    }, 200)
 
+  },
+  onHide: function () {
+    if (this.data.isClose) {
+      console.log('重新打开')
+    }
+  },
+  onShow: function () {
+  },
 })

@@ -93,14 +93,15 @@ Page({
   table_numbe: function (e) {
     let table_number = e.detail.value;
     this.data.table_number = table_number;
-    console.log(e, 94,this.data.table_number)
+    
   },
   payForWechat:function(){//微信支付
     let that=this
     let userInfokey = wx.getStorageSync('userInfokey');
     let globalKey = wx.getStorageSync('globalKey');
+    var store_info = wx.getStorageSync('store_info');
     let token = app.globalData.token || globalKey.token
-    var store_id = app.globalData.store_id || wx.getStorageSync('store_info').store_id;
+    var store_id = app.globalData.store_id || store_info.store_id;
     timestamp= Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString() + token;
     var hexMD5 = md5.hexMD5(val);
@@ -114,9 +115,10 @@ Page({
         timestamp: timestamp,
         process: hexMD5,
         store_id,
-        openid: app.globalData.openid || globalKey.openid,
+        openid: app.globalData.newopenid1 || globalKey.newopenid1,
         remark: that.data.userInput || '',
-        table_number: that.data.table_number ||'',
+        table_number: that.data.table_number || store_info.table_number||'',
+        people_number: that.data.people_number || store_info.people_number || '',
         payment_money,
       },
       method: 'POST',
@@ -202,17 +204,8 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
-    let store_info = wx.getStorageSync('store_info');
-    console.log(store_info)
-    if (res.from === 'button') {
-    }
-    return {
-      title: '转发',
-      path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_info.store_id + '&store_name=' + store_info.store_name,
-      success: function (res) {
 
-      }
-    }
+    app.onshare()
 
   },
 })

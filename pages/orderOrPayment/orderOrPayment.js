@@ -4,8 +4,7 @@ var md5 = require('../../utils/md5.js');
 var util = require('../../utils/util.js');
 var timestamp =0;
 var store_id='';
-var user_id = '';
-var openid = '';
+var user_id='';
 var token='';
 Page({
 
@@ -14,225 +13,114 @@ Page({
    */
   data: {
     titlename: '',
-    isUser:true,
-    isPhone:true,
+    isUser:false,
+    isPhone: false,
+    hasGoods:true,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let store_info = wx.getStorageSync('store_info') || [];
-    let titlename= options.store_name ;
-    let that=this;
-    // store_id = 2
-    store_id = options.store_id || store_info.store_id ;
-    if (options.openid){
-      openid = options.openid
-      user_id = options.user_id
-      token = options.token
+    console.log(options, 242424242424242424242424)
+    let that = this;
+    this.options = options;
+    let store_info = wx.getStorageSync('store_info');
+
+    var userInfo = wx.getStorageSync('userInfoKey');
+    var globalKey = wx.getStorageSync('globalKey');
+    if (globalKey.hasOwnProperty('user_id') && globalKey.user_id) {
+      user_id = globalKey.user_id;
+      token = globalKey.token;
+    } else {
+      this.showModal(this, app);
     }
+
     wx.getSystemInfo({
-      success: function(res) {
+      success: function (res) {
         console.log(res)
         that.setData({
-          containerH:res.screenHeight-80
+          containerH: res.screenHeight - 80
         })
       },
     })
+
+    let scene = util.praseStrEmpty(options.scene);
+    if (util.praseStrEmpty(options.store_id) != '') {
+      store_id = options.store_id;
+    } else {
+      store_id = options.store_id_new;
+    }
     this.setData({
-      titlename,
-      store_id
+      titlename: options.store_name || '',
+      store_id,
+      user_id,
+      token,
+      userInfo,
     })
+    this.getStoreData()
+  },
+  getStoreData(e){
+    let that=this;
+    let store_info = wx.getStorageSync('store_info');
+    let scene = util.praseStrEmpty(this.options.scene);
+    let store_id = this.data.store_id;
+    let index = util.praseStrEmpty(e) != '' ?  e.currentTarget.dataset.index:2;
+    
     if (store_info.store_id != store_id) {
-      let choosedList=[];
+      let choosedList = [];
       let order_info = [];
       wx.setStorageSync('choosedList', choosedList);
       wx.setStorageSync('order_info', order_info);
-      
-      store_info.store_id = store_id
-      // 店铺详情
-      wx.request({
-        url: app.globalData.url+'/api/store_detail/get_store_info_new',
-        data: {
-          store_id: store_id,
-          request_object: app.globalData.request_object,
-        },
-        method: 'POST',
-        header: {
-          'Content-Type': "application/x-www-form-urlencoded"
-        },
-        success: function (res) {
-          if (res.data.status == 1) {
-            console.log(res.data.data.store_info,50)
-            that.setData({
-              titlename: res.data.data.store_info.store_name
-            })
-            wx.setStorageSync('store_info', res.data.data.store_info)
-          } else {
-            wx.showToast({
-              title: '加载失败',
-              icon: 'none',
-              duration: 2000
-            })
-          }
-        },
-        fail: function () {
-          console.log("店铺详情请求失败");
-          wx.showToast({
-            title: '服务器响应失败',
-            icon: 'none',
-            duration: 3000,
-          })
-        },
-        complete: function () {
-          // complete
-        }
-      })
 
-      //商品列表
-      wx: wx.request({
-        url: app.globalData.url+'/api/store_detail/list_store_goods',
-        data: {
-          request_object: app.globalData.request_object,
-          store_id :store_id,
-          page: 1,
-          limit: 100
-        },
-        method: 'POST',
-        dataType: 'json',
-        responseType: 'text',
-        success: function (res) {
-          console.log('商品列表', res)
-          if (res.data.status == 1) {
-            let goodsItem = res.data.data;
-            for (let i = 0; i < goodsItem.length; i++) {
-              goodsItem[i].id = 'id' + i;
-              goodsItem[i].select_nums = 0;
-              let goods = goodsItem[i].list_goods;
-              goods = util.addUrl(goods, 'goods_pic')
-              for (let j = 0; j < goods.length; j++) {
-                goods[j].num = 0;
+      store_info.store_id = store_id;
+      if (util.praseStrEmpty(this.options.store_id) != '') {
+        store_info.table_number = '';
+        scene = 1;
+      } else {
+        store_info.scene = scene;
+        store_info.table_number = this.options.table_number;
+      }
 
-              }
-            }
-            // console.log(goodsItem)
-            wx.setStorageSync('goodsItem', goodsItem)
+      wx.setStorageSync('store_info', store_info);
+      // 店铺详情//商品列表
+      util.storeInfo(that, store_id, user_id, scene, app, index);
+    } else {
 
-          } else {
-            wx.showToast({
-              title: '营业日期加载失败',
-              icon: 'none',
-              duration: 2000
-            })
-          }
-        },
-        fail: function (res) {
-          wx.showToast({
-            title: '服务器响应失败',
-            icon: 'none',
-            duration: 3000,
-          })
-        },
-        complete: function (res) { },
-      })
+      store_info.scene = scene;
+      store_info.table_number = this.options.table_number;
+      if (this.options.hasOwnProperty("scene")) {
+
+        util.storeInfo(that, store_id, user_id, scene, app, index);
+      }
     }
+  },
+  handleContact(e){
+    console.log(e,153)
   },
   toHome:function(){
 
     let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
     let prevPage = pages[pages.length - 2];
+    console.log(prevPage,86666)
     if (prevPage) {
       wx.navigateBack({
         delta: 1  // 返回上一级页面。
       })
     } else {
-      wx.reLaunch({
-        url: '/pages/index/index',
-        //如果已经评价成功了的话就把评论按钮隐藏
+      wx.switchTab({
+        url: '../home/index',
       })
     }
   },
-
+  getPhoneNumber: function (e) {
+    let that = this;
+    app.getPhoneNumber(e,that,3)
+  },
+  
   getUserInfo: function(e){
     let that = this;
-    let userInfoKey = wx.getStorageSync('userInfoKey') || [];
-    var globalKey = wx.getStorageSync('globalKey');
-    
-    timestamp=Date.parse(new Date());
-    var val = 'fanbuyhainan' + timestamp.toString();
-    var hexMd5 = md5.hexMD5(val);
-    if (!user_id){
-    
-      wx.getUserInfo({
-        success(res) {
-          console.log("获取用户信息成功", res,171)
-          if ('getUserInfo:ok' == res.errMsg) {
-            var userinfo = res.userInfo;
-            
-            wx.request({
-              url: app.globalData.url+'/api/mini_program/login',
-              data: {
-                request_object: app.globalData.request_object,
-                nickname: userinfo.nickName,
-                sex: userinfo.gender,
-                headimgurl: userinfo.avatarUrl,
-                country: userinfo.country,
-                city: userinfo.city ,
-                province: userinfo.province,
-                unionid: '',
-                nickname: userinfo.nickName,
-                openid: app.globalData.openid || globalKey.openid || openid ,
-                timestamp,
-                process: hexMd5,
-
-              },
-              method: 'POST',
-              success: function (res) {
-                
-                if (res.data.status == 1) {
-                  wx.hideLoading();
-
-                  userInfoKey.userinfo = userinfo;
-                  var globalKey = wx.getStorageSync('globalKey');
-                  globalKey.user_id = res.data.data.user_id;
-                  globalKey.token = res.data.data.token;
-                  wx.setStorageSync('globalKey', globalKey)
-                  that.setData({
-                    isUser: false,
-                    user_id:res.data.data.user_id,
-                    token: res.data.data.token
-                  })
-                  wx.showToast({
-                    title: '登录成功',
-                  })
-                }
-
-              }
-            })
-          }
-        },
-        fail(res) {
-          console.log("获取用户信息失败", res)
-          wx.showModal({
-            title: '请授权',
-            content: '为了让您更好的体验点单服务，请授权！！！',
-          })
-        }
-      })
-    }
-   
-   
-
-  
-  
-  
-  
-  },
-  showLoading:function(e){
-    wx.showLoading({
-      title: '加载中',
-    })
+    app.getUserInfo(e, that,3)
   },
   // 打开权限设置页提示框
   showSettingToast: function (e) {
@@ -257,6 +145,7 @@ Page({
 
   },
   gotoPay() {
+    console.log(wx.getStorageSync('store_info'))
     timestamp = Date.parse(new Date());
     var val = 'fanbuyhainan' + timestamp.toString();
     var hexMd5 = md5.hexMD5(val);
@@ -285,20 +174,19 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    let globalKey = wx.getStorageSync('globalKey');
-    console.log(user_id)
-    if (globalKey.user_id || user_id) {
-      this.setData({
-        isPhone: false,
-        isUser: false
-      })
-    } else {
-      this.setData({
-        isUser: true
-      })
-    }
+    
   },
-
+  showModal() {
+    let me = this;
+    util.showModal(me,app);
+  },
+  closeshowModal(e){
+    this.setData({
+      isPhone: false,
+      isUser: false,
+      isshowModal:true,
+    }) 
+  },
   /**
    * 生命周期函数--监听页面隐藏
    */

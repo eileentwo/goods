@@ -1,48 +1,43 @@
 
 <import src="/template/wxml/waterfall.wxml" />
-<template is="head" data="{{titlename}}"></template>
-<form bindsubmit="formSubmit">
-    <view container>
-        <image class="storeInco" src="{{store_logo}}"></image>
-        <text class="storeName">{{store_name}}</text>
-        <!-- 星级评价 -->
-        <block wx:for="{{stars}}">
-            <image class="star-image" style="left: {{item*80}}rpx" src="{{key > item ?(key-item == 0.5?                             halfSrc:selectedSrc) : normalSrc}}">
-                <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
-                <view class="item" style="left:30rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
-            </image>
-            <text class="score">{{key}}分</text>
-        </block>
-        <view>
-        <!-- tags标签 -->
-            <view class='tagArea'>
-                <block wx:for="{{selectall}}" wx:key="{{this}}">
-                    <text class="{{item.isSelect?'active':'select'}}" bindtap='select' data-index="{{index}}">{{item.title}}</text>
-                </block>
-            </view>
-            <!-- <button bindtap="submit">dianji</button> -->
+<template is="head" data="{{titlename,redBack}}"></template>
+<image class="back" src="../../images/back.png" mode="aspectFit" bindtap="navigateback"></image>
 
-            <textarea class="moreEvaluate" placeholder="请输入内容..." maxlength="99" placeholder-style="color:#b3b3b3;font-size:28rpx;" bindinput="handleContentInput" value="{{content}}"></textarea>
-            <view class=" tongji">
-                {{contentCount}}/99</view>
-            <view class="upImgWrap">
-                <view class="uploadImg" bindtap="chooseImage" wx:if="{{images.length < 9}}">
-                    <image class="upImg" src="../../images/eva/camera.png"></image>
-                    <text class="upText">上传图片</text>
-                </view>
-                <view class="imgContent">
-                    <view wx:for="{{images}}" wx:key="*this">
-                        <scroll-view scroll-x>
-                            <image class="uploadImg1" src="{{item}}" data-id="{{index}}" mode="aspectFill" bindtap="previewIamge"></image>
-                            <image class="deImg1" src="../../images/eva/error.png" mode="aspectFill" data-id="{{index}}" bindtap="deleteImage"></image>
-                        </scroll-view>
-                    </view>
-                </view>
-            </view>
-            <checkbox-group bindchange="anonymous">
-            <checkbox class="anonymousText"  value="1" >是否匿名</checkbox>
-            </checkbox-group>
-            <button class="release" type="primary" form-type="submit">发布</button>
-        </view>
+<view class="wrap">
+  <view class="flexbox eva_store_info">
+    <image class="storeInco" src="{{store_logo?store_logo:'../../images/noImg.png'}}" mode="aspectFill"></image>
+    <view class="storeName">{{store_name}}</view>
+  </view>
+
+  <view class="stars flexbox spaceBetween" bindtap="selectStar">
+    <image wx:for='{{stars}}' wx:key='index'  src="{{isDes>item.score-1 ?'../../images/starR.png':'../../images/star.png'}}" mode="aspectFit" data-index="{{item.score}}"></image>
+  </view>
+  <view class="describe">
+    <text  wx:for='{{stars}}' wx:key='index' wx:if="{{isDes==item.score}}">{{item.evaluate}}</text>
+  </view>
+  <view class="eva_tags ">
+    <view class="flexbox spaceBetween">
+      <text wx:for='{{tags}}'  class="{{item.ischoice?'active':''}}"  bindtap="choice" wx:for-index='index' data-tag_id="{{item.tag_id}}"  data-index="{{index}}" >{{item.tag_name}}</text>
     </view>
-</form>
+  </view>
+  <view class="textarea">
+    <textarea placeholder="请输入您的评价" placeholder-class="placeholder" value="{{textareaValue}}" maxlength="100" bindinput="handleContentInput"></textarea>
+    <view>{{contentCount}}/100</view>
+  </view>
+  <view class="upLoadImg flexbox">
+    <view class="upLoad flexbox" bindtap="chooseImage">
+       <image src="../../images/camera.png" mode="aspectFit"></image>
+       <view>上传图片</view>
+    </view>
+    <view class="images" wx:for="{{images}}" wx:key="index" wx:for-index='index'>
+      <image class="error" src="../../images/eva/error.png" mode="aspectFit" data-index="{{index}}"   bindtap="deleteImage"></image>
+      <image src="{{item}}" mode="aspectFit" bindtap="previewIamge"></image>
+    </view>
+  
+  </view>
+  <view class="anonymous flexbox"  bindtap="anonymous">
+    <view><image wx:if="{{is_anonymous==1}}" class="error" src="../../images/eva/checked.png" mode="aspectFit"></image></view> 匿名评价
+    
+  </view>
+  <view class="button" bindtap="sentData" data-onOff="{{onOff}}">发布</view>
+</view>

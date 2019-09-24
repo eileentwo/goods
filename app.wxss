@@ -1,4 +1,16 @@
 /**app.wxss**/
+.usermask{
+  position: fixed;
+  z-index: 99;
+  background: transparent;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+.phonemask{
+  z-index: 999
+}
 .container {
   height: 100%;
   display: flex;
@@ -9,6 +21,7 @@
 } 
 .scrollBox{
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 /* 隐藏滚动条 */
 
@@ -32,6 +45,10 @@
   border-radius: 15rpx;
 
 }
+
+.spaceBetween{
+  justify-content: space-between
+}
 /* 下边框为0 */
 .nobottomB{
   border-bottom:0;
@@ -47,4 +64,11 @@
 .navigator-hover {
   background-color:transparent;
 
+}
+
+.nomore-tip image{
+  width: 60rpx;
+  height: 60rpx;
+  margin: 0 auto;
+ 
 }

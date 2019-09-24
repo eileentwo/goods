@@ -16,7 +16,7 @@
             <view class="remarks flexbox">
             
               <text>备注</text>
-              <textarea class="remarksContent" maxlength="25"  placeholder-class="place-holder"  placeholder="请填写备注信息"  value="{{userInput}}" bindinput="handleContentInput">{{remarks}}</textarea>
+              <textarea  class="remarksContent" maxlength="25"  placeholder-class="place-holder"  placeholder="请填写备注信息"  value="{{userInput}}" bindinput="handleContentInput">{{remarks}}</textarea>
             </view>
             <view bindtap="payForWechat">
               <view class="mask" wx:if="{{isMask}}"></view>

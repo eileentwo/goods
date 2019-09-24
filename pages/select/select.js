@@ -16,6 +16,7 @@ Page({
     isAdd: true,//是否下拉增加
     selectNum:1,
     stores:[],
+    nearList:[],
     nomore:1,
   },
 
@@ -23,11 +24,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(options)
+    console.log(options,'select')
     let city = options.city;
 
     let nearList = wx.getStorageSync('nearList') ;
-    
+    console.log(nearList)
     let that=this;
     if (city) {
       this.data.city = city;
@@ -37,7 +38,9 @@ Page({
       this.setData({ city, nearList});
       this.hotList(city);
     }
-
+    if (options.store_area !=''){
+      this.data.store_area = options.store_area
+    }
     wx.getSystemInfo({
       success: function(res) {
         console.log(res)
@@ -81,6 +84,9 @@ Page({
             hotList:res.data.data
           })
         }
+      },fail(){
+
+        app.showMind();
       }
     })
   },
@@ -124,6 +130,7 @@ Page({
         process,
         store_city,
         store_name,
+        store_area:that.data.store_area||'',
         page: selectNum ,
         longitude: that.data.longitude||'',
         latitude: that.data.latitude|| '',
@@ -154,15 +161,19 @@ Page({
               selectNum,
             })
           }else{
-            that.data.nomore=2
-            wx.showToast({
-              title: '没有数据了哦！',
-            })
-            if (selectNum==1){
+            if (selectNum == 1) {
+              wx.showToast({
+                title: '没有相关店铺哦！',
+              })
               that.setData({
                 noResult: false,
                 result: false,
                 nomore: 2
+              })
+            }else{
+              that.data.nomore = 2
+              wx.showToast({
+                title: '没有数据了哦！',
               })
             }
           }
@@ -216,15 +227,8 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
-    if (res.from === 'button') {
-    }
-    return {
-      title: '转发',
-      path: 'pages/index/index',
-      success: function (res) {
 
-      }
-    }
+    app.onshare()
 
   },
 

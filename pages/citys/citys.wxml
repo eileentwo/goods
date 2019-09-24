@@ -25,8 +25,8 @@
   <view class="location ">
       <view class="hotcity-common thisCity">当前定位</view>
       <view class="thisCityName flexbox">
-        <view><image mode="aspectFit" src="../../images/local.png"></image> {{city}}</view>
-        <view class="change_local" bindtap="changeLocal">
+        <view catchtap="getLocal"><image mode="aspectFit" src="../../images/local.png"></image> {{city}}</view>
+        <view class="change_local" wx:if="{{is_show==1}}" bindtap="changeLocal">
           <view class="fz24">切换区县 <image  mode="aspectFit" src="../../images/bottomg.png" hidden="{{!localH}}"></image><image  mode="aspectFit" src="../../images/topG.png" hidden="{{localH}}"></image></view>
         </view>
       </view>

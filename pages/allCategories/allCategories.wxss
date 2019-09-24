@@ -9,7 +9,7 @@
 
 .selection{
   width: 100%;
-  padding: 0 0 40rpx;
+  padding: 20rpx 0 40rpx;
   color: #FF2041;
    background-color: #fff;
 }
@@ -55,6 +55,25 @@
 .allSelect{
   color: #808080;
 }
+.result{
+  position: fixed;
+  z-index: 9;
+  left: 0;
+  top: 130px;
+  width: 100%;
+  padding:0 20rpx 20rpx;
+  background-color: #fff;
+  height: 100%;
+}
+.result navigator{
+  border-bottom: 1px solid #eee;
+  color: #FF2041;
+  padding: 24rpx 0;
+  width: 100%;
+text-align: left;
+
+}
+
 .scrollView{
   background-color: #eee;
   padding:0  25rpx 25rpx 25rpx;
@@ -71,7 +90,7 @@
   padding: 10rpx 0;
   white-space: nowrap;
   color: #666666;
-  border-bottom: 4rpx solid transparent;
+  border-bottom: 2px solid transparent;
 }
 .nav_content .navactive view{
   color:#FF2041;
@@ -89,10 +108,11 @@
 .categoriesLi{
   background-color: #fff;
   width: 173rpx;
-  line-height: 80rpx;
+  line-height: 34rpx;
   text-align: center;
   color: #666666;
   font-size: 30rpx;
+  padding: 23rpx 0;
   margin:0 2rpx 2rpx 0;
 }
 

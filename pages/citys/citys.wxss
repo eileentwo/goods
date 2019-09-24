@@ -1,8 +1,10 @@
  @import "/template/wxss/waterfall.wxss"; 
-
+page{
+  overflow-y: hidden;
+}
 .searchLetter {
   position: fixed;
-  top: 408rpx;
+  top: 400rpx;
   right: 0;
   bottom: 0;
   width: 80rpx;
@@ -103,15 +105,18 @@
 }
 .order_local{
   width: 650rpx;
-  padding:20rpx 40rpx 20rpx 24rpx;
+  padding:10rpx 40rpx 20rpx 24rpx;
   flex-wrap: wrap;
+  max-height: 420rpx;
+  overflow-y: scroll;
+  margin-top: 20rpx;
 }
 .order_local view{
   width: 160rpx;
   height: 60rpx;
   font-size: 30rpx;
   line-height: 60rpx;
-  margin:0 30rpx 30rpx 0;
+  margin:0 52rpx 30rpx 0;
   text-align: center;
   border:1px solid rgba(238,238,238,1);
   border-radius:5px;

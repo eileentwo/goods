@@ -22,7 +22,7 @@
 
 .selection{
   width: 100%;
-  padding-bottom:20rpx;
+  padding:10rpx 0 20rpx;
   color: #fff;
    background-color:#FF2041;
 }
@@ -52,7 +52,7 @@
  /* 条件 */
  .conditions{
    position: fixed;
-   top: 160rpx;
+   top: 70px;
    left: 0;
    z-index: 9;
    background-color: #fff;
@@ -84,7 +84,7 @@
  }
  .fruit{
    position: absolute;
-   top: 80rpx;
+   top: 168rpx;
    left: 0;
    width: 100%;
    z-index: 9999;
@@ -99,12 +99,25 @@
    line-height: 2.8;
    color: #0A0A0A;
  }
+ .morec{
+   height: 40rpx;
+   border-top: 1px solid rgba(245, 245, 245);
+ }
  .categories_list_left{
    text-indent: 30rpx;
-   width:600rpx;
+   background-color: #f5f5f5;
+ }
+ .categories_list_left view,
+ .categories_list_right view{
+   border-bottom: 1px solid rgba(245, 245, 245)
+ }
+ .categories_list_left nob,
+ .categories_list_right nob{
+   border-bottom: 0;
  }
  .categories_list scroll-view{
    height: 514rpx;
+   text-indent: 1em;
  }
  .categories_list scroll-view text{
    color: #939090;
@@ -115,3 +128,14 @@
  .categories_list scroll-view .active text{
    color: #FD0D1A;
  }
+
+ 
+.noStore{
+  width: 100%;
+  background-color: #fff;
+  text-align: center;
+}
+.noStore image{
+  width: 60%;
+  margin: 100rpx auto 40rpx;
+}

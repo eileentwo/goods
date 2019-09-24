@@ -19,24 +19,24 @@
           <text class="storePrice">门店价:¥{{goodsDetails.goods_price}}</text>
           <text class="remainder">剩余{{goodsDetails.stock_count}}份</text>
           <text class="range"></text>
-          <text class="line"></text>
+          
       </view>
   
     </block>
 
-  <view class="wrapa" wx:if="{{goodsDetails.goods_remark}}">
+  <view class="wrapa" wx:if='{{goodsDetails.goods_desc}}'>
       <view class="proDetails">商品详情</view>
-      <view class="detailsName">{{goodsDetails.name}}</view>
-      <view class="remark">备注</view> 
-      <block>
+      <view class="detailsName">{{goodsDetails.goods_desc}}</view>
+      <view wx:if="{{goodsDetails.goods_remark}}">
+        <view class="remark" >备注</view> 
         <view class="productContent">{{goodsDetails.goods_remark}}</view><br/>
         <view class="remarkWrap">
             <view class="productNameNum">田园沙拉冰淇淋（2份）</view>
-            <view class="productNameNum">盐酥鸡（1份）</view>
-            <view class="productNameNum">饮料(2杯)</view>
+            <!-- <view class="productNameNum">盐酥鸡（1份）</view>
+            <view class="productNameNum">饮料(2杯)</view> -->
         </view> 
-      </block>
-      <view class="parting"></view>
+      </view>
+      <!-- <view class="parting"></view> -->
   </view>
   
   <view class="evaluatebox" wx:if="{{list_evaluate1}}">

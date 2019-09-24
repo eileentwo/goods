@@ -1,5 +1,12 @@
 
  @import "/template/wxss/waterfall.wxss"; 
+ .header{
+   margin-bottom: -1px;
+ }
+ .header view{
+   background: #FD0D1A;
+ }
+
 .wrap{
     position: relative;
     width: 100%;
@@ -7,13 +14,13 @@
     background: #eeeeee;
     overflow-x: hidden;
     overflow-y: scroll;
+    font-size:30rpx;
 }
 .topBackground{
     position: absolute;
     width: 100%;
     height: 190rpx;
-    background:linear-gradient(0deg,#FFF94D1E -100%,rgba(249,77,30,1.58) 100%);
-    opacity:1;
+    background:linear-gradient(180deg,rgba(253,13,26,1),rgba(255,39,78,1));
 }
 .paidText{
     padding-top: 41rpx;
@@ -22,284 +29,167 @@
     font-size: 36rpx;
 }
 .storePanel{
-    position: absolute;
-    top: 120rpx;
-    left: 24rpx;
-    width:702rpx;
-    height:168rpx;
-    background:rgba(255,255,255,1);
-    border-radius:10rpx;
-    /* border: 1rpx solid skyblue; */
-    z-index: 1000;
+  position: absolute;
+  top: 120rpx;
+  left: 24rpx;
+  width:672rpx;
+  height:132rpx;
+  line-height: 132rpx;
+  padding: 18rpx 0 18rpx 30rpx;
+  color: #939090;
+  font-size: 24rpx;
+  background:rgba(255,255,255,1);
+  border-radius:10rpx;
+  z-index: 1000;
 }
-.storeInco{
-    position: relative;
-    top: 17rpx;
-    left: 30rpx;
-    width:133rpx;
-    height:133rpx;
-    border-radius:5rpx;
-    /* border: 1rpx solid blue; */
+.storePanel_detail{
+  line-height: 42rpx;
+  width: 390rpx;
+
+}
+.storePanel image{
+  width:132rpx;
+  height:132rpx;
+  border-radius:6rpx;
+  margin-right: 12rpx;
 }
 .storeName{
-    position: absolute;
-    top: 24rpx;
-    left: 175rpx;
-    font-size:30rpx;
-    color:rgba(50,50,50,1);
-}
-.useTime{
-    position:  absolute ;
-    top: 73rpx;
-    left: 174rpx;
-    font-size:24rpx;
-    color:#939090;
-}
-.enter,.enterInco{
-    position: absolute;
-    top: 72rpx;
-    right: 71rpx;
-    font-size: 24rpx;
-    color: #939090;
-}
-.enterInco{
-    top: 60rpx;
-    right: 30rpx;
-    font-size: 40rpx;
-}
-.timeOut{
-    position: absolute;
-    top: 119rpx;
-    left: 175rpx;
-    font-size: 24rpx;
-    color: #939090;
-}
-.timeStyle{
-    color: #f94d1e;
-}
-.packagePanel{
-    position: absolute;
-    top: 310rpx;
-    left: 24rpx;
-    width:702rpx;
-    height:500rpx;
-    background:rgba(255,255,255,1);
-    border-radius:10rpx;
-    /* border: 1rpx solid darkorange; */
-}
-.ainco,.ainco1,.ainco2{
-    position: absolute;
-    top:25rpx;
-    left: 24rpx;
-    color: #f94d1e;
-    font-weight: bold;
-    font-size: 40rpx;
-}
-/* .ainco1{
-    top:24rpx;
-}
-.ainco2{
-    top: 2440rpx;
-} */
-.all{
-    position: absolute;
-    top:97rpx;
-    left: 30rpx;
-    color: #939090;
-    font-size: 30rpx;
-}
-.count{
-    font-size: 24rpx;
-    color: #939090;
-}
-.amount{
-    position: absolute;
-    top: 156rpx;
-    right: 30rpx;
-    color: #323232;
-    
-}
-.lineA{
-    position: absolute;
-    top: 220rpx;
-    left: 29rpx;
-    width:643rpx;
-    height:2rpx;
-    background:rgba(27,27,27,1);
-    z-index: 1000;
-    opacity:0.05;
-}
-.proDetails,.evaluateText,.ownBusiness{
-    position: absolute;
-    top:35rpx;
-    left: 49rpx;
-    color: #111111;
-    font-size: 30rpx;
+  font-size: 30rpx;
+  color: #323232;
 }
 
-.evaluateText{
-    top: 35rpx;
+.timeStyle{
+    color: #FF274E;
 }
-.ownBusiness{
-    top: 2450rpx;
+.storePanel_detail .mtop{
+  margin-top: 20rpx;
+  line-height: 48rpx;
 }
-.detailsName{
-    position: absolute;
-    top: 120rpx;
-    left: 30rpx;
-    color: #323232;
-    font-size: 30rpx;
+.heightline{
+  width: 100%;
+  height: 310rpx;
 }
-.remark{
-    position: absolute;
-    top:227rpx;
-    left: 24rpx;
-    color: #939090;
-    font-size: 30rpx;
+.radiusbox{
+  width: 642rpx;
+  padding: 20rpx 30rpx ;
 }
-.productContent{
-    position: absolute;
-    top: 280rpx;
-    left: 24rpx;
+.code{
+  color: #111111;
+  line-height: 40rpx;
 }
-.remarkWrap{
-    position: absolute;
-    top:325rpx;
-    left: 24rpx;
-    width:672rpx;
-    height: 150rpx;
-    /* border: 1rpx solid red; */
-    overflow-y: scroll;
+.code_info{
+  border-right: 1px solid rgba(0, 0, 0, .5);
+  width: 520rpx;
 }
-.productNameNum{
-    margin-top: 10rpx;
-    font-size: 30rpx;
-    color: #323232;
-    display: block;
-    width: 600rpx;
-    height: 40rpx;
+.leftline{
+  display: inline-block;
+  width: 6rpx;
+  height: 40rpx;
+  background:rgba(249,77,30,1);
+  vertical-align: middle;
+  margin-right: 16rpx;
 }
-.parting{
-    position: absolute;
-    left: 0;
-    top: 1366rpx;
-    width:750rpx;
-    height:10rpx;
-    background:rgba(238,238,238,1);
+.code text{
+  color: #939090;
+  font-size: 24rpx;
+  margin-left: 30rpx;
 }
-.addMessagePanel{
-    position: absolute;
-    top:837rpx;/*837*/
-    left: 24rpx;
-    width:702rpx;
-    height:243rpx;
-    background:rgba(255,255,255,1);
-    border-radius:10rpx;
+.codenum{
+  font-size: 40rpx;
+  margin-top: 40rpx;
 }
-.addDeskNum,.addRemark{
-    position: absolute;
-    top: 47rpx;
-    left: 29rpx;
-    font-size: 30rpx;
-    color: #323232;
+
+.code .mode{
+  width: 96rpx;
+  height: 96rpx;
+  margin-top: 16rpx;
 }
-.addRemark{
-    top: 166rpx;
+.code .aspectFit{
+  width: 96rpx;
+  height: 96rpx;
 }
-.addInput{
-    position: absolute;
-    top: 45rpx;
-    left: 109rpx;
-    width: 560rpx;
-    height: 40rpx;
-    line-height: 40rpx;
-    font-size: 28rpx;
-    /* border: 1rpx solid red; */
+
+
+.detail_title{
+  color: #111;
+  padding:6rpx 0 20rpx;
 }
-.addRemarkTextarea{
-    position: absolute;
-    top: 169rpx;
-    left: 109rpx;
-    width: 560rpx;
-    /* height: 40rpx; */
-    /* line-height: 40rpx; */
-    font-size: 28rpx;
-    /* border: 1rpx solid red; */
-    overflow: hidden;
+.order_sec_title{
+  color:rgba(147,144,144,1);
 }
-.partingLine{
-    position: absolute;
-    top: 121rpx;
-    left: 29rpx;
-    width:643rpx;
-    height:1rpx;
-    background:rgba(27,27,27,1);
-    opacity:0.1;
+.pink{
+  font-weight: 500;
 }
-.billingDetailsPanel{
-    position: absolute;
-    top:1105rpx;/*837*/
-    left: 24rpx;
-    width:702rpx;
-    height:599rpx;
-    background:rgba(255,255,255,1);
-    border-radius:10rpx;
+.order_detail{
+  line-height: 2;
 }
-.moneyDetailsWrap{
-    position: absolute;
-    top: 114rpx;
-    width:702rpx;
-    height: 366rpx;
-    overflow-y: scroll;
-    /* border: 3rpx solid darkorange; */
+.order_detail_content text{
+  color: #939090;
+  font-size: 24rpx;
+  margin-left: 6rpx;
 }
-.moneyDetails{
-    position: relative;
-    /* top: 10rpx; */
-    left: 31rpx;
-    width: 643rpx;
-    height:70rpx;
-    border-bottom: 1rpx solid #f2f2f2;
-    font-size: 30rpx;
-    color: #737370;
-    line-height: 60rpx; 
+.money_detail_content{
+  line-height: 78rpx;
+  color: #737370;
+  padding-bottom:  30rpx;
 }
-.money{
-    padding-left:380rpx;
-    color: #f94d1e;
+.money_item{
+  border-bottom: 1px solid rgba(2,2,2,.05);
 }
-.actualPay{
-    position: absolute;
-    top: 515rpx;
-    left: 31rpx;
-    font-size: 30rpx;
-    color:rgba(17,17,17,1);
-    font-weight: 500;
+.other_item {
+  line-height: 72rpx;
+  color: #939090;
 }
-.actualMoney{
-    position: absolute;
-    top: 506rpx;
-    left: 535rpx;
-    font-size: 36rpx;
-    color: #f94d1e;
-    font-weight: 500;
-    /* width: 50rpx;height: 40rpx;
-    border: 1rpx solid darkblue; */
+.other_item text{
+  color:#666;
+}
+
+.other_item .blockw {
+  display: block;
+  max-width: 450rpx;
+  text-align: left;
+}
+.button{
+  display: inline-block;
+  vertical-align: text-top;
+  margin-left: 40rpx;
+  font-size: 22rpx;
+  width:70rpx;
+  height:36rpx;
+  line-height: 36rpx;
+  text-align: center;
+  border:1px solid rgba(229,229,229,1);
+}
+.order_button{
+  justify-content: flex-end;
 }
 .payForWechat,.cancleOrder{
-    position: absolute;
-    top: 1735rpx;
-    right: 31rpx;
-    width:178rpx;
-    height:81rpx;
-    background-color: #f94d1e;
-    border-radius:10rpx;
-    text-align: center;
-    line-height: 81rpx;
-    color: #ffffff;
-    font-size: 30rpx;
+  width:178rpx;
+  height:80rpx;
+  background-color:  #FB953E;
+  border-radius:10rpx;
+  text-align: center;
+  line-height: 80rpx;
+  color: #ffffff;
+  margin:0 24rpx 30rpx;
 }
-.cancleOrder{
-    right: 224rpx;
-    background-color: #FB953E;
+.payForWechat{
+  background-color: #FF274E;
+}
+/* 桌号 */
+.remark .order_detail_content{
+  padding: 26rpx 0 ;
+  border-bottom: 1px solid #e1e1e1;
+}
+.remark_textarea .clear{
+  width: 32rpx;
+  height: 32rpx;
+}
+.remark_input,
+.remark_textarea{
+  width:560rpx;
+}
+.inputRemarks {
+  width: 560rpx;
+  height: 40rpx;
 }

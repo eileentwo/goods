@@ -4,7 +4,7 @@
 		"ignore": []
 	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
@@ -21,9 +21,9 @@
 		}
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.7.3",
+	"libVersion": "2.8.2",
 	"appid": "wxa556a62b908f7479",
-	"projectname": "shb2.0",
+	"projectname": "yiluson",
 	"cloudfunctionTemplateRoot": "",
 	"debugOptions": {
 		"hidedInDevtools": []
@@ -48,8 +48,30 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
-			"list": []
+			"current": 1,
+			"list": [
+				{
+					"id": 0,
+					"name": "pages/index/index",
+					"pathName": "pages/index/index",
+					"query": "",
+					"scene": 1011
+				},
+				{
+					"id": 1,
+					"name": "pages/index/index",
+					"pathName": "pages/index/index",
+					"query": "q=AIMaggPfQkJjSp7hlINkfL3LSJd9wHLUNOycAauIYnNffIvy234yuO+/gfKYT3vcVGeL4IqDQZ9pSEmXMe9KFA==",
+					"scene": 1011
+				},
+				{
+					"id": -1,
+					"name": "pages/index/index",
+					"pathName": "pages/index/index",
+					"query": "",
+					"scene": 1007
+				}
+			]
 		}
 	}
 }

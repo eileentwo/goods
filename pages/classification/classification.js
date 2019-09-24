@@ -2,6 +2,7 @@
 var app = getApp();
 var util = require('../../utils/util.js');
 var md5 = require('../../utils/md5.js');
+var amap = require('../../utils/amap-wx.js');
 Page({
 
   /**
@@ -29,6 +30,7 @@ Page({
     zactiveIndex: 0,
     isLoad:false,
     isOk:true,
+    noResult:true,
   },
 
   /**
@@ -36,6 +38,9 @@ Page({
    */
   onLoad: function (options) {
     console.log(options, 'classif')
+
+    
+
     let that = this;
     let redBack = false;
     let is_save = false;
@@ -43,7 +48,9 @@ Page({
     let titlename = '';
     let category_name = '';
 
-    if (options.category_name == '省到爆' || options.category_name == '精选') {
+    // this.getSet();
+    
+    if (options.category_name == '省到爆' || options.category_name == '小鹿精选') {
       redBack = true;
       if (options.category_name == '省到爆') {
         is_save = true
@@ -56,13 +63,12 @@ Page({
       titlename = '分类';
       category_name = options.category_name;
     }
-
-
-
+    console.log()
     that.setData({
-      latitude: options.latitude,
+      store_city: options.store_city, 
+      store_area: options.store_area,
       longitude: options.longitude,
-      store_city: options.store_city,
+      latitude: options.latitude,
       titlename,
       category_name,
       city: options.store_city,
@@ -73,14 +79,13 @@ Page({
       success: function (res) {
         that.setData({
           contentH: res.screenHeight,
-          fruitH: res.screenHeight - 460,
+          fruitH: res.screenHeight - 300,
           loadingmaskH: res.screenHeight - 80,
+          noStoreH: res.screenHeight - 300,
         })
       },
     })
-    wx.showLoading({
-      title: '加载中',
-    })
+    app.showMind();
 
     let arr = this.returnArr();
 
@@ -91,9 +96,11 @@ Page({
       that.data.store_url = arr[0].store_url;
     } else {
       console.log(61)
-      arr[0].store_url = 'mini_program/list_store';
+      arr[0].store_url = 'nearby/list_store_new';
       arr[0].category_id = options.category_id;
+      arr[0].sec_category_id = options.sec_category_id;
       that.data.category_id = options.category_id;
+      that.data.sec_category_id = options.sec_category_id;
       that.data.store_url = arr[0].store_url;
     }
 
@@ -105,13 +112,108 @@ Page({
 
     that.getCate('list_sort', 3);//获取智能分类筛选
   },
- 
+  getSet(){
+    let that=this;
+    wx.getSetting({
+      success(res) {
+        console.log(res, !res.authSetting['scope.userLocation'])
+        if (!res.authSetting['scope.userLocation']) {
+          wx.authorize({
+            scope: 'scope.userLocation',
+            success(res) {
+              that.getLocal();
+            }
+          })
+
+        } else {
+
+          that.getLocal();
+        }
+      }
+    })
+  },
+  getLocal: function () {
+    let that = this; 
+    app.showMind();
+    wx: wx.getLocation({
+      type: 'gcj02',
+      altitude: true,
+      success: function (res) {
+        console.log(res, 47)
+        if (res.longitude) {
+          var myAmapFun = new amap.AMapWX({ key: 'd909b59416287f4eeecfd7f57d4251c4' });
+          myAmapFun.getRegeo({
+            location: '' + res.longitude + ',' + res.latitude + '',
+            success: function (data) {
+              //成功回调
+              if (data.length > 0) {
+
+                let city = data[0].regeocodeData.addressComponent.city;
+                let store_area = data[0].regeocodeData.addressComponent.district;
+                let store_street = data[0].regeocodeData.addressComponent.streetNumber.street + data[0].regeocodeData.addressComponent.streetNumber.number;
+                let re = new RegExp("市");
+                city = city.replace(re, "");
+                
+                that.setData({
+                  city, longitude: res.longitude, latitude: res.latitude, store_city: city, store_area, 
+                })
+                
+                let globalKey = wx.getStorageSync('globalKey');
+                globalKey.city = city;
+                wx.setStorageSync('globalKey', globalKey);
+              }
+            },
+            fail: function (info) {
+              //失败回调
+
+            }
+          })
+        }
+
+      },
+      fail: function (res) {
+        console.log(res, 65)
+        //判断是否获得了用户地理位置授权
+        wx.getSetting({
+          success: (res) => {
+            if (!res.authSetting['scope.userLocation'])
+              that.openConfirm()
+          }
+        })
+
+      },
+      complete: function (res) { },
+    })
+
+  },
+  openConfirm() {
+    wx.showModal({
+      content: '检测到您没打开一鹿省的定位权限，是否去设置打开？',
+      confirmText: "确认",
+      cancelText: "取消",
+      success: function (res) {
+        console.log(res);
+        //点击“确认”时打开设置页面
+        if (res.confirm) {
+          console.log('用户点击确认')
+          wx.openSetting({
+            success: (res) => {
+              console.log(res, 103)
+            }
+          })
+        } else {
+          console.log('用户点击取消')
+        }
+      }
+    });
+  },
   //getData的参数
   returnArr:function(){
     let arr = [{
       latitude: this.data.latitude,
       longitude: this.data.longitude,
       store_city: this.data.store_city,
+      store_area: this.data.store_area,
       page: 1,
     }]
     return arr;
@@ -147,18 +249,32 @@ Page({
           let data = res.data.data;
           let dataL = data.length;
           if (near_num == 1) {
+            let activeIndex=0;
+            let activeIndex1=0;
             if (dataL > 0) {
-              util.addUrl(data, 'category_pic');
+              data =util.addUrl(data, 'category_pic');
 
-              for (let i = 0; i < dataL; i++){
-                if(data[i].category_name==that.data.category_name){
-                  that.data.activeIndex=i;
+              for(var i=0;i<dataL;i++){
+                if (data[i].category_name == that.data.category_name ) {
+                  activeIndex = i;
+                }
+                for (var j =0;j<data[i].list_second.length;j++) {
+                  data[i].list_second[j].f_id = data[i].category_id;
+                  
+                  if (data[i].list_second[j].category_name == that.data.category_name) {
+                    console.log(data[i].list_second[j].category_name,that.data.category_name)
+                    activeIndex = i;
+                    activeIndex1 = j;
+
+                  }
                 }
               }
             }
-            wx.setStorageSync('list_category', data)
+            wx.setStorageSync('list_category', data);
+            let list_second = data[activeIndex].list_second;
+            console.log(data, 16888, activeIndex, activeIndex1)
             that.setData({
-              goodlist: data, list_second: data[0].list_second, category_name: that.data.category_name, activeIndex: that.data.activeIndex,
+              goodlist: data, list_second, category_name: that.data.category_name, activeIndex, activeIndex1
             })
           }
           if (near_num == 2) {
@@ -222,9 +338,11 @@ Page({
     let goodlist = this.data.goodlist;
     let index = e.currentTarget.dataset.index;
     this.data.category_name = goodlist[index].category_name
+    console.log(goodlist)
     this.setData({
       list_second: goodlist[index].list_second,
       activeIndex: index,
+      activeIndex1:0,
     })
   },
   // 选择附近二级类型
@@ -236,6 +354,8 @@ Page({
     this.setData({
       nactiveIndex: index,
       districts: nearData[index].districts,
+      nactiveIndex1:0,
+
     })
   },
   secondData: function (e) {
@@ -243,55 +363,78 @@ Page({
     let near_name = e.currentTarget.dataset.near_name || '';
     let category_name = e.currentTarget.dataset.category_name || '';
     let sort = e.currentTarget.dataset.sort || '';
+    let sortname = e.currentTarget.dataset.sortname || '';
     let category_id = e.currentTarget.dataset.category_id || '';
-    let arr = this.returnArr();
-    
-    arr[0].store_url = 'nearby/list_store_new';
-    arr[0].store_area = this.data.store_area || '';
-    arr[0].store_street = this.data.store_street || '';
-    arr[0].category_name = this.data.category_name || '';
-    arr[0].category_id = this.data.category_id || '';
-        
-    if (category_name != '') {
-      arr[0].category_name = category_name;
-      arr[0].category_id = category_id;
-      this.data.category_name = category_name;
-      this.data.category_id = category_id;
-      
-      if (category_name=='全部'){
-        category_name = this.data.category_name
-      }
-      this.setData({
-        activeIndex1: index,
-        category_name,
-        category_id,
-        store_url: arr[0].store_url
-      })
-    }
+    let sec_category_id = e.currentTarget.dataset.sec_category_id || '';
 
+    let arr = this.returnArr();
+
+    arr[0].store_url = 'nearby/list_store_new';
+    arr[0].store_area = this.data.store_area ;
+    arr[0].store_street = this.data.store_street || '';
+    arr[0].category_name = this.data.category_name;
+    arr[0].category_id = this.data.category_id ;
+    arr[0].sec_category_id = this.data.sec_category_id ||'';
+    arr[0].distance = this.data.distance || '';
     if (near_name != '') {
-      
-      if (near_name.search("-") != -1 ){
-        let temp = near_name.split('-');
-        arr[0].store_area =temp[0];
-        arr[0].store_street = near_name;
-        this.data.store_area = temp[0];
-        this.data.store_street = near_name;
-      }
+      console.log(near_name, arr)
+      if (this.data.nactiveIndex == 0) {
+        arr[0].distance = near_name;
+        this.data.distance = near_name;
+        this.data.store_area = '';
+        this.data.store_street = '';
+        arr[0].store_area = '';
+        arr[0].store_street = '';
+      } else {
+        console.log(near_name)
+        if (near_name.search("-") != -1){
+          let temp = near_name.split('-');
+          console.log(near_name, temp)
+          arr[0].distance = '';
+          arr[0].store_city = this.data.city;
+          arr[0].store_area = temp[0];
+          arr[0].store_street = temp[1];
+        } else {
+          arr[0].store_street = near_name;
+          this.data.store_street = near_name;
+        }
+    }
 
       this.setData({
         nactiveIndex1: index,
         near_name,
       })
     }
+        
+    if (category_name != '') {
+      arr[0].category_name = category_name;
+      arr[0].category_id = category_id;
+      arr[0].sec_category_id = sec_category_id;
+      this.data.category_name = category_name;
+      this.data.category_id = category_id;
+      this.data.sec_category_id = sec_category_id;
+      
+      if (category_name=='全部'){
+        category_name = this.data.category_name
+      }
+      
+      this.setData({
+        activeIndex1: index,
+        category_name,
+        category_id,
+        sec_category_id,
+        store_url: arr[0].store_url
+      })
+    }
+
 
     if (sort != '') {
       arr[0].sort = sort;
       this.setData({
-        sort
+        sort, sactiveIndex: index, sort_name:sortname
       })
     }
-
+    console.log(arr[0],6666)
     this.getData(this, arr[0]);
     this.setData({
       isShowFruit: false, onOff1: false, onOff2: false, onOff3: false,
@@ -314,13 +457,12 @@ Page({
 
     let globalKey = wx.getStorageSync('globalKey');  
     let gram = this.returnGram();
-
+console.log(arr,439)
     wx.request({
       url: app.globalData.url + '/api/' + arr.store_url,
       method: "POST",
       data: {
         request_object: app.globalData.request_object,
-        user_id: globalKey.user_id || '',
         store_city: arr.store_city,
         store_street: arr.store_street || '',
         store_area: arr.store_area || '',
@@ -338,7 +480,6 @@ Page({
         limit: 10,
         timestamp,
         process: gram.process,
-        token: gram.token,
       },
       success: function (res) {
         console.log('class', res)
@@ -381,7 +522,8 @@ Page({
               stores,
               page: arr.page || 1,
               num,
-              isLoad:true,
+              isLoad: true,
+              noResult: true,
               half
             })
           } else {
@@ -390,12 +532,20 @@ Page({
                 title: '没有更多数据了哦！',
               })
             } else {
+              that.setData({
+                stores: [],
+                isLoad: true,
+                noResult:false
+              })
               wx.showToast({
                 title: '没有相关店铺哦！',
               })
             }
           }
         }
+      },
+      fail(){
+        app.showMind();
       }
     })
 
@@ -448,15 +598,8 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
-    if (res.from === 'button') {
-    }
-    return {
-      title: '转发',
-      path: 'pages/index/index',
-      success: function (res) {
 
-      }
-    }
+    app.onshare()
 
   },
   contentScroll: function (ev) {

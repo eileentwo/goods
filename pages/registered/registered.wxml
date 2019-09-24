@@ -21,7 +21,7 @@
     <navigator url="../login/login">
         <text class=" login">账号密码登录</text>
     </navigator>
-        <button class="enter" type="primary" form-type="submit">进入数呗花</button>
+        <button class="enter" type="primary" form-type="submit">进入一鹿省</button>
     </view>
 
 </form>

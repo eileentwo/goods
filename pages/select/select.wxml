@@ -9,8 +9,6 @@
   </view>
     <text bindtap="select" data-fromselect="select">搜索</text>
 </view>
-
-
 <view class="hot paddingbox" wx:if="{{hotList}}" hidden="{{result}}">
   <view class="hottitle">热门搜索</view>
   <view class="tags">
@@ -26,7 +24,7 @@
   </view>
   <view class="tags">
     <block  wx:for='{{nearList}}' wx:key='item'>
-      <text class="ellipsis" data-value="{{item.name}}">{{item.name}}</text>
+      <text class="ellipsis" data-value="{{item.name}}" wx:if='{{item.name}}' bindtap="gotoselect" data-discount_id="{{item.discount_id}}">{{item.name}}</text>
     </block>
   </view>
 </view>
@@ -36,6 +34,6 @@
   <view>暂无数据</view>
 </view>
 
-<scroll-view class="scrollBox MT" wx:if="{{noResult}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
-  <template is="selectShow" data="{{stores,floorstatus,city}}"></template>
+<scroll-view class="scrollBox MT" hidden="{{!result}}" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
+  <template is="waterfall_save" data="{{stores,floorstatus,city}}"></template>
 </scroll-view>

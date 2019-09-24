@@ -1,6 +1,7 @@
 
 <import src="/template/wxml/waterfall.wxml" />
 <template is="head" data="{{titlename}}"></template>
+
 <view class="container">
     <!-- 店铺详情 -->
     <view class="storeDetails flexbox">
@@ -10,13 +11,13 @@
           <text>{{store_name}}</text>
           <text class="detailLocaltion">{{store_address}}</text> 
         </view>
-    </view>
+    </view> 
     <!-- 订单详细信息 -->
-    <view class="orderDetails" style="height:{{moreH}}rpx">
+    <view class="orderDetails" style="max-height:{{moreH}}px">
         <block wx:for="{{orderList}}" wx:for-item="orderList" wx:for-index="{{index}}" wx:key='index'>
             <view class="orderWrap flexbox">
                 <image class="orderImg" src="{{orderList.goods_pic}}"></image> 
-                <view class="boline flexbox">
+                <view class="boline {{index==orderList.length?'nobor':''}} flexbox">
                   <view class="orderdesc">
                     <view class="orderDescript">{{orderList.goods_name}}</view>
                     <view class="orderName">{{orderList.goods_desc}}</view>
@@ -26,20 +27,26 @@
                 
             </view>
             <view class="backWhite" bindtap="showMore" hidden="{{isShowmore}}">
-                  <image class="more" src="../../images/submitOrders/down.png" ></image>
+              <image class="more" src="../../images/submitOrders/down.png" ></image>
             </view>
         </block> 
     </view>
     <!-- 桌号备注信息 -->
     <view class="deskRemarks ">
         <view class="deskNum flexbox ">
+          <view>人数</view>
+          <input  class="inputNum" placeholder-class="place-holder" type='digit' placeholder="请填写人数                                （必填)" bindinput="table_number" value="{{people_number}}"  bindblur='bindblur' data-index='1'></input>
+        </view>
+        <view wx:if="{{category_id==1}}" class="deskNum flexbox">
+          
           <view>桌号</view>
-          <input class="inputNum" placeholder-class="place-holder" type='digit' placeholder="请填写桌号                                （非必填)" bindinput="table_number"></input>
+          <input class="inputNum"  placeholder-class="place-holder"  type='text' placeholder="请填写桌号                                （非必填)" bindinput="table_number" value="{{table_number}}" disabled="{{disabled}}" data-index='2'></input>
+          
         </view>
         <view  class="remarks flexbox">
           <view>备注</view>
-          <image class="clear" src="../../images/report/de.png" bindtap="clearInput"></image>
-          <textarea class="inputRemarks" value="{{userInput}}" bindinput="handleContentInput"></textarea>
+          <image wx:if='{{userInput.length>0}}' class="clear" src="../../images/report/de.png" bindtap="clearInput"></image>
+          <textarea class="inputRemarks"  wx:if="{{!showModalStatus}}" value="{{userInput}}"  placeholder-class="place-holder"  placeholder="请填写备注信息 "  bindinput="handleContentInput"></textarea>
         </view>
     </view>
     <!-- tabBar -->
@@ -49,7 +56,7 @@
           <view class="offer">已享优惠<text class="offerMoney">¥{{save_money}}</text></view>
         </view>
         <!-- 遮罩层 -->
-        <view bindtap="powerDrawer" data-statu="open" class="detail">
+        <view bindtap="powerDrawer" data-statu="{{statu}}" class="detail">
             <text>明细</text>
             <image class="detailInco" src="../../images/submitOrders/up.png"></image>
         </view>
@@ -62,13 +69,13 @@
                 <text class="ainco">|</text>
                 <text class="proDetails">账单详情</text>
                 <view class="moneyDetailsWrap">
-                    <view class="moneyDetails">订单原价 
+                    <view class="moneyDetails flexbox spaceBetween">订单原价 
                         <text class="money">¥{{account_money}}</text>
                     </view>
-                    <view class="moneyDetails">服务费用
+                    <view class="moneyDetails flexbox spaceBetween">服务费用
                         <text class="money">¥{{service_money}}</text>
                     </view>
-                    <view class="moneyDetails">本单节省
+                    <view class="moneyDetails flexbox spaceBetween">本单节省
                         <text class="money">¥{{save_money}}</text>
                     </view>
                 </view>
@@ -77,7 +84,7 @@
         <!-- <navigator url="../payment/payment"> -->
         <view class="settlement">
             <view class="mask" wx:if="{{isMask}}"></view>
-            <view  bindtap="wechatPay">微信支付</view>
+            <view  bindtap="wechatPay">提交订单</view>
         </view>
         <!-- </navigator> -->
     </view>

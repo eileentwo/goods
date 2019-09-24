@@ -58,7 +58,8 @@ Page({
             },
             fail: function () {
                 // fail
-                console.log("获取失败");
+              console.log("获取失败");
+              app.showMind();
             },
             complete: function () {
                 // complete

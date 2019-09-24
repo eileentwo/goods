@@ -37,7 +37,7 @@ Page({
     imgUrls: [],
     tips: [],
     store_score: '',//店铺评分
-    stars: [0, 1, 2, 3, 4],
+    stars: [0,1,2,3,4],
     normalSrc: '../../images/storeDetails/normal.png',
     selectedSrc: '../../images/storeDetails/selected.png',
     halfSrc: '../../images/storeDetails/half.png',
@@ -54,7 +54,7 @@ Page({
     storeDetails: [],
     list_type: [],
     list_tag: [],
-    list_evaluate1: [],//评论
+    list_evaluate: [],//评论
     evaHeadPic: [],
     evaPics: [],
     goods_id: 0,
@@ -95,33 +95,34 @@ Page({
     leftToTop: 0
   },
   onLoad: function (options) {
-    let store_info = wx.getStorageSync('store_info')
-    console.log(7888, store_info)
-    let globalKey = wx.getStorageSync('globalKey')
+    var store_info = wx.getStorageSync('store_info') || app.globalData.store_info;
+    let globalKey = wx.getStorageSync('globalKey');
+    goodsItem = wx.getStorageSync('goodsItem');
+    console.log(options, 'storedetail', store_info, app.globalData.store_info.scene,10111111111)
+    
     store_id = options.store_id ;
     user_id = options.user_id || globalKey.user_id;
     token = options.token || globalKey.token;
-    wx.showLoading({
-      title: '加载中',
-    })
-    setTimeout(function () {
-      wx.hideLoading()
-    }, 3000)
+    console.log(!options.hasOwnProperty('user_id'))
+    if (!options.hasOwnProperty('user_id')) {
+      store_info.table_number=''
+      wx.setStorageSync('store_info', store_info)
+    }
+    app.showLoading();
+    
     var that = this;
     // 店铺详情
-
-    var list = store_info.list_store_pics
+    
+    var list = store_info.list_store_pics;
+    console.log(store_info, '店铺详情', store_info)
     list = util.addUrl(list,'store_pic') ;
-    // console.log(list)
     var array1 = new Array();
     var tips = store_info.list_tips;
     for (var index in tips) {
       array1.push(tips[index].tips);
     }
     //判断是否在当前营业时间内
-    let business_hours = store_info.business_hours.split('-');
-    that.time_range(business_hours[0], business_hours[1])
-    // console.log(105,list)
+    
     that.setData({
       storeDetails: store_info,
       imgUrls: list,
@@ -129,20 +130,21 @@ Page({
       tips: array1,
       store_score: store_info.store_score,
       isMask:false,
+      category_id: options.category_id || store_info.category_id
     })
 
 
     //商品列表
     let choosedList = wx.getStorageSync('choosedList') || [];
     let order_info = wx.getStorageSync('order_info') || {};
-    goodsItem = wx.getStorageSync('goodsItem') ;
     
-    console.log(goodsItem,1333)
+    
+
     if (choosedList.length > 0 || wx.getStorageInfoSync('goodsItem').length>0){
       for (let i = 0; i < choosedList.length;i++){
         for(let j=0;j<goodsItem.length;j++){
           let list_goods = util.addUrl(goodsItem[j].list_goods,'goods_pic') ;
-          goodsItem[j].select_nums=0
+          goodsItem[j].select_nums=0;
           for (let k = 0; k < list_goods.length;k++){
             if (choosedList[i].goodsid == list_goods[k].goods_id){
               list_goods[k].num = choosedList[i].goods_selenum;
@@ -155,23 +157,29 @@ Page({
     let totalCont = goodsItem.length;
     if (goodsItem && totalCont > 0) {
       
-      for(let i=0;i<totalCont;i++){
+      for (let i = 0; i < totalCont; i++) {
         for (let j = 0; j < goodsItem[i].list_goods.length;j++){
+          
           if (goodsItem[i].list_goods[j].stock_count>0){
-            that.data.noGood = true;
-          }else{
-            that.data.noGood = false;
+            goodsItem[i].list_goods[j].noGood = true;
+            goodsItem[i].list_goods[j].per = Math.round(goodsItem[i].list_goods[j].stock_count) / Math.round(goodsItem[i].list_goods[j].goods_count)
+            goodsItem[i].list_goods[j].per = goodsItem[i].list_goods[j].per.toFixed(2)
+          } else {
+            goodsItem[i].list_goods[j].noGood = false;
           }
         }
       }
+      console.log(goodsItem,173)
+      
       that.localtion(1);//获取当前位置与店家之间的距离
       that.setData({
-        total_num: order_info.total_num,
-        order_cost: order_info.order_cost,
+        total_num: order_info.total_num || 0,
+        order_cost: order_info.order_cost ||0,
         goodsItem,
         noGood: that.data.noGood,
         choosedList
       })
+      wx.hideLoading()
     }
     wx.createSelectorQuery().select('#storeDetails').boundingClientRect(function (rect) {
       that.data.rectT = rect.top;
@@ -188,14 +196,34 @@ Page({
         })
       },
     })
-    that.setData({
-      currentLeftSelect: goodsItem[0].id,
-      tcategory: goodsItem[0].category,
-      tintroduce: goodsItem[0].introduce,
-      eachRightItemToTop: this.getEachRightItemToTop()
-    })
+    console.log(goodsItem,196666)
+    if (goodsItem.length > 0) {
+      that.setData({
+        currentLeftSelect: goodsItem[0].id,
+        tcategory: goodsItem[0].category,
+        tintroduce: goodsItem[0].introduce,
+        eachRightItemToTop: this.getEachRightItemToTop()
+      })
+    }else{
+      wx.hideLoading();
+    }
   },
- 
+
+  toHome: function () {
+
+    let pages = getCurrentPages(); //获取当前页面js里面的pages里的所有信息。
+    let prevPage = pages[pages.length - 2];
+    if (prevPage) {
+      wx.navigateBack({
+        delta: 1  // 返回上一级页面。
+      })
+    } else {
+      wx.reLaunch({
+        url: '/pages/home/index',
+        //如果已经评价成功了的话就把评论按钮隐藏
+      })
+    }
+  },
   onPageScroll: function (e) {
     let that = this
     let scrollT = 0;
@@ -207,7 +235,13 @@ Page({
       // })
     }
   },
-
+  // 打电话
+  to_call(e){
+    console.log(e)
+    wx.makePhoneCall({
+      phoneNumber: e.currentTarget.dataset.telephone,
+    })
+  },
   swiperChange: function (e) {
     let index = e.detail.index
     if (e.detail.source == 'touch') {
@@ -218,95 +252,15 @@ Page({
 
     }
   },
-  toPay:function (e) {
+  toPay: function (e) {
     let that = this;
     // 判断是否有选中商品
+    let store_info = wx.getStorageSync('store_info');
     if (this.data.total_num > 0) {
-      var choosedList = wx.getStorageSync('choosedList') || that.data.choosedList;  
-        var discount_goods = new Array();
-        var activity_goods = new Array();
-        for (var item in choosedList) {
-            var obj1 = {
-              goods_id: choosedList[item]["goodsid"],
-              goods_num: choosedList[item]["goods_selenum"],
-              goods_type: choosedList[item]["goods_type"],
-            }
-            discount_goods.push(obj1)
-          // }
-        }
-
-      wx.setStorageSync('ol', choosedList);
-       
-        var discount_goods = JSON.stringify(discount_goods);
-        app.globalData.discount_goods = discount_goods;
-      var timestamp = Date.parse(new Date());
-      var val = 'fanbuyhainan' + timestamp.toString() + token;
-      var hexMD5 = md5.hexMD5(val);
-        // 生成订单号
-        wx: wx.request({
-          url:app.globalData.url+'/api/store_detail/insert_order_new',
-          data: {
-            request_object: app.globalData.request_object,
-            user_id: user_id ,
-            store_id,
-            discount_goods: discount_goods,
-            timestamp: timestamp,
-            process: hexMD5, 
-            token
-          },
-          method: 'POST',
-          header: {
-            'Content-Type': "application/x-www-form-urlencoded"
-          },
-          success: function (res) {
-            console.log(token, 243,'生成订单号', res)
-            if (res.data.status == 1) {
-              that.setData({
-                actual_money: res.data.data.actual_money, isMask:true
-              })
-              let globalKey = wx.getStorageSync('globalKey');
-              // 订单号
-              globalKey.order_id = res.data.data.order_id;
-              // 订单金额
-              globalKey.account_money = res.data.data.account_money
-              // 翻倍金额
-              globalKey.discount_price = res.data.data.discount_price
-              // 服务费用
-              globalKey.service_money = res.data.data.service_money
-              // 本单节省
-              globalKey.save_money = res.data.data.save_money
-              // 未翻金额
-              globalKey.no_discount_price = res.data.data.no_discount_price
-              globalKey.actual_money = res.data.data.actual_money
-              wx.setStorageSync('globalKey', globalKey)
-              wx.navigateTo({
-                url: '../submitOrders/submitOrders?store_id=' + store_id + '&user_id=' + user_id + '&token=' + token 
-              });
-            } else {
-              if (res.data.message){
-
-                wx.showToast({
-                  title: res.data.message,
-                  icon: 'none',
-                  duration: 2000,
-                })
-              }
-            }
-          },
-          fail: function () {
-            // fail
-            console.log("服务器响应失败");
-            wx.showToast({
-              title: '服务器响应失败',
-              icon: 'none',
-              duration: 2000,
-            })
-          },
-          complete: function () {
-            // complete
-          },
-
-        })
+      console.log(store_id)
+      wx.navigateTo({
+        url: '../submitOrders/submitOrders?store_id=' + store_id + '&user_id=' + user_id + '&token=' + token + '&category_id=' + that.data.category_id
+      });
     } else {
       wx.showToast({
         title: '请先选购商品',
@@ -315,7 +269,6 @@ Page({
       })
     }
   },
-
   // 打开定位地图
 
   localtion(num) {
@@ -469,16 +422,7 @@ Page({
       });
     }
   },
-  to_call: function () { //拨打手机号码
-    wx.makePhoneCall({
-      phoneNumber: this.data.phone,
-    })
-  },
-  to_call_landline: function () {
-    wx.makePhoneCall({ //拨打座机号码
-      phoneNumber: this.data.landline
-    })
-  },
+  
   getdata: function (category, isloaded) {
     var fl = new Object();
     if (!category) {
@@ -594,6 +538,7 @@ Page({
       order_info.total_num += choosedList[k].goods_selenum;
       order_info.order_cost += choosedList[k].discount_price * choosedList[k].goods_selenum; //计算总价
     }
+    order_info.order_cost = order_info.order_cost.toFixed(2)
     if (order_info.total_num==0){
       this.data.cartBoxStatus=false
     }
@@ -647,17 +592,29 @@ Page({
         'Content-Type': "application/x-www-form-urlencoded"
       }, // 设置请求的 header
       success: function (res) {
-        // console.log(709, res)
+        console.log(709, res)
         if (res.data.status == 1) {
           let evaluate = res.data.data;
           that.data.evaluate = evaluate;
+          let list_evaluate = evaluate.list_evaluate;
+          list_evaluate = util.addUrl(list_evaluate, 'head_pic');
+          for(let i=0;i<list_evaluate.length;i++){
+            if(list_evaluate[i].pics !=''){
+              list_evaluate[i].pics = list_evaluate[i].pics.split(',');
+              for (let j = 0; j < list_evaluate[i].pics.length; j++) {
+                list_evaluate[i].pics[j] = app.globalData.url + list_evaluate[i].pics[j];
+              }
+            }
+          }
+          console.log(list_evaluate, list_evaluate.len)
           that.setData({
-            len: evaluate.list_evaluate.length,
+            len:list_evaluate.length,
             list_type: evaluate.list_type,
             list_tag: evaluate.list_tag,
-            list_evaluate: evaluate.list_evaluate,
+            list_evaluate: list_evaluate,
+            all_list_evaluate: list_evaluate,
           })
-          that.evaluatefn(that.data.menuTapCurrenta);
+          wx.setStorageSync('list_evaluate', list_evaluate);
           wx.setStorageSync('evaluate', evaluate);
 
         } else {
@@ -683,42 +640,41 @@ Page({
   },
   // 评价
   evaluatefn: function (e) {
-    var current = 0;
-    if(e==3){
-      current =e
-    }else{
-      current = e.currentTarget.dataset.current;//获取到绑定的数据
-    }
-   
+
+    var current = e.currentTarget.dataset.current;//获取到绑定的数据
+  
     //改变menuTapCurrent的值为当前选中的menu所绑定的数据
     
     var that = this;
-    let evaluate = wx.getStorageSync('evaluate') || that.data.evaluate;
-    let evaluate_list = evaluate.list_evaluate;
-    let templist=[];
     
+    let evaluate_list = wx.getStorageSync('evaluate_list') || this.data.all_list_evaluate;
+    let templist=[];
+    console.log(evaluate_list,621)
     for (let i = 0; i < evaluate_list.length;i++){
-
-      if (evaluate_list[i].pics !='' && current == 0) {
-        templist.push(evaluate_list[i])
-
-      } else if (evaluate_list[i].score == 5 && current == 1) {
-        templist.push(evaluate_list[i])
-      }
-      else if (evaluate_list[i].score == 1 && current == 2) {
-        templist.push(evaluate_list[i])
+      console.log(evaluate_list[i].pics.length,624)
+      if (current == 0){
+        if (evaluate_list[i].pics.length > 0){
+          templist.push(evaluate_list[i])
+        }
+      } else if (current == 1) {
+        if (evaluate_list[i].score == 5 ){
+          templist.push(evaluate_list[i])
+        }
+      } else if ( current == 2) {
+        if (evaluate_list[i].score <3 ){
+          templist.push(evaluate_list[i])
+        }
+      }else{
+        templist = evaluate_list
       }
     }
-    if (current == 3) {
-      templist = util.addUrl(evaluate_list, 'head_pic');
-      templist = util.addUrl(evaluate_list, 'pics');
-    }
+    console.log(templist)
     let len = templist.length;
     
     this.setData({
       len: len,
       menuTapCurrenta: current,
-      list_evaluate1: templist,
+      list_evaluate: templist,
     });
 
   },
@@ -771,47 +727,16 @@ Page({
     if (res.from === 'button') { 
     } 
     return {
-       title: '转发', 
+      title: '转发', 
       path: 'pages/orderOrPayment/orderOrPayment?store_id=' + store_id + '&store_name=' + store_info.store_name,
-        success: function (res) { 
+      success: function (res) { 
         
     } }
 
   },
 
-  time_range: function (beginTime, endTime) {
-    var strb = beginTime.split(":");
-
-    var stre = endTime.split(":");
-
-    var b = new Date();
-    var e = new Date();
-    var n = new Date();
-
-    b.setHours(strb[0]);
-    b.setMinutes(strb[1]);
-    e.setHours(stre[0]);
-    e.setMinutes(stre[1]);
-
-    if (n.getTime() - b.getTime() > 0 && n.getTime() - e.getTime() < 0) {
-      this.setData({
-        business: true
-      })
-    } else {
-      ////console.log("当前时间是：" + n.getHours() + ":" + n.getMinutes() + "，不在该时间范围内！");
-      this.setData({
-        business: false
-      })
-    }
-  },
-  // 剩余百分比
-  percent(info) {
-    let per = '';
-    for (let i = 0; i < info.length; i++) {
-      info[i].per = Math.round(info[i].stock_count) / Math.round(info[i].goods_count)
-    }
-
-  },
+  
+ 
   // 优惠商品，用户评价，温馨提醒切换
   changeTab: function (e) {
     var scrollLeft = ((e.detail.current + 1) - 3) + 1;

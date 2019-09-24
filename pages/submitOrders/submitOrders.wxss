@@ -5,10 +5,12 @@
 
 .container{
   width: 750rpx;
-  height: 1207rpx;
+  min-height: 1200rpx;
+  padding-bottom: 120rpx;
   background-color: #EEEEEE;
   position: relative;
 }
+
 /* 店铺详情 */
 .storeDetails{
   margin: 20rpx 0;
@@ -45,16 +47,15 @@
 .orderDetails{
   position: relative;
   width:702rpx;
-  height:500rpx;
+  max-height:500rpx;
   border-radius: 5px;
   background-color: #FFFFFF;
-  overflow-y: scroll;
-  overflow-x: hidden;
+  overflow: hidden;
   margin-bottom: 20rpx;
 }
 .orderWrap{
   width:702rpx;
-  height: 150rpx;
+  height: 146rpx;
   border: 1rpx solid transparent;
 }
 /* 商品图片 */
@@ -107,6 +108,9 @@
   padding: 20rpx 0;
   align-items:center;
 }
+.nobor{
+  border-bottom-color:transparent; 
+}
 /* 下拉提示 */
 .backWhite{
   height: 50rpx;
@@ -125,10 +129,9 @@
 }
 /* 桌号备注信息 */
 .deskRemarks{
-  height:256rpx;
   border-radius: 20rpx;
   background-color: #FFFFFF;
-  padding: 20rpx 30rpx 0;
+  padding: 20rpx 30rpx ;
 }
 
 /* 桌号 */
@@ -137,7 +140,7 @@
   line-height: 80rpx;
 }
 
-.deskNum view,.remarks view{
+.deskNum  view,.remarks view{
   width: 80rpx;
 }
 .remarks{
@@ -153,18 +156,21 @@
 .inputNum,.inputRemarks{
   width: 85%;
   height: 80rpx;
-  padding-bottom: 10rpx;
   color: #939090;
   font-size: 28rpx;
   border-bottom:1px solid #f1f1f1; 
+  position: static;
   z-index: 0;
 }
 /* 备注 */
 .inputRemarks{
-   height: 114rpx;
-   overflow: scroll;
+  height: auto;
+  border-bottom: 0;
    padding-top: 6rpx;
   width: 80%;
+  position: absolute;
+  left: 80rpx;
+  min-height: 80rpx;
 }
 .place-holder {
     color: #939090;
@@ -172,11 +178,10 @@
 }
 .clear{
     position: absolute;
-    top: 50rpx;
+    top: 36rpx;
     right: 20rpx;
     width: 31rpx;
     height: 31rpx;
-    z-index: 9;
 }
 
 /* 底部tarBar */
@@ -251,7 +256,7 @@
 /*mask*/
 .drawer_screen {
   width: 100%;
-  height: 100%;
+  height: 91.8%;
   position: fixed;
   top: 0;
   left: 0;
@@ -260,69 +265,51 @@
   opacity: 0.2;
   overflow: hidden;
 }
+.drawer_content{
+  padding: 16rpx 24rpx;
+}
 /*content*/
 .drawer_attr_box {
   width: 100%;
   overflow: hidden;
   position: fixed;
-  bottom:115rpx;
+  bottom:106rpx;
   left: 0;
   z-index: 2000;
   background: #fff;
-  /* border: 1rpx solid salmon; */
 }
-.drawer_content {
-  height: 470rpx;
-  
-}
+
 .moneyDetailsWrap{
-    top: 90rpx;
-    width:702rpx;
-    height: 366rpx;
-    overflow-y: scroll;
-    align-items:center;
+  width:702rpx;
+  overflow-y: scroll;
+  align-items:center;
+  padding-top: 16rpx;
 }
 .moneyDetails{
-    position: relative;
-    /* top: 10rpx; */
-    left: 31rpx;
-    width: 643rpx;
-    height:70rpx;
+    height:80rpx;
     border-bottom: 1rpx solid #f2f2f2;
     font-size: 30rpx;
     color: #737370;
-    line-height: 60rpx; 
+    line-height: 80rpx; 
 }
 .money{
-    padding-left:380rpx;
     color: #FF1D3A;
 }
 .proDetails{
-    
-    top:35rpx;
-    left: 49rpx;
     color: #111111;
     font-size: 30rpx;
 }
 .ainco{
-    
-    top:25rpx;
-    left: 24rpx;
     color: #FF1D3A;
     font-weight: bold;
     font-size: 40rpx;
+    margin-right: 16rpx;
 }
 /* 购物车遮罩层 */
 .submit{   
-  /* height: 120rpx;   */
-  /* display: flex;   */
-  /* flex-direction: row;   */
-  /* line-height: 120rpx;   */
   position: fixed;   
   left: 0;  
   bottom: 0;   
-  /*要显示在遮罩层shade的上面 */   
-  /* z-index: 2;   */
   }  
 .mingXi{   
   display: inline-block;   

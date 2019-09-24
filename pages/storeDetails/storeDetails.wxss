@@ -8,6 +8,19 @@
     height: auto;
 }
 
+.toHome{
+  width: 48rpx;
+  height: 44rpx;
+  position: fixed;
+  top: 72rpx;
+  left: 10rpx;
+  z-index: 9999999999999999;
+}
+
+
+.backhome{
+  display: none;
+}
 navigator {
     display: inline-block;
 }
@@ -53,8 +66,8 @@ navigator {
   margin: 0;
 }
 .storeInfo {
-    width: 750rpx;
-    height: 225rpx;
+    width: 702rpx;
+    padding: 30rpx 24rpx;
     background-color: palegreenred;
     position: relative;
     top: 0;
@@ -63,35 +76,28 @@ navigator {
 /* 店铺名称 */
 
 .storeName {
-    font-size: 12pt;
-    color: #111;
-    font-weight: bold;
-    position: absolute;
-    top: 30rpx;
-    left: 24rpx;
+    
     display: block;
 }
 
 /* 五角星 */
-
+.starsBox{
+  width: 100%;
+  margin: 14rpx 0;
+}
 .pentagram {
-    /* border: 1px solid red; */
     color: gray;
     width: 23rpx;
     height: 23rpx;
-    position: absolute;
-    top: 100rpx;
-    margin-left: 24rpx;
+    margin-right: 6rpx;
 }
 
 /* 店铺评分 */
 
 .storeScore {
-    position: absolute;
-    left: 151rpx;
-    top: 96rpx;
-    font-size: 24rpx;
-    color: #FF1D3A;
+  margin:0 10rpx;
+  font-size: 24rpx;
+  color: #FF1D3A;
 }
 
 /* 人均 */
@@ -99,17 +105,12 @@ navigator {
 .perCapita {
     font-size: 24rpx;
     color: #939090;
-    position: absolute;
-    left: 222rpx;
-    top: 95rpx;
 }
 
 /* 月售 */
 
 .monthSales {
-    position: absolute;
-    right: 38rpx;
-    top: 98rpx;
+  float: right;
     color: #939090;
     font-size: 24rpx;
 }
@@ -117,11 +118,11 @@ navigator {
 /* 营业时间 */
 
 .businessTime {
-    position: absolute;
-    left: 24rpx;
-    top: 150rpx;
     font-size: 24rpx;
     color: #939090;
+}
+.businessTime text{
+  margin-left: 1rem;
 }
 
 /* 营业状态 */
@@ -138,19 +139,21 @@ navigator {
 
 .contact {
     position: absolute;
-    right: 24rpx;
-    top: 160rpx;
-    width: 31rpx;
-    height: 31rpx;
+    right: 30rpx;
+    top: 136rpx;
+    width: 32rpx;
+    height: 32rpx;
+}
+.contact image{
+    width: 32rpx;
+    height: 32rpx;
 }
 
 /* 分割线 */
 
 .line {
-    position: absolute;
-    left: 24rpx;
-    top: 640rpx;
     width: 702rpx;
+    margin: 0 auto;
     border: 1rpx solid #f1f1f1;
 }
 
@@ -176,12 +179,16 @@ navigator {
 
 .detailedLocation {
     margin: 30rpx 0 0 69rpx; 
-    width: 578rpx;
+    width: 568rpx;
     height: 90rpx;
     padding: 5rpx 10rpx 5rpx 0;
     font-size: 23rpx;
     color: #323232;
     line-height: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
 }
 .leftborder{
   font-size: 23rpx;
@@ -217,10 +224,10 @@ navigator {
 /* 店铺详情 */
 
 .storeDetails {
-    width: 100%;
+    width: 80%;
     height: 80rpx;
-    position: relative;
     background-color: #fff;
+    margin: 0 auto;
 }
 
 /* 增加padding */
@@ -228,26 +235,25 @@ navigator {
   padding-top: 80rpx;
 }
 .navInfo1, .navInfo2, .navInfo3 {
-    position: absolute;
-    left: 134rpx;
-    top: 25rpx;
     font-weight: bold;
     font-size: 30rpx;
     color: #737370;
+    text-align: center;
+    width: 33.33%;
+    margin-top:12rpx ;
+}
+.storeDetails text{
+  display: inline-block;
+  width: 64rpx;
+  height: 2px;
+  background-color: #FF1D3A;
 }
 .storeDetails .active{
   color: #FF1D3A;
-  border-bottom: 2px solid #FF1D3A;
 }
-
-.navInfo2 {
-    left: 315rpx;
+.storeDetails view view{
+  margin-bottom: -20rpx;
 }
-
-.navInfo3 {
-    left: 496rpx;
-}
-
 /* 优惠商品，用户评价，温馨提醒面板 */
 
 .tab1, .tab2, .tab3 {
@@ -279,7 +285,7 @@ navigator {
 .activeInco {
     width: 30rpx;
     height: 30rpx;
-    margin: 10rpx 10rpx 0 20rpx;
+    margin: 4rpx 10rpx 0 20rpx;
 }
 .tab-left .active {
   background-color: #fff;
@@ -300,8 +306,6 @@ navigator {
 .tab-left .tabArr view{
     display: flex;
     display: -webkit-flex;
-    flex-direction: row;
-    flex-wrap: wrap;
     justify-content:center;
     line-height: 1.2;
 
@@ -322,8 +326,8 @@ navigator {
 }
 
 .textTitle {
-    width: 94rpx;
-    text-align: left;
+    width: 120rpx;
+    text-align: center;
     line-height: 42rpx;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -377,7 +381,8 @@ navigator {
 
 .specificProduct {
     position: relative;
-    margin-bottom: 20rpx;
+    margin-bottom: 16rpx;
+    padding-bottom:16rpx;
     width: 100%;
     height: 200rpx;
     border-bottom: 1px solid #eee;
@@ -395,41 +400,43 @@ navigator {
 /* 商品图片 */
 
 .productImage {
-    width: 180rpx;
-    height: 180rpx;
-    /* border: 1px solid darkcyan; */
+    width: 196rpx;
+    height: 196rpx;
 }
-
+.goodsInfosbox{
+  padding:0 15rpx;
+  width: 344rpx;
+}
 /* 商品描述 */
 
 .productDescription {
     font-size: 28rpx;
     color: #323232;
-    position: absolute;
-    margin-left: 24rpx;
+    height: 36rpx;
+  line-height: 1; 
 }
 
+.productDescription view{
+  width:268rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
 /* 月售 */
 
 .saleMonth {
     font-size: 20rpx;
     color: #999;
-    position: absolute;
-    margin-top: 5rpx;
-    right: 24rpx;
 }
 
 /* 商品名称 */
 
 .name {
-    width: 139rpx;
+    width: 300rpx;
     height: 40rpx;
     line-height: 40rpx;
     font-size: 20rpx;
     color: #999;
-    position: absolute;
-    top: 36rpx;
-    left: 206rpx;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis; 
@@ -440,9 +447,6 @@ navigator {
 .diningNum {
     font-size: 19rpx;
     color: #999;
-    position: absolute;
-    margin-top: 40rpx;
-    margin-left: 140rpx;
 }
 
 
@@ -450,14 +454,8 @@ navigator {
 /* 平台价 */
 
 .platformPrice {
-    font-size: 24rpx;
-    color: #FF1D3A;
-    position: absolute;
-    top: 74rpx;
-    left: 200rpx;
-    height: 31rpx;
-    text-align: center;
-    line-height: 35rpx;
+    font-size: 32rpx;
+    color: #FD0D1A;
 }
 .platformPrice image{
   width:26rpx;
@@ -466,43 +464,37 @@ navigator {
   margin-right: 6rpx;
 }
 .platformPrice text{
-  margin: 0 10rpx;
+  margin-right:10rpx;
 }
 /* 门店价 */
 
 .storePrice {
     font-size: 20rpx;
     color: #999;
-    position: absolute;
-    margin-top: 110rpx;
-    margin-left: 24rpx;
+    margin: 4rpx 0;
 }
 
 /* 进度条 */
 .gray{
-  
-    position: absolute;
-    top: 150rpx;
-    left: 194rpx;
     width: 150rpx;
     height: 12rpx;
     background-color: #909090;
     border-radius:6rpx;
+    position: relative;
+    overflow: hidden;
 }
 
 .range {
     width: 150rpx;
     height: 12rpx;
     background-color: #FF1D3A;
-    position: absolute;
     border-radius: 6rpx;
+  position: absolute;
+  left: 0;
 }
 /* 剩余 */
 
 .remainder {
-    position: absolute;
-    margin-top: 170rpx;
-    margin-left: 24rpx;
     color: #323232;
     font-size: 19rpx;
 }
@@ -510,23 +502,19 @@ navigator {
 /* 圆圈 */
 
 .circleLess {
-    position: absolute;
-    margin-top: 140rpx;
-    right: 124rpx;
     width: 42rpx;
     height: 42rpx;
 }
-
-.amount {
-    position: absolute;
-    margin-top: 136rpx;
-    right: 83rpx;
+.amount{
+  display: inline-block;
+  margin: 0 12rpx;
+  vertical-align: top;
+}
+.addToCart {
+    line-height: 42rpx;
 }
 
 .circleAdd {
-    position: absolute;
-    margin-top: 140rpx;
-    right: 24rpx;
     width: 42rpx;
     height: 42rpx;
 }
@@ -602,8 +590,9 @@ navigator {
     width: 272rpx;
     height: 118rpx;
     z-index: 9999;
-    background-color: rgba(0, 0, 0, .5)
+    background-color: rgba(255, 255, 255, .5)
 }
+
 .position{
     width: 568rpx;
     background: #fff;
@@ -655,9 +644,7 @@ navigator {
 .cartBox{
   bottom: 116rpx;
 }
-.drawer_content {
-    height: 413rpx;
-}
+
 
 .drawer_title {
     padding-top: 25rpx;
@@ -735,11 +722,12 @@ navigator {
 .marks view{
   padding: 20rpx ;
   border-radius: 10rpx;
-  background-color: #FF1D3A;
+  background-color: rgba(255,39,65,.3);
   color: #939090;
   font-size: 26rpx;
 }
 .marks .active{
+  background-color: #FF1D3A;
   color: #fff;
 }
 .comments{
@@ -843,7 +831,7 @@ navigator {
    width: 12rpx;
    height: 12rpx;
    border-radius: 50%;
-   background-color: #FB953E;
+   background-color: #FF1D3A;
    margin: 22rpx 24rpx;
 }
 .qualification {

@@ -33,7 +33,7 @@ Page({
       var val = 'fanbuyhainan' + timestamp.toString() + token;
       var hexMD5 = md5.hexMD5(val);
         wx.request({
-            url: 'https://exbuy.double.com.cn/api/store_order/get_order_info',
+            url: app.globalData.url+'/api/store_order/get_order_info',
             data: {
               user_id: app.globalData.user_id || userInfokey.user_id,
                 order_id: app.globalData.order_id,

@@ -6,6 +6,15 @@
  .MT{
    margin-top: 20rpx;
  }
+ .scrollBox {
+   background-color: #fff;
+ }
+.save_item {
+  border-bottom: 1px solid #ebf0ea;
+}
+.save_item1{
+  border-bottom: 0;
+} 
 .selection{
   width: 100%;
   padding: 40rpx 0;

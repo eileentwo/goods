@@ -1,122 +1,35 @@
-<import src="/template/wxml/waterfall.wxml" />
-<scroll-view class="scrollBox" style="height:{{contentH}}px" scroll-y bindscrolltolower="contentScroll" scroll-top='{{topNum}}' bindscroll="scrolltoupper" >
-    <image class="bgimg" mode="aspectFit" src="../../images/redimg.png"></image>
-   <template is="head" data="{{titlename}}"></template>
-  <view class="selectionBox">
-    <view class="selection flexbox ">
-      <view class="flexbox">
-        <image class="logo"  lazy-load="true" mode="aspectFit" src="../../images/logo.png"></image>
-        <view class="location"  bindtap="changeCity">
-          <view class="curcity"> {{curCity}}
-            <image mode="aspectFit" src="../../images/bottom.png"></image>
-          </view>
-          <view>{{weather.wea}} {{weather.tem}}</view>
-        </view>
-        <navigator class="selectbtn flexbox"  url="../../pages/select/select?city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
-          <label><image src="../../images/select.png" mode="aspectFit"></image></label>
-          <!-- <input placeholder="数呗花全新升级  " placeholder-class="placeholder"></input> -->
-          <text class="placeholder">数呗花</text>
-        </navigator>
-      </view>
-      <!-- <view class="moreSelect" bindtap="saoma">
-        <image src="../../images/more10.png" mode="aspectFit"></image>更多
-      </view> -->
-    </view>
-  </view>
-  <view class="swiperbox">
-    <swiper id='loop'	 circular class="swiper" source current="{{swiperCurrent}}"  bindchange="swiperChange">
-      <block wx:for="{{list_ad}}"  wx:key="item">
-          <swiper-item>
-              <image lazy-load='true' src="{{item.ad_pic}}" mode="aspectFill" class="slide-image" />
-          </swiper-item>
-      </block>
-    </swiper>
-  
-      <!--重置小圆点的样式  -->
-      <view class="dots">  
-          <block wx:for="{{list_ad}}" wx:key="item">  
-              <view class="dot {{index == swiperCurrent ? ' dotactive' : ''}}"></view>  
-          </block>  
-      </view> 
-  </view>
-  <view class="nav flexbox">
-    <block  wx:for='{{list_category}}' wx:key='index'>
-      <navigator class="nav_item"  wx:if="{{item.category_name=='全部'}}"  url="../../pages/allCategories/allCategories?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}&store_city={{curCity}}" hover-class="navigator-hover" >
-      <image src="{{item.category_pic}}"></image>
-      <view>{{item.category_name}}</view>
-      </navigator>
-        <navigator class="nav_item" wx:else  url="../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.category_name}}&&longitude={{longitude}}&latitude={{latitude}}&store_city={{curCity}}" hover-class="navigator-hover" >
-        <image src="{{item.category_pic}}"></image>
-        <view>{{item.category_name}}</view>
-      </navigator>
+<!--logs.wxml-->
+<!-- <import src="/template/wxml/waterfall.wxml" />
+<template is="showModal" data="{{isUser}}"></template> -->
+<view class="container logs" >
+  <block wx:if="{{!hasUser}}">
+    <image src="../../images/log.png" class="logimg" mode="aspectFit"></image>
     
-    </block>
-  </view>
-  <!-- 二级分类导航 -->
-  <!-- <view class="nav nav1 flexbox"> 
-   <navigator class="nav_item" wx:for='{{nav2}}' url='../../pages/classification/classification?category_id={{item.category_id}}&category_name={{item.title}}' wx:key='index'>
-    <image src="../../images/{{item.src}}.png"  mode="aspectFit"></image>
-    <view>{{item.category_name}}</view>
-   </navigator>
-  </view> -->
-  <view class="adds flexbox radiusbox">
-    <!-- <image src="../../images/toutiao.png"  mode="aspectFit"></image> -->
-    <view class="toutiao">头条</view>
-    <view class="new">NEW</view>
-    <view class="add">
-      <swiper  autoplay="true" vertical='true' circular='true' interval='1500'>
-        <swiper-item wx:for='{{list_headlines}}' wx:key='item'>{{item.content}}</swiper-item>
-      </swiper>
+    <view  wx:if="{{hasPhone}}">
+      <view class="center">请完成微信授权以继续使用</view>
+      <button  open-type="getUserInfo" bindgetuserinfo="getUserInfo">授权微信用户信息</button>
     </view>
-  </view>
-  <view class="goods_item radiusbox" >
-    <navigator class="goods_item_head flexbox" url="../../pages/classification/classification?store_url=list_store_save_more&category_name=省到爆&store_city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
-      <text>省到爆</text>
-      <view>更多 ></view>
-    </navigator>
-    <view class="goods_item_body">
-      
-      <scroll-view scroll-x='true' class="goods_item_scroll" enable-flex='true' style="">
-        <navigator class="goods_item_detail" wx:for="{{list_store_save}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
-          <view class="goods_img">
-            <image  lazy-load="true"  src="{{item.store_logo?item.store_logo:'../../images/noImg1.png'}}"  mode="scaleToFill"></image>
-          </view>
-          <view class="goods_title ellipsis">{{item.store_name}}</view>
-          <view class="flexbox">
-            <image class="stars"src="../../images/redstar.png"  mode="aspectFit"></image>
-            <text class="pink">{{item.store_score}}</text>
-            <text>月售{{item.month_count}}</text>
-          </view>
-        </navigator>
-
-      </scroll-view>
+    <view wx:else >
+      <button open-type="getPhoneNumber" bindgetphonenumber="getPhoneNumber">微信用户一键登录</button>
+      <button class="donot" bindtap="toIndex">暂不登录</button>
     </view>
-  </view>
-  <view class="goods_item radiusbox">
-    <navigator class="goods_item_head flexbox" url="../../pages/classification/classification?store_url=list_store_choice_more&category_name=精选&store_city={{curCity}}&&longitude={{longitude}}&latitude={{latitude}}">
-      <text>精选</text>
-      <view>更多 ></view>
-    </navigator>
-    <view class="goods_item_body">
-      
-      <scroll-view scroll-x='true' class="goods_item_scroll" enable-flex='true' style="">
-        <navigator class="goods_item_detail" wx:for="{{list_store_choice}}" wx:key='index' url="../../pages/orderOrPayment/orderOrPayment?store_id={{item.store_id}}&store_name={{item.store_name}} ">
-          <view class="goods_img">
-            <image  lazy-load="true"  src="{{item.store_logo?item.store_logo:'../../images/noImg1.png'}}"  mode="scaleToFill"></image>
-          </view>
-          <view class="goods_title ellipsis">{{item.store_name}}</view>
-          <view class="flexbox">
-            <image class="stars"src="../../images/redstar.png"  mode="aspectFit"></image>
-            <text class="pink">{{item.store_score}}</text>
-            <text>月售{{item.month_count}}</text>
-          </view>
-        </navigator>
-
-      </scroll-view>
+    <view class="desc">
+      <view class="flexbox spaceBetween  li">
+        <view class="flexbox spaceBetween">
+          <image src="../../images/ok.png" class="logimg" mode="aspectFit"></image><view>在线扫码点单</view>
+        </view>
+        <view class="flexbox spaceBetween">
+          <image src="../../images/ok.png" class="logimg" mode="aspectFit"></image><view>精选优惠商家</view>
+        </view>
+      </view>
+      <view class="flexbox  spaceBetween li">
+        <view class="flexbox spaceBetween">
+          <image src="../../images/ok.png" class="logimg" mode="aspectFit"></image><view>新品优品特价</view>
+        </view>
+        <view class="flexbox spaceBetween">
+          <image src="../../images/ok.png" class="logimg" mode="aspectFit"></image><view>新式特惠平台</view>
+        </view>
+      </view>
     </view>
-  </view>
-  <scroll-view class="store_items" style="height:">
-    <template is="morefall" data="{{stores,floorstatus,curCity}}"></template>
-  </scroll-view>
-  
-</scroll-view>
+  </block>
+</view>

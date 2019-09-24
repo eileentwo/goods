@@ -43,24 +43,30 @@ Page({
 
     // 图片操作的具体函数
     ImageOperator() {
+
+      const imageList = this.data.images;
+      // 原来的图片数量
+      let imageLenght = imageList.length;
+      if (imageLenght == 2) {
+        wx.showModal({
+          title: '提示',
+          content: "数量已经有2张，请删除在添加...",
+        })
+        return;
+      }
+      // 当前的图片数量
         wx.chooseImage({
             count: 2,
             sizeType: ['original', 'compressed'],
             sourceType: ['album', 'camera'],
             success: res => {
-                // 上传的图片数据
-                const imgList = res.tempFilePaths;
+              // 上传的图片数据
+              const imgList = res.tempFilePaths;
                 // 原始的图片数据
-                const imageList = this.data.images;
-                // 原来的图片数量
-                let imageLenght = imageList.length;
-                // 当前的图片数量
-                let nowLenght = imgList.length;
-                // console.log(imageLenght);
+              // console.log(imageLenght);
+              let nowLenght = imgList.length;
 
-                if (imageLenght == 2) {
-                    console.log("数量已经有2张，请删除在添加...");
-                }
+                
                 if (imageLenght < 2) {
                     let images = [];
                     // 获取缺少的图片张数
@@ -78,10 +84,7 @@ Page({
                     })
                 }
                 // images.push(JSON.stringify(imgList))
-                // console.log("9999999:", imgList);
-                // console.log("aaa:", imgList.length)
                 for (var i = 0; i < imgList.length; i++) {
-                    // console.log("aaa:", imgList.length)
                     newImgs.push(imgList[i])
                 }
             }
@@ -173,10 +176,10 @@ Page({
                     //    icon: 'none',
                     //    duration: 2000,
                        success: function(res){
-                           wx.reLaunch({
-                               url: '/pages/storeDetails/storeDetails',
-                               //如果已经评价成功了的话就把评论按钮隐藏
-                           })
+                         wx.navigateBack({
+                            url: '/pages/storeDetails/storeDetails?store_id=' + store_id,
+                              //如果已经评价成功了的话就把评论按钮隐藏
+                          })
                         }
                    })
                }else{
@@ -191,7 +194,7 @@ Page({
                        duration: 5000,
                        success:res=>{
                            wx.navigateBack({
-                               url: '/pages/storeDetails/storeDetails',
+                             url: '/pages/storeDetails/storeDetails?store_id=' + store_id,
                            })
                        }
                    })
@@ -199,7 +202,8 @@ Page({
 
             },
             fail: function() {
-                // fail
+              // fail
+              app.showMind();
 
             },
             complete: function() {
@@ -266,12 +270,17 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function (res) {
-    if (res.from === 'button') {
+    let title = '我在一鹿省边省边赚，你也快来吧！';
+    let that = this;
+    if (res.from === 'menu') {
+      console.log(res)
     }
     return {
-      title: '转发',
-      path: 'pages/orderOrPayment/orderOrPayment?store_id=' +store_id,
+      title,
+      imageUrl: '/images/5.png',
+      path: 'pages/home/index',
       success: function (res) {
+        console.log(res)
 
       }
     }
